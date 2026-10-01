@@ -1,0 +1,618 @@
+---
+/**
+ * =========================================================
+ * ACTT — CARD
+ * =========================================================
+ *
+ * Carte de contenu ACTT.
+ *
+ * Règle visuelle :
+ * - fond blanc
+ * - texte navy
+ * - texte secondaire bleu ACTT
+ * - bordure navy 8 %
+ * - ombre navy 6 %
+ * - badge ACTT
+ * =========================================================
+ */
+
+interface Props {
+  title: string;
+  description?: string;
+
+  href?: string;
+  ariaLabel?: string;
+
+  image?: string;
+  imageAlt?: string;
+
+  badge?: string;
+
+  variant?: "default" | "glass";
+
+  depth?: "flat" | "raised" | "floating";
+
+  padding?: "sm" | "md" | "lg";
+
+  interactive?: boolean;
+
+  class?: string;
+}
+
+const {
+  title,
+  description = "",
+  href,
+  ariaLabel,
+  image,
+  imageAlt = "",
+  badge,
+  variant = "default",
+  depth = "raised",
+  padding = "md",
+  interactive = true,
+  class: className = "",
+} = Astro.props;
+
+const classes = [
+  "vision-card",
+  "visionos-card",
+  `visionos-card-${variant}`,
+  `visionos-card-depth-${depth}`,
+  `visionos-card-padding-${padding}`,
+  interactive && href ? "visionos-card-interactive" : "",
+  className,
+]
+  .filter(Boolean)
+  .join(" ");
+---
+
+<article class={classes}>
+
+  {image && (
+    <div class="visionos-card-image">
+      <img
+        src={image}
+        alt={imageAlt}
+        loading="lazy"
+        decoding="async"
+      />
+    </div>
+  )}
+
+  <div class="visionos-card-content">
+
+    {badge && (
+      <div class="visionos-card-badge">
+        <span
+          class="visionos-card-badge-dot"
+          aria-hidden="true"
+        ></span>
+
+        <span>{badge}</span>
+      </div>
+    )}
+
+    <div class="visionos-card-heading">
+
+      {href ? (
+        <h3>
+          <a
+            href={href}
+            aria-label={ariaLabel || title}
+            class="visionos-card-title-link"
+          >
+            {title}
+          </a>
+        </h3>
+      ) : (
+        <h3>{title}</h3>
+      )}
+
+    </div>
+
+    {description && (
+      <p class="visionos-card-description">
+        {description}
+      </p>
+    )}
+
+    <div class="visionos-card-extra">
+      <slot />
+    </div>
+
+    {href && (
+      <a
+        href={href}
+        class="visionos-card-action"
+        aria-label={
+          ariaLabel || `En savoir plus : ${title}`
+        }
+      >
+        <span>Découvrir</span>
+
+        <span
+          class="visionos-card-arrow"
+          aria-hidden="true"
+        >
+          →
+        </span>
+      </a>
+    )}
+
+  </div>
+
+</article>
+
+<style>
+
+/* =========================================================
+   BASE
+   ========================================================= */
+
+.visionos-card {
+  position: relative;
+
+  display: flex;
+  flex-direction: column;
+
+  width: 100%;
+  min-width: 0;
+
+  overflow: hidden;
+
+  background: #ffffff;
+
+  border:
+    1px solid
+    rgba(6, 26, 58, 0.08);
+
+  border-radius:
+    var(--vision-radius-xl);
+
+  color:
+    #061a3a;
+
+  box-shadow:
+    0 8px 24px
+    rgba(6, 26, 58, 0.06);
+
+  transition:
+    transform
+      var(--vision-duration-normal)
+      var(--vision-ease-smooth),
+
+    box-shadow
+      var(--vision-duration-normal)
+      var(--vision-ease-smooth),
+
+    border-color
+      var(--vision-duration-normal)
+      var(--vision-ease-standard);
+}
+
+
+/* =========================================================
+   VARIANTS
+   ========================================================= */
+
+.visionos-card-default {
+  background: #ffffff;
+}
+
+
+/*
+ * Le variant glass reste volontairement très léger.
+ * Il ne doit jamais rendre le texte illisible.
+ */
+
+.visionos-card-glass {
+  background:
+    rgba(255, 255, 255, 0.94);
+}
+
+@supports (backdrop-filter: blur(1px)) {
+
+  .visionos-card-glass {
+    backdrop-filter:
+      blur(var(--vision-blur-md));
+
+    -webkit-backdrop-filter:
+      blur(var(--vision-blur-md));
+  }
+
+}
+
+
+/* =========================================================
+   DEPTH
+   ========================================================= */
+
+.visionos-card-depth-flat {
+  box-shadow: none;
+}
+
+.visionos-card-depth-raised {
+  box-shadow:
+    0 8px 24px
+    rgba(6, 26, 58, 0.06);
+}
+
+.visionos-card-depth-floating {
+  box-shadow:
+    0 16px 48px
+    rgba(6, 26, 58, 0.10);
+}
+
+
+/* =========================================================
+   PADDING
+   ========================================================= */
+
+.visionos-card-padding-sm
+  .visionos-card-content {
+  padding:
+    var(--vision-space-5);
+}
+
+.visionos-card-padding-md
+  .visionos-card-content {
+  padding:
+    var(--vision-space-7);
+}
+
+.visionos-card-padding-lg
+  .visionos-card-content {
+  padding:
+    var(--vision-space-8);
+}
+
+
+/* =========================================================
+   IMAGE
+   ========================================================= */
+
+.visionos-card-image {
+  position: relative;
+
+  width: 100%;
+
+  aspect-ratio: 16 / 9;
+
+  overflow: hidden;
+
+  background:
+    #e0ecf7;
+}
+
+.visionos-card-image img {
+  width: 100%;
+  height: 100%;
+
+  object-fit: cover;
+
+  transition:
+    transform
+      var(--vision-duration-slow)
+      var(--vision-ease-smooth);
+}
+
+
+/* =========================================================
+   CONTENT
+   ========================================================= */
+
+.visionos-card-content {
+  position: relative;
+
+  display: flex;
+  flex-direction: column;
+
+  min-width: 0;
+  height: 100%;
+}
+
+
+/* =========================================================
+   BADGE
+   ========================================================= */
+
+.visionos-card-badge {
+  display: inline-flex;
+
+  align-items: center;
+  align-self: flex-start;
+
+  gap:
+    var(--vision-space-2);
+
+  margin-bottom:
+    var(--vision-space-5);
+
+  padding:
+    7px 11px;
+
+  border:
+    1px solid
+    rgba(0, 174, 239, 0.20);
+
+  border-radius:
+    var(--vision-radius-pill);
+
+  background:
+    #e0ecf7;
+
+  color:
+    #061a3a;
+
+  font-size:
+    var(--vision-text-sm);
+
+  font-weight:
+    var(--vision-weight-semibold);
+
+  line-height: 1;
+}
+
+
+.visionos-card-badge-dot {
+  width: 7px;
+  height: 7px;
+
+  flex:
+    0 0 auto;
+
+  border-radius: 50%;
+
+  background:
+    #00aeef;
+}
+
+
+/* =========================================================
+   HEADING
+   ========================================================= */
+
+.visionos-card-heading h3 {
+  margin: 0;
+
+  color:
+    #061a3a;
+
+  font-size:
+    var(--vision-text-xl);
+
+  line-height:
+    var(--vision-line-tight);
+
+  font-weight:
+    var(--vision-weight-semibold);
+}
+
+
+.visionos-card-title-link {
+  color:
+    #061a3a;
+
+  text-decoration:
+    none;
+}
+
+
+.visionos-card-title-link:focus-visible {
+  outline:
+    3px solid
+    #00aeef;
+
+  outline-offset:
+    5px;
+
+  border-radius:
+    4px;
+}
+
+
+/* =========================================================
+   DESCRIPTION
+   ========================================================= */
+
+.visionos-card-description {
+  margin:
+    var(--vision-space-4)
+    0
+    0;
+
+  color:
+    #17345c;
+
+  font-size:
+    var(--vision-text-md);
+
+  line-height:
+    var(--vision-line-relaxed);
+}
+
+
+/* =========================================================
+   EXTRA CONTENT
+   ========================================================= */
+
+.visionos-card-extra {
+  margin-top:
+    var(--vision-space-5);
+}
+
+
+/* =========================================================
+   ACTION
+   ========================================================= */
+
+.visionos-card-action {
+  display: inline-flex;
+
+  align-items: center;
+  align-self: flex-start;
+
+  gap:
+    var(--vision-space-2);
+
+  margin-top:
+    auto;
+
+  padding-top:
+    var(--vision-space-6);
+
+  color:
+    #061a3a;
+
+  font-size:
+    var(--vision-text-sm);
+
+  font-weight:
+    var(--vision-weight-semibold);
+
+  text-decoration:
+    none;
+
+  transition:
+    color
+      var(--vision-duration-fast)
+      var(--vision-ease-standard);
+}
+
+
+.visionos-card-arrow {
+  display: inline-block;
+
+  transition:
+    transform
+      var(--vision-duration-fast)
+      var(--vision-ease-standard);
+}
+
+
+/* =========================================================
+   DESKTOP INTERACTION
+   ========================================================= */
+
+@media (hover: hover) and (pointer: fine) {
+
+  .visionos-card-interactive:hover {
+
+    transform:
+      translateY(-4px);
+
+    border-color:
+      rgba(6, 26, 58, 0.16);
+
+    box-shadow:
+      0 18px 42px
+      rgba(6, 26, 58, 0.10);
+  }
+
+
+  .visionos-card-interactive:hover
+    .visionos-card-arrow {
+
+    transform:
+      translateX(4px);
+  }
+
+
+  .visionos-card-interactive:hover
+    .visionos-card-image img {
+
+    transform:
+      scale(1.035);
+  }
+
+
+  .visionos-card-action:hover {
+
+    color:
+      #073b7a;
+  }
+
+}
+
+
+/* =========================================================
+   MOBILE / TOUCH
+   ========================================================= */
+
+@media (hover: none), (pointer: coarse) {
+
+  .visionos-card-interactive {
+
+    transition:
+      box-shadow
+        var(--vision-duration-normal)
+        var(--vision-ease-standard),
+
+      border-color
+        var(--vision-duration-normal)
+        var(--vision-ease-standard);
+  }
+
+
+  .visionos-card-interactive:active {
+
+    transform:
+      scale(0.995);
+  }
+
+}
+
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 767px) {
+
+  .visionos-card {
+    border-radius:
+      var(--vision-radius-lg);
+  }
+
+
+  .visionos-card-padding-md
+    .visionos-card-content {
+
+    padding:
+      var(--vision-space-6);
+  }
+
+
+  .visionos-card-padding-lg
+    .visionos-card-content {
+
+    padding:
+      var(--vision-space-7);
+  }
+
+}
+
+
+/* =========================================================
+   ACCESSIBILITY
+   ========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+
+  .visionos-card,
+  .visionos-card-image img,
+  .visionos-card-arrow {
+
+    transition: none;
+  }
+
+
+  .visionos-card-interactive:hover {
+
+    transform: none;
+  }
+
+}
+
+</style>

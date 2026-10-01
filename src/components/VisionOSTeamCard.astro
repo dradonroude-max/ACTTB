@@ -1,0 +1,417 @@
+---
+/**
+ * =========================================================
+ * ACTT — TEAM CARD
+ * =========================================================
+ *
+ * Cadre d'une équipe : photo, titre, liste de joueurs.
+ * Chaque joueur a un avatar rond (photo ou initiales).
+ *
+ * Hiérarchie d'espacement :
+ * - badge / titre / sous-titre → serrés (bloc d'en-tête)
+ * - trait → aéré sur les deux côtés (séparateur)
+ * - joueurs → liste respirante
+ */
+
+import VisionOSBadge from "./VisionOSBadge.astro";
+
+import type { Team } from "../data/teams";
+
+interface Props {
+  team: Team;
+}
+
+const { team } = Astro.props;
+
+const getInitials = (name: string) =>
+  name
+    .replace(/\./g, "")
+    .split(/\s+/)
+    .filter(Boolean)
+    .slice(0, 2)
+    .map((part) => part[0].toUpperCase())
+    .join("");
+
+const playerCount = team.players.length;
+const countLabel =
+  playerCount > 1 ? `${playerCount} joueurs` : `${playerCount} joueur`;
+---
+
+<article class="team-card">
+
+  {team.photo && (
+    <div class="team-photo">
+      <img
+        src={team.photo}
+        alt={team.photoAlt ?? `Photo de ${team.label}`}
+        width="1200"
+        height="675"
+        loading="lazy"
+        decoding="async"
+      />
+    </div>
+  )}
+
+  <div class="team-content">
+
+    <VisionOSBadge label={countLabel} variant="primary" />
+
+    <h3 class="team-title">
+      {team.label}
+    </h3>
+
+    {team.subtitle && (
+      <p class="team-subtitle">
+        {team.subtitle}
+      </p>
+    )}
+
+    <div class="team-divider" aria-hidden="true"></div>
+
+    <ul class="team-players">
+      {team.players.map((player) => (
+        <li
+          class:list={[
+            "team-player",
+            { "team-player-has-role": Boolean(player.role) },
+          ]}
+        >
+
+          {player.photo ? (
+            <img
+              class="team-avatar"
+              src={player.photo}
+              alt=""
+              width="56"
+              height="56"
+              loading="lazy"
+              decoding="async"
+            />
+          ) : (
+            <span class="team-avatar team-avatar-initials" aria-hidden="true">
+              {getInitials(player.name)}
+            </span>
+          )}
+
+          <span class="team-player-text">
+            <span class="team-player-name">
+              {player.name}
+            </span>
+
+            {player.role && (
+              <span class="team-player-role">
+                {player.role}
+              </span>
+            )}
+          </span>
+
+        </li>
+      ))}
+    </ul>
+
+  </div>
+
+</article>
+
+<style>
+
+  /* =======================================================
+     CARD
+     ======================================================= */
+
+  .team-card {
+    display: flex;
+    flex-direction: column;
+
+    width: 100%;
+    min-width: 0;
+
+    overflow: hidden;
+
+    background: #ffffff;
+
+    border: 1px solid rgba(6, 26, 58, 0.10);
+    border-radius: 14px;
+
+    box-shadow:
+      0 8px 22px rgba(6, 26, 58, 0.08);
+
+    transition:
+      transform var(--vision-duration-normal) var(--vision-ease-smooth),
+      box-shadow var(--vision-duration-normal) var(--vision-ease-smooth),
+      border-color var(--vision-duration-normal) var(--vision-ease-standard);
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+
+    .team-card:hover {
+      transform: translateY(-3px);
+
+      border-color: rgba(6, 26, 58, 0.18);
+
+      box-shadow:
+        0 14px 30px rgba(6, 26, 58, 0.12);
+    }
+
+    .team-card:hover .team-photo img {
+      transform: scale(1.03);
+    }
+
+  }
+
+  /* =======================================================
+     PHOTO
+     ======================================================= */
+
+  .team-photo {
+    position: relative;
+
+    width: 100%;
+
+    aspect-ratio: 16 / 9;
+
+    overflow: hidden;
+
+    background: #e0ecf7;
+  }
+
+  .team-photo::after {
+    content: "";
+
+    position: absolute;
+    inset: auto 0 0 0;
+
+    height: 4px;
+
+    background: linear-gradient(
+      90deg,
+      var(--vision-color-secondary) 0%,
+      var(--vision-color-secondary) 50%,
+      var(--vision-color-accent) 50%,
+      var(--vision-color-accent) 80%,
+      var(--vision-color-danger) 80%,
+      var(--vision-color-danger) 100%
+    );
+  }
+
+  .team-photo img {
+    display: block;
+
+    width: 100%;
+    height: 100%;
+
+    object-fit: cover;
+
+    transition:
+      transform var(--vision-duration-slow) var(--vision-ease-smooth);
+  }
+
+  /* =======================================================
+     CONTENT
+     Base rythmique : gap 16px.
+     Les marges ciblées du titre et du trait créent
+     la hiérarchie entre les trois groupes.
+     ======================================================= */
+
+  .team-content {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+
+    gap: 16px;
+
+    padding: 32px;
+  }
+
+  .team-title {
+    margin: 4px 0 0;
+
+    color: #061a3a;
+
+    font-size: clamp(1.5rem, 2.6vw, 1.9rem);
+    font-weight: 900;
+
+    line-height: 1.15;
+
+    letter-spacing: -0.02em;
+  }
+
+  .team-subtitle {
+    margin: 0;
+
+    color: var(--vision-color-text-muted);
+
+    font-size: var(--vision-text-md);
+  }
+
+  /* =======================================================
+     DIVIDER
+     ======================================================= */
+
+  .team-divider {
+    align-self: stretch;
+
+    flex: 0 0 1px;
+
+    height: 1px;
+
+    margin-block: 8px;
+
+    background: rgba(6, 26, 58, 0.12);
+  }
+
+  /* =======================================================
+     PLAYERS
+     ======================================================= */
+
+  .team-players {
+    align-self: stretch;
+
+    display: grid;
+
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+
+    gap: 20px 16px;
+
+    margin: 0;
+    padding: 0;
+
+    list-style: none;
+  }
+
+  .team-player {
+    display: flex;
+    align-items: center;
+
+    gap: 12px;
+
+    min-width: 0;
+  }
+
+  .team-avatar {
+    flex: 0 0 auto;
+
+    display: block;
+
+    width: 56px;
+    height: 56px;
+
+    border-radius: 50%;
+
+    object-fit: cover;
+
+    background: #e0ecf7;
+
+    box-shadow:
+      0 0 0 2px #ffffff,
+      0 0 0 4px rgba(0, 174, 239, 0.35);
+  }
+
+  .team-player-has-role .team-avatar {
+    box-shadow:
+      0 0 0 2px #ffffff,
+      0 0 0 4px var(--vision-color-accent);
+  }
+
+  .team-avatar-initials {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: linear-gradient(
+      135deg,
+      var(--vision-color-primary),
+      #061a3a
+    );
+
+    color: #f8fafc;
+
+    font-size: 1.05rem;
+    font-weight: 800;
+
+    letter-spacing: 0.04em;
+  }
+
+  .team-player-text {
+    display: flex;
+    flex-direction: column;
+
+    gap: 3px;
+
+    min-width: 0;
+  }
+
+  .team-player-name {
+    overflow: hidden;
+
+    color: #061a3a;
+
+    font-size: var(--vision-text-md);
+    font-weight: var(--vision-weight-semibold);
+
+    line-height: 1.2;
+
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .team-player-role {
+    color: #1f6b35;
+
+    font-size: var(--vision-text-xs);
+    font-weight: var(--vision-weight-bold);
+
+    letter-spacing: 0.1em;
+
+    text-transform: uppercase;
+  }
+
+  /* =======================================================
+     MOBILE
+     ======================================================= */
+
+  @media (max-width: 767px) {
+
+    .team-card {
+      border-radius: 12px;
+    }
+
+    .team-content {
+      gap: 12px;
+
+      padding: 24px;
+    }
+
+    .team-title {
+      margin-top: 2px;
+    }
+
+    .team-divider {
+      margin-block: 6px;
+    }
+
+    .team-players {
+      grid-template-columns: 1fr;
+    }
+
+  }
+
+  /* =======================================================
+     REDUCED MOTION
+     ======================================================= */
+
+  @media (prefers-reduced-motion: reduce) {
+
+    .team-card,
+    .team-photo img {
+      transition: none;
+    }
+
+    .team-card:hover,
+    .team-card:hover .team-photo img {
+      transform: none;
+    }
+
+  }
+
+</style>

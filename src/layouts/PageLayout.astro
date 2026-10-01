@@ -1,0 +1,56 @@
+---
+/**
+ * =========================================================
+ * VISIONOS — PAGE LAYOUT
+ * =========================================================
+ */
+
+import BaseLayout from "./BaseLayout.astro";
+import VisionOSNavbar from "../components/VisionOSNavbar.astro";
+import VisionOSFooter from "../components/VisionOSFooter.astro";
+
+interface Props {
+  title?: string;
+  description?: string;
+  image?: string;
+  noIndex?: boolean;
+  showNavbar?: boolean;
+  showFooter?: boolean;
+}
+
+const {
+  title,
+  description,
+  image,
+  noIndex = false,
+  showNavbar = true,
+  showFooter = true,
+} = Astro.props;
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+  image={image}
+  noIndex={noIndex}
+>
+  <div class="vision-page">
+
+    {
+      showNavbar && (
+        <VisionOSNavbar />
+      )
+    }
+
+    <main class="vision-main">
+      <slot />
+    </main>
+
+    {
+      showFooter && (
+        <VisionOSFooter />
+      )
+    }
+
+  </div>
+</BaseLayout>

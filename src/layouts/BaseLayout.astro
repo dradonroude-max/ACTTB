@@ -1,0 +1,211 @@
+---
+/**
+ * =========================================================
+ * VISIONOS — BASE LAYOUT
+ * =========================================================
+ *
+ * Global document structure:
+ * - HTML / language
+ * - SEO
+ * - canonical URL
+ * - Open Graph
+ * - Twitter / X
+ * - favicon (multi-formats)
+ * - theme
+ * - global CSS
+ * - progressive enhancement
+ *
+ * =========================================================
+ */
+
+import { site } from "../config/site";
+import { theme } from "../config/theme";
+import "../styles/global.css";
+
+interface Props {
+  title?: string;
+  description?: string;
+  image?: string;
+  noIndex?: boolean;
+}
+
+const {
+  title = site.seo.title,
+  description = site.seo.description,
+  image = site.seo.image,
+  noIndex = false,
+} = Astro.props;
+
+const canonicalURL = new URL(
+  Astro.url.pathname,
+  site.url
+);
+
+const socialImage = new URL(
+  image,
+  site.url
+);
+
+const themeName = theme.active;
+
+const fullTitle =
+  title === site.seo.title
+    ? title
+    : `${title} — ${site.name}`;
+---
+
+<!doctype html>
+<html lang="fr" data-theme={themeName}>
+
+  <head>
+
+    <meta charset="UTF-8" />
+
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1"
+    />
+
+    <meta
+      name="theme-color"
+      content={
+        themeName === "dark"
+          ? "#0b0b0f"
+          : "#f5f5f7"
+      }
+    />
+
+    <title>{fullTitle}</title>
+
+    <meta
+      name="description"
+      content={description}
+    />
+
+    <link
+      rel="canonical"
+      href={canonicalURL}
+    />
+
+    <!-- =================================================
+         FAVICON — PACK MULTI-FORMATS
+         ================================================= -->
+
+    <link
+      rel="icon"
+      type="image/png"
+      href="/favicon-96x96.png"
+      sizes="96x96"
+    />
+
+    <link
+      rel="icon"
+      type="image/svg+xml"
+      href="/favicon.svg"
+    />
+
+    <link
+      rel="shortcut icon"
+      href="/favicon.ico"
+    />
+
+    <link
+      rel="apple-touch-icon"
+      sizes="180x180"
+      href="/apple-touch-icon.png"
+    />
+
+    <link
+      rel="manifest"
+      href="/site.webmanifest"
+    />
+
+    <!-- =================================================
+         OPEN GRAPH
+         ================================================= -->
+
+    <meta
+      property="og:type"
+      content="website"
+    />
+
+    <meta
+      property="og:title"
+      content={fullTitle}
+    />
+
+    <meta
+      property="og:description"
+      content={description}
+    />
+
+    <meta
+      property="og:url"
+      content={canonicalURL}
+    />
+
+    <meta
+      property="og:image"
+      content={socialImage}
+    />
+
+    <!-- =================================================
+         TWITTER / X
+         ================================================= -->
+
+    <meta
+      name="twitter:card"
+      content={site.seo.twitterCard}
+    />
+
+    <meta
+      name="twitter:title"
+      content={fullTitle}
+    />
+
+    <meta
+      name="twitter:description"
+      content={description}
+    />
+
+    <meta
+      name="twitter:image"
+      content={socialImage}
+    />
+
+    <!-- =================================================
+         ROBOTS
+         ================================================= -->
+
+    {
+      noIndex && (
+        <meta
+          name="robots"
+          content="noindex, nofollow"
+        />
+      )
+    }
+
+    <!-- =================================================
+         PAGE-SPECIFIC HEAD
+         ================================================= -->
+
+    <slot name="head" />
+
+  </head>
+
+  <body>
+
+    <slot />
+
+    <!-- =================================================
+         PROGRESSIVE ENHANCEMENT
+         ================================================= -->
+
+    <script>
+      import "../scripts/visionos-effects.js";
+    </script>
+
+  </body>
+
+</html>

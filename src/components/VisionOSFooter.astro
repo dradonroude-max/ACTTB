@@ -1,0 +1,498 @@
+---
+/**
+ * =========================================================
+ * VISIONOS — FOOTER
+ * =========================================================
+ *
+ * Global footer:
+ * - brand
+ * - secondary navigation
+ * - contact
+ * - legal links
+ * - social links
+ *
+ * =========================================================
+ */
+
+import { site } from "../config/site";
+import { navigation } from "../config/navigation";
+---
+
+<footer class="vision-footer">
+  <div class="vision-container">
+
+    <div class="vision-footer-main">
+
+      <!-- =================================================
+           BRAND
+           ================================================= -->
+
+      <div class="vision-footer-brand">
+
+        <a
+          class="vision-footer-logo-link"
+          href="/"
+          aria-label={`${site.name} — Accueil`}
+        >
+          <img
+            class="vision-footer-logo"
+            src={site.assets.logo}
+            alt=""
+            width="40"
+            height="40"
+          />
+
+          <span class="vision-footer-name">
+            {site.name}
+          </span>
+        </a>
+
+        {site.description && (
+          <p class="vision-footer-description">
+            {site.description}
+          </p>
+        )}
+
+      </div>
+
+      <!-- =================================================
+           NAVIGATION
+           ================================================= -->
+
+      <nav
+        class="vision-footer-navigation"
+        aria-label="Navigation secondaire"
+      >
+        <h2 class="vision-footer-heading">
+          Navigation
+        </h2>
+
+        <ul class="vision-footer-links">
+          {
+            navigation.main.map((item) => (
+              <li>
+                <a
+                  href={item.href}
+                  target={
+                    item.external
+                      ? "_blank"
+                      : undefined
+                  }
+                  rel={
+                    item.external
+                      ? "noopener noreferrer"
+                      : undefined
+                  }
+                >
+                  {item.label}
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </nav>
+
+      <!-- =================================================
+           CONTACT
+           ================================================= -->
+
+      {
+        (
+          site.contact.email ||
+          site.contact.phone ||
+          site.contact.address ||
+          site.contact.city
+        ) && (
+          <div class="vision-footer-contact">
+
+            <h2 class="vision-footer-heading">
+              Contact
+            </h2>
+
+            <address class="vision-footer-address">
+
+              {site.contact.email && (
+                <a
+                  href={`mailto:${site.contact.email}`}
+                >
+                  {site.contact.email}
+                </a>
+              )}
+
+              {site.contact.phone && (
+                <a
+                  href={`tel:${site.contact.phone.replace(/\s+/g, "")}`}
+                >
+                  {site.contact.phone}
+                </a>
+              )}
+
+              {
+                (
+                  site.contact.address ||
+                  site.contact.city ||
+                  site.contact.postalCode ||
+                  site.contact.country
+                ) && (
+                  <span>
+                    {site.contact.address && (
+                      <>
+                        {site.contact.address}
+                        <br />
+                      </>
+                    )}
+
+                    {site.contact.postalCode}{" "}
+                    {site.contact.city}
+
+                    {site.contact.country && (
+                      <>
+                        <br />
+                        {site.contact.country}
+                      </>
+                    )}
+                  </span>
+                )
+              }
+
+            </address>
+
+          </div>
+        )
+      }
+
+    </div>
+
+    <!-- =================================================
+         BOTTOM
+         ================================================= -->
+
+    <div class="vision-footer-bottom">
+
+      <p class="vision-footer-copyright">
+        © {new Date().getFullYear()} {site.name}
+      </p>
+
+      <nav
+        class="vision-footer-legal"
+        aria-label="Informations légales"
+      >
+        <ul>
+          {
+            navigation.footer.map((item) => (
+              <li>
+                <a href={item.href}>
+                  {item.label}
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </nav>
+
+      <!-- =================================================
+           SOCIAL
+           ================================================= -->
+
+      {
+        (
+          site.social.instagram ||
+          site.social.facebook ||
+          site.social.linkedin ||
+          site.social.x ||
+          site.social.youtube
+        ) && (
+          <nav
+            class="vision-footer-social"
+            aria-label="Réseaux sociaux"
+          >
+            <ul>
+
+              {site.social.instagram && (
+                <li>
+                  <a
+                    href={site.social.instagram}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label="Instagram"
+                  >
+                    Instagram
+                  </a>
+                </li>
+              )}
+
+              {site.social.facebook && (
+                <li>
+                  <a
+                    href={site.social.facebook}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label="Facebook"
+                  >
+                    Facebook
+                  </a>
+                </li>
+              )}
+
+              {site.social.linkedin && (
+                <li>
+                  <a
+                    href={site.social.linkedin}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label="LinkedIn"
+                  >
+                    LinkedIn
+                  </a>
+                </li>
+              )}
+
+              {site.social.x && (
+                <li>
+                  <a
+                    href={site.social.x}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label="X"
+                  >
+                    X
+                  </a>
+                </li>
+              )}
+
+              {site.social.youtube && (
+                <li>
+                  <a
+                    href={site.social.youtube}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label="YouTube"
+                  >
+                    YouTube
+                  </a>
+                </li>
+              )}
+
+            </ul>
+          </nav>
+        )
+      }
+
+    </div>
+
+  </div>
+</footer>
+
+<style>
+  .vision-footer {
+    position: relative;
+
+    padding-block:
+      var(--vision-space-11)
+      var(--vision-space-6);
+
+    border-top: 1px solid var(--vision-border);
+
+    background: var(--vision-background-secondary);
+  }
+
+  .vision-footer-main {
+    display: grid;
+
+    grid-template-columns:
+      minmax(0, 1.5fr)
+      minmax(0, 1fr)
+      minmax(0, 1fr);
+
+    gap: var(--vision-space-10);
+
+    padding-bottom: var(--vision-space-10);
+  }
+
+  .vision-footer-brand {
+    max-width: 420px;
+  }
+
+  .vision-footer-logo-link {
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: var(--vision-space-3);
+
+    margin-bottom: var(--vision-space-4);
+
+    color: var(--vision-color-text);
+
+    font-weight: var(--vision-weight-semibold);
+  }
+
+  .vision-footer-logo {
+    display: block;
+
+    width: 40px;
+    height: 40px;
+
+    object-fit: contain;
+  }
+
+  .vision-footer-name {
+    font-size: var(--vision-text-lg);
+  }
+
+  .vision-footer-description {
+    max-width: 42ch;
+
+    margin: 0;
+
+    color: var(--vision-color-text-muted);
+
+    font-size: var(--vision-text-sm);
+    line-height: var(--vision-line-relaxed);
+  }
+
+  .vision-footer-heading {
+    margin: 0 0 var(--vision-space-4);
+
+    color: var(--vision-color-text);
+
+    font-size: var(--vision-text-sm);
+    font-weight: var(--vision-weight-semibold);
+  }
+
+  .vision-footer-links,
+  .vision-footer-legal ul,
+  .vision-footer-social ul {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: var(--vision-space-2);
+
+    margin: 0;
+    padding: 0;
+
+    list-style: none;
+  }
+
+  .vision-footer-links a,
+  .vision-footer-address a,
+  .vision-footer-legal a,
+  .vision-footer-social a {
+    color: var(--vision-color-text-muted);
+
+    font-size: var(--vision-text-sm);
+
+    transition:
+      color var(--vision-duration-normal)
+      var(--vision-ease-standard);
+  }
+
+  .vision-footer-links a:hover,
+  .vision-footer-address a:hover,
+  .vision-footer-legal a:hover,
+  .vision-footer-social a:hover {
+    color: var(--vision-color-primary);
+  }
+
+  .vision-footer-address {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: var(--vision-space-2);
+
+    margin: 0;
+
+    font-style: normal;
+  }
+
+  .vision-footer-address span {
+    color: var(--vision-color-text-muted);
+
+    font-size: var(--vision-text-sm);
+    line-height: var(--vision-line-relaxed);
+  }
+
+  .vision-footer-bottom {
+    display: grid;
+
+    grid-template-columns:
+      minmax(0, 1fr)
+      auto
+      auto;
+
+    align-items: center;
+
+    gap: var(--vision-space-6);
+
+    padding-top: var(--vision-space-5);
+
+    border-top: 1px solid var(--vision-border);
+  }
+
+  .vision-footer-copyright {
+    margin: 0;
+
+    color: var(--vision-color-text-muted);
+
+    font-size: var(--vision-text-xs);
+  }
+
+  .vision-footer-legal ul,
+  .vision-footer-social ul {
+    flex-direction: row;
+
+    flex-wrap: wrap;
+
+    align-items: center;
+  }
+
+  @media (max-width: 767px) {
+
+    .vision-footer {
+      padding-top: var(--vision-space-9);
+    }
+
+    .vision-footer-main {
+      grid-template-columns: 1fr;
+
+      gap: var(--vision-space-7);
+
+      padding-bottom: var(--vision-space-8);
+    }
+
+    .vision-footer-brand {
+      max-width: none;
+    }
+
+    .vision-footer-description {
+      max-width: none;
+    }
+
+    .vision-footer-bottom {
+      grid-template-columns: 1fr;
+
+      justify-items: start;
+
+      gap: var(--vision-space-4);
+    }
+
+    .vision-footer-legal ul,
+    .vision-footer-social ul {
+      justify-content: flex-start;
+    }
+
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+
+    .vision-footer-links a,
+    .vision-footer-address a,
+    .vision-footer-legal a,
+    .vision-footer-social a {
+      transition: none;
+    }
+
+  }
+</style>

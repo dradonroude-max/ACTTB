@@ -1,0 +1,254 @@
+/* =========================================================
+ACTT — ANIMATIONS
+========================================================= */
+
+/*
+PRINCIPLE
+
+Le contenu reste visible par défaut.
+
+JavaScript ajoute .js-ready uniquement lorsque
+le moteur d'animation est initialisé.
+
+Ainsi :
+
+JavaScript désactivé → contenu visible
+moteur non initialisé → contenu visible
+reduced motion → contenu visible
+moteur actif → animations activées
+*/
+
+/* =========================================================
+REVEAL — APPARITION AU SCROLL
+========================================================= */
+
+.reveal {
+opacity: 1;
+transform: none;
+}
+
+.js-ready .reveal {
+opacity: 0;
+transform: translateY(28px);
+transition:
+opacity 700ms var(--vision-ease-smooth),
+transform 700ms var(--vision-ease-smooth);
+}
+
+.js-ready .reveal.is-visible {
+opacity: 1;
+transform: translateY(0);
+}
+
+/* =========================================================
+FADE
+========================================================= */
+
+.reveal-fade {
+opacity: 1;
+}
+
+.js-ready .reveal-fade {
+opacity: 0;
+transition:
+opacity 700ms var(--vision-ease-smooth);
+}
+
+.js-ready .reveal-fade.is-visible {
+opacity: 1;
+}
+
+/* =========================================================
+SCALE
+========================================================= */
+
+.reveal-scale {
+opacity: 1;
+transform: none;
+}
+
+.js-ready .reveal-scale {
+opacity: 0;
+transform: scale(0.96);
+transition:
+opacity 700ms var(--vision-ease-smooth),
+transform 700ms var(--vision-ease-smooth);
+}
+
+.js-ready .reveal-scale.is-visible {
+opacity: 1;
+transform: scale(1);
+}
+
+/* =========================================================
+DELAYS
+========================================================= */
+
+.js-ready .delay-1 {
+transition-delay: 80ms;
+}
+
+.js-ready .delay-2 {
+transition-delay: 160ms;
+}
+
+.js-ready .delay-3 {
+transition-delay: 240ms;
+}
+
+.js-ready .delay-4 {
+transition-delay: 320ms;
+}
+
+/* =========================================================
+HERO — ANIMATION INITIALE
+========================================================= */
+
+.hero-animate {
+opacity: 1;
+transform: none;
+}
+
+.js-ready .hero-animate {
+opacity: 0;
+transform: translateY(24px);
+transition:
+opacity 800ms var(--vision-ease-smooth),
+transform 800ms var(--vision-ease-smooth);
+}
+
+.js-ready .hero-animate.is-visible {
+opacity: 1;
+transform: translateY(0);
+}
+
+/* =========================================================
+HERO — IMAGE / VISUEL
+========================================================= */
+
+.hero-visual-animate {
+opacity: 1;
+transform: none;
+}
+
+.js-ready .hero-visual-animate {
+opacity: 0;
+transform: scale(0.96) translateY(16px);
+transition:
+opacity 900ms var(--vision-ease-smooth),
+transform 900ms var(--vision-ease-smooth);
+}
+
+.js-ready .hero-visual-animate.is-visible {
+opacity: 1;
+transform: scale(1) translateY(0);
+}
+
+/* =========================================================
+FLOATING
+========================================================= */
+
+@keyframes vision-float {
+0%,
+100% {
+transform: translateY(0);
+}
+
+50% {
+transform: translateY(-8px);
+}
+}
+
+.vision-float {
+animation:
+vision-float 5s ease-in-out infinite;
+}
+
+/* =========================================================
+PULSE
+========================================================= */
+
+@keyframes vision-pulse {
+0%,
+100% {
+opacity: 1;
+}
+
+50% {
+opacity: 0.72;
+}
+}
+
+.vision-pulse {
+animation:
+vision-pulse 2.5s ease-in-out infinite;
+}
+
+/* =========================================================
+3D TILT — DESKTOP UNIQUEMENT
+========================================================= */
+
+.vision-tilt {
+transform:
+perspective(1000px)
+rotateX(0deg)
+rotateY(0deg);
+
+transform-style: preserve-3d;
+
+transition:
+transform 400ms var(--vision-ease-smooth);
+}
+
+/* =========================================================
+TOUCH / ANDROID
+========================================================= */
+
+/*
+Les animations principales ne dépendent PAS du hover.
+
+Sur écran tactile :
+
+les reveals continuent de fonctionner ;
+les animations d'entrée continuent de fonctionner ;
+le tilt souris est désactivé.
+*/
+
+@media (hover: none), (pointer: coarse) {
+
+.vision-float {
+animation-duration: 7s;
+}
+
+.vision-tilt {
+transform: none;
+transition: none;
+}
+}
+
+/* =========================================================
+REDUCED MOTION
+========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+
+.js-ready .reveal,
+.js-ready .reveal-fade,
+.js-ready .reveal-scale,
+.js-ready .hero-animate,
+.js-ready .hero-visual-animate {
+opacity: 1;
+transform: none;
+transition: none;
+}
+
+.vision-float,
+.vision-pulse {
+animation: none;
+}
+
+.vision-tilt {
+transform: none;
+transition: none;
+}
+}

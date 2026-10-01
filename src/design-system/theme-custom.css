@@ -1,0 +1,31 @@
+[data-theme="custom"] {
+color-scheme: light;
+
+--vision-color-primary: #073b7a;
+--vision-color-primary-hover: #061a3a;
+--vision-color-secondary: #00aeef;
+--vision-color-accent: #35a853;
+
+--vision-background: #cbd8e5;
+--vision-background-secondary: #f8fafc;
+
+--vision-surface: #f8fafc;
+--vision-surface-soft: #dce6ef;
+--vision-surface-elevated: #f8fafc;
+
+--vision-surface-glass: rgba(248, 250, 252, 0.72);
+--vision-surface-glass-strong: rgba(248, 250, 252, 0.86);
+
+--vision-color-text: #17345c;
+--vision-color-text-muted: #45617f;
+--vision-color-text-inverse: #f8fafc;
+
+--vision-border: rgba(6, 26, 58, 0.14);
+--vision-border-strong: rgba(6, 26, 58, 0.24);
+--vision-border-glass: rgba(248, 250, 252, 0.48);
+
+--vision-shadow-sm: 0 2px 8px rgba(6, 26, 58, 0.08);
+--vision-shadow-md: 0 8px 24px rgba(6, 26, 58, 0.10);
+--vision-shadow-lg: 0 16px 48px rgba(6, 26, 58, 0.14);
+--vision-shadow-floating: 0 24px 70px rgba(6, 26, 58, 0.18);
+}

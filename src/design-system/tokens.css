@@ -1,0 +1,190 @@
+:root {
+/* =========================================================
+ACTT — DESIGN TOKENS
+========================================================= */
+
+/* ---------------------------------------------------------
+COLORS
+--------------------------------------------------------- */
+
+--vision-color-primary: #073b7a;
+--vision-color-primary-hover: #061a3a;
+--vision-color-secondary: #00aeef;
+--vision-color-accent: #35a853;
+--vision-color-danger: #8f1520;
+--vision-color-warning: #8bcf32;
+
+--vision-color-white: #f8fafc;
+--vision-color-black: #061a3a;
+
+--vision-color-text: #17345c;
+--vision-color-text-muted: #45617f;
+--vision-color-text-inverse: #f8fafc;
+
+/* ---------------------------------------------------------
+SURFACES
+--------------------------------------------------------- */
+
+--vision-surface: #f8fafc;
+--vision-surface-soft: #dce6ef;
+--vision-surface-elevated: #f8fafc;
+
+--vision-surface-glass: rgba(248, 250, 252, 0.72);
+--vision-surface-glass-strong: rgba(248, 250, 252, 0.86);
+--vision-surface-glass-dark: rgba(6, 26, 58, 0.72);
+
+/* ---------------------------------------------------------
+BACKGROUNDS
+--------------------------------------------------------- */
+
+--vision-background: #cbd8e5;
+--vision-background-secondary: #f8fafc;
+
+/* ---------------------------------------------------------
+BORDERS
+--------------------------------------------------------- */
+
+--vision-border: rgba(6, 26, 58, 0.14);
+--vision-border-strong: rgba(6, 26, 58, 0.24);
+--vision-border-glass: rgba(248, 250, 252, 0.48);
+
+/* ---------------------------------------------------------
+RADIUS
+--------------------------------------------------------- */
+
+--vision-radius-sm: 10px;
+--vision-radius-md: 16px;
+--vision-radius-lg: 24px;
+--vision-radius-xl: 32px;
+--vision-radius-pill: 999px;
+
+/* ---------------------------------------------------------
+SHADOWS
+--------------------------------------------------------- */
+
+--vision-shadow-sm: 0 2px 8px rgba(6, 26, 58, 0.08);
+--vision-shadow-md: 0 8px 24px rgba(6, 26, 58, 0.10);
+--vision-shadow-lg: 0 16px 48px rgba(6, 26, 58, 0.14);
+--vision-shadow-floating: 0 24px 70px rgba(6, 26, 58, 0.18);
+
+/* ---------------------------------------------------------
+DEPTH
+--------------------------------------------------------- */
+
+--vision-depth-flat: 0;
+--vision-depth-raised: 8px;
+--vision-depth-floating: 18px;
+
+/* ---------------------------------------------------------
+SPACING
+--------------------------------------------------------- */
+
+--vision-space-1: 4px;
+--vision-space-2: 8px;
+--vision-space-3: 12px;
+--vision-space-4: 16px;
+--vision-space-5: 20px;
+--vision-space-6: 24px;
+--vision-space-7: 32px;
+--vision-space-8: 40px;
+--vision-space-9: 48px;
+--vision-space-10: 64px;
+--vision-space-11: 80px;
+--vision-space-12: 96px;
+--vision-space-13: 120px;
+
+/* ---------------------------------------------------------
+TYPOGRAPHY
+--------------------------------------------------------- */
+
+--vision-font-sans:
+-apple-system,
+BlinkMacSystemFont,
+"SF Pro Display",
+"SF Pro Text",
+"Segoe UI",
+Roboto,
+Helvetica,
+Arial,
+sans-serif;
+
+--vision-font-mono:
+"SFMono-Regular",
+Consolas,
+"Liberation Mono",
+monospace;
+
+--vision-text-xs: 0.75rem;
+--vision-text-sm: 0.875rem;
+--vision-text-md: 1rem;
+--vision-text-lg: 1.125rem;
+--vision-text-xl: 1.5rem;
+--vision-text-2xl: 2rem;
+--vision-text-3xl: 3rem;
+--vision-text-4xl: 4rem;
+
+--vision-line-tight: 1.05;
+--vision-line-normal: 1.5;
+--vision-line-relaxed: 1.7;
+
+--vision-weight-regular: 400;
+--vision-weight-medium: 500;
+--vision-weight-semibold: 600;
+--vision-weight-bold: 700;
+
+/* ---------------------------------------------------------
+TRANSITIONS
+--------------------------------------------------------- */
+
+--vision-duration-fast: 150ms;
+--vision-duration-normal: 250ms;
+--vision-duration-slow: 400ms;
+
+--vision-ease-standard: cubic-bezier(0.2, 0, 0, 1);
+--vision-ease-smooth: cubic-bezier(0.22, 1, 0.36, 1);
+--vision-ease-spring: cubic-bezier(0.16, 1, 0.3, 1);
+
+/* ---------------------------------------------------------
+LAYOUT
+--------------------------------------------------------- */
+
+--vision-container-sm: 640px;
+--vision-container-md: 768px;
+--vision-container-lg: 1024px;
+--vision-container-xl: 1200px;
+--vision-container-2xl: 1440px;
+
+--vision-header-height: 72px;
+
+/* ---------------------------------------------------------
+EFFECTS
+--------------------------------------------------------- */
+
+--vision-blur-sm: 10px;
+--vision-blur-md: 20px;
+--vision-blur-lg: 32px;
+
+--vision-glow-primary: 0 0 40px rgba(0, 174, 239, 0.24);
+
+/* ---------------------------------------------------------
+Z-INDEX
+--------------------------------------------------------- */
+
+--vision-z-base: 1;
+--vision-z-content: 10;
+--vision-z-header: 100;
+--vision-z-overlay: 500;
+--vision-z-modal: 1000;
+}
+
+/* =========================================================
+ACCESSIBILITY
+========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+:root {
+--vision-duration-fast: 0ms;
+--vision-duration-normal: 0ms;
+--vision-duration-slow: 0ms;
+}
+}

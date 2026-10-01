@@ -1,0 +1,415 @@
+---
+/**
+ * =========================================================
+ * VISIONOS — BUTTON
+ * =========================================================
+ *
+ * Reusable action component for:
+ * - navigation links
+ * - calls to action
+ * - forms
+ * - interface actions
+ *
+ * Works without JavaScript.
+ * =========================================================
+ */
+
+export type ButtonVariant =
+  | "primary"
+  | "secondary"
+  | "ghost"
+  | "outline";
+
+export type ButtonSize = "sm" | "md" | "lg";
+
+interface Props {
+  label: string;
+  href?: string;
+
+  type?: "button" | "submit" | "reset";
+
+  variant?: ButtonVariant;
+  size?: ButtonSize;
+
+  disabled?: boolean;
+
+  ariaLabel?: string;
+
+  external?: boolean;
+
+  class?: string;
+}
+
+const {
+  label,
+  href,
+  type = "button",
+  variant = "primary",
+  size = "md",
+  disabled = false,
+  ariaLabel,
+  external = false,
+  class: className = "",
+} = Astro.props;
+
+const classes = [
+  "vision-button",
+  `vision-button-${variant}`,
+  `vision-button-${size}`,
+  disabled ? "vision-button-disabled" : "",
+  className,
+]
+  .filter(Boolean)
+  .join(" ");
+
+const externalAttributes = external
+  ? {
+      target: "_blank",
+      rel: "noopener noreferrer",
+    }
+  : {};
+---
+
+{href ? (
+  <a
+    href={disabled ? undefined : href}
+    class={classes}
+    aria-label={ariaLabel}
+    aria-disabled={disabled ? "true" : undefined}
+    tabindex={disabled ? -1 : undefined}
+    {...externalAttributes}
+  >
+    <span>{label}</span>
+  </a>
+) : (
+  <button
+    type={type}
+    class={classes}
+    disabled={disabled}
+    aria-label={ariaLabel}
+  >
+    <span>{label}</span>
+  </button>
+)}
+
+<style>
+  /* =======================================================
+     BASE
+     ======================================================= */
+
+  .vision-button {
+    display: inline-flex;
+
+    align-items: center;
+    justify-content: center;
+
+    gap: var(--vision-space-2);
+
+    min-width: max-content;
+
+    border: 1px solid transparent;
+
+    border-radius: var(--vision-radius-pill);
+
+    font-family: inherit;
+    font-weight: var(--vision-weight-semibold);
+    line-height: 1;
+
+    text-align: center;
+    text-decoration: none;
+    white-space: nowrap;
+
+    cursor: pointer;
+
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+
+    transition:
+      transform var(--vision-duration-fast) var(--vision-ease-standard),
+      background-color var(--vision-duration-fast) var(--vision-ease-standard),
+      border-color var(--vision-duration-fast) var(--vision-ease-standard),
+      color var(--vision-duration-fast) var(--vision-ease-standard),
+      box-shadow var(--vision-duration-fast) var(--vision-ease-standard);
+  }
+
+
+  /* =======================================================
+     SIZES
+     ======================================================= */
+
+  .vision-button-sm {
+    min-height: 38px;
+    padding-inline: var(--vision-space-4);
+
+    font-size: var(--vision-text-sm);
+  }
+
+  .vision-button-md {
+    min-height: 46px;
+    padding-inline: var(--vision-space-6);
+
+    font-size: var(--vision-text-md);
+  }
+
+  .vision-button-lg {
+    min-height: 54px;
+    padding-inline: var(--vision-space-7);
+
+    font-size: var(--vision-text-lg);
+  }
+
+
+  /* =======================================================
+     PRIMARY
+     ======================================================= */
+
+  .vision-button-primary {
+    background: var(--vision-color-primary);
+    border-color: var(--vision-color-primary);
+
+    color: var(--vision-color-white);
+
+    box-shadow: var(--vision-shadow-sm);
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+
+    .vision-button-primary:hover {
+      background: var(--vision-color-primary-hover);
+      border-color: var(--vision-color-primary-hover);
+
+      box-shadow: var(--vision-shadow-md);
+
+      transform: translateY(-1px);
+    }
+
+  }
+
+  .vision-button-primary:active {
+    transform: translateY(0) scale(0.98);
+  }
+
+
+  /* =======================================================
+     SECONDARY
+     ======================================================= */
+
+  .vision-button-secondary {
+    background: var(--vision-color-secondary);
+    border-color: var(--vision-color-secondary);
+
+    color: var(--vision-color-white);
+
+    box-shadow: var(--vision-shadow-sm);
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+
+    .vision-button-secondary:hover {
+      filter: brightness(0.94);
+
+      box-shadow: var(--vision-shadow-md);
+
+      transform: translateY(-1px);
+    }
+
+  }
+
+  .vision-button-secondary:active {
+    transform: translateY(0) scale(0.98);
+  }
+
+
+  /* =======================================================
+     OUTLINE
+     ======================================================= */
+
+  .vision-button-outline {
+    background: transparent;
+
+    border-color: var(--vision-border-strong);
+
+    color: var(--vision-color-text);
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+
+    .vision-button-outline:hover {
+      background: var(--vision-surface-soft);
+
+      border-color: var(--vision-color-primary);
+
+      color: var(--vision-color-primary);
+
+      transform: translateY(-1px);
+    }
+
+  }
+
+  .vision-button-outline:active {
+    transform: scale(0.98);
+  }
+
+
+  /* =======================================================
+     LE CLUB — BOUTON SECONDAIRE
+     =======================================================
+     
+     Sur le fond clair #f8fafc :
+     - bordure navy 30 %
+     - texte navy
+     - hover navy 5 %
+     
+     Cette règle est volontairement limitée à #club.
+     ======================================================= */
+
+  :global(#club) .vision-button-outline {
+    background: transparent;
+
+    border-color:
+      rgba(6, 26, 58, 0.30);
+
+    color:
+      #061a3a;
+  }
+
+
+  @media (hover: hover) and (pointer: fine) {
+
+    :global(#club) .vision-button-outline:hover {
+      background:
+        rgba(6, 26, 58, 0.05);
+
+      border-color:
+        rgba(6, 26, 58, 0.42);
+
+      color:
+        #061a3a;
+
+      box-shadow:
+        0 4px 14px
+        rgba(6, 26, 58, 0.06);
+
+      transform:
+        translateY(-1px);
+    }
+
+  }
+
+
+  /* =======================================================
+     GHOST
+     ======================================================= */
+
+  .vision-button-ghost {
+    background: transparent;
+
+    border-color: transparent;
+
+    color: var(--vision-color-text);
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+
+    .vision-button-ghost:hover {
+      background: var(--vision-surface-soft);
+
+      color: var(--vision-color-primary);
+
+      transform: translateY(-1px);
+    }
+
+  }
+
+  .vision-button-ghost:active {
+    transform: scale(0.98);
+  }
+
+
+  /* =======================================================
+     FOCUS
+     ======================================================= */
+
+  .vision-button:focus-visible {
+    outline: 3px solid var(--vision-color-primary);
+    outline-offset: 3px;
+  }
+
+
+  /* =======================================================
+     DISABLED
+     ======================================================= */
+
+  .vision-button-disabled,
+  .vision-button:disabled {
+    opacity: 0.48;
+
+    cursor: not-allowed;
+
+    pointer-events: none;
+
+    transform: none;
+    box-shadow: none;
+  }
+
+
+  /* =======================================================
+     TOUCH / MOBILE
+     ======================================================= */
+
+  @media (hover: none), (pointer: coarse) {
+
+    .vision-button {
+      min-height: 48px;
+    }
+
+    .vision-button-sm {
+      min-height: 44px;
+    }
+
+    .vision-button-md {
+      min-height: 48px;
+    }
+
+    .vision-button-lg {
+      min-height: 54px;
+    }
+
+    .vision-button:active {
+      transform: scale(0.98);
+    }
+
+  }
+
+
+  /* =======================================================
+     REDUCED MOTION
+     ======================================================= */
+
+  @media (prefers-reduced-motion: reduce) {
+
+    .vision-button {
+      transition: none;
+    }
+
+    .vision-button:hover,
+    .vision-button:active {
+      transform: none;
+    }
+
+  }
+
+
+  /* =======================================================
+     SMALL SCREENS
+     ======================================================= */
+
+  @media (max-width: 420px) {
+
+    .vision-button {
+      white-space: normal;
+    }
+
+  }
+
+</style>

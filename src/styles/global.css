@@ -1,0 +1,482 @@
+/* =========================================================
+   ACTT — GLOBAL STYLES
+   ========================================================= */
+
+@import "../design-system/tokens.css";
+@import "../design-system/theme-light.css";
+@import "../design-system/theme-dark.css";
+@import "../design-system/theme-custom.css";
+
+@import "./layout.css";
+@import "./components.css";
+@import "./animations.css";
+@import "./utilities.css";
+
+
+/* =========================================================
+   ACTT — PALETTE
+   ========================================================= */
+
+:root {
+  --actt-navy: #061a3a;
+  --actt-navy-deep: #04152f;
+
+  --actt-light: #f8fafc;
+
+  --actt-green: #35a853;
+  --actt-cyan: #00aeef;
+  --actt-red: #8f1520;
+  --actt-lime: #8bcf32;
+
+  /*
+   * Le fond global devient le blanc cassé ACTT.
+   * Les sections sombres utilisent ensuite leur propre fond.
+   */
+  --vision-background: var(--actt-light);
+  --vision-background-secondary: var(--actt-light);
+
+  --vision-surface: var(--actt-light);
+}
+
+
+/* =========================================================
+   RESET
+   ========================================================= */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+
+html {
+  scroll-behavior: smooth;
+
+  font-family: var(--vision-font-sans);
+
+  background: var(--actt-light);
+  color: var(--vision-color-text);
+
+  -webkit-text-size-adjust: 100%;
+}
+
+
+body {
+  margin: 0;
+
+  min-width: 320px;
+  min-height: 100vh;
+
+  background: var(--actt-light);
+  color: var(--vision-color-text);
+
+  font-family: var(--vision-font-sans);
+  font-size: var(--vision-text-md);
+  line-height: var(--vision-line-normal);
+
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+
+
+/* =========================================================
+   MEDIA
+   ========================================================= */
+
+img,
+picture,
+svg,
+video,
+canvas {
+  display: block;
+  max-width: 100%;
+}
+
+
+img {
+  height: auto;
+}
+
+
+/* =========================================================
+   FORM ELEMENTS
+   ========================================================= */
+
+button,
+input,
+textarea,
+select {
+  font: inherit;
+}
+
+
+button {
+  cursor: pointer;
+}
+
+
+/* =========================================================
+   LINKS
+   ========================================================= */
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+
+/* =========================================================
+   ACCESSIBILITY
+   ========================================================= */
+
+:focus-visible {
+  outline: 3px solid var(--actt-cyan);
+  outline-offset: 3px;
+}
+
+
+::selection {
+  background: var(--actt-green);
+  color: var(--actt-navy);
+}
+
+
+/* =========================================================
+   TYPOGRAPHY
+   ========================================================= */
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p {
+  margin-top: 0;
+}
+
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-weight: var(--vision-weight-semibold);
+  line-height: var(--vision-line-tight);
+}
+
+
+p {
+  color: var(--vision-color-text-muted);
+}
+
+
+/* =========================================================
+   GLASS FALLBACK
+   ========================================================= */
+
+.vision-glass {
+  background: var(--actt-light);
+
+  border: 1px solid var(--vision-border);
+}
+
+
+@supports (backdrop-filter: blur(1px)) {
+  .vision-glass {
+    background: var(--vision-surface-glass);
+
+    backdrop-filter: blur(var(--vision-blur-md));
+    -webkit-backdrop-filter: blur(var(--vision-blur-md));
+  }
+}
+
+
+/* =========================================================
+   ACTT — SECTION RHYTHM
+   =========================================================
+
+   HERO
+   ─────
+   Navy profond
+
+   01 — LE CLUB
+   ─────────────
+   Blanc cassé
+
+   02 — JOUER
+   ───────────
+   Navy
+
+   03 — ÉQUIPES
+   ────────────
+   Blanc cassé
+
+   04 — ACTUALITÉS
+   ───────────────
+   Navy
+
+   05 — CALENDRIER
+   ───────────────
+   Blanc cassé
+
+   06 — PARTENAIRES
+   ────────────────
+   Navy
+
+   07 — PREMIÈRE SÉANCE
+   ─────────────────────
+   Vert ACTT
+
+   FOOTER
+   ──────
+   Navy profond
+   ========================================================= */
+
+
+/* =========================================================
+   HERO
+   ========================================================= */
+
+.visionos-hero {
+  background-color: var(--actt-navy);
+}
+
+
+/* =========================================================
+   01 — LE CLUB
+   ========================================================= */
+
+#club {
+  background: var(--actt-light) !important;
+
+  color: var(--vision-color-text);
+}
+
+
+/*
+ * Neutralise l'ancien dégradé ajouté précédemment
+ * dans VisionOSSection.astro.
+ */
+#club.vision-section-club {
+  background: var(--actt-light) !important;
+
+  border-top: none;
+}
+
+
+#club .vision-section-eyebrow {
+  color: var(--actt-cyan);
+}
+
+
+#club .vision-section-title {
+  color: var(--actt-navy);
+}
+
+
+#club .vision-section-description {
+  color: #45617f;
+}
+
+
+/* =========================================================
+   02 — JOUER
+   ========================================================= */
+
+#jouer {
+  background: var(--actt-navy) !important;
+
+  color: var(--actt-light);
+}
+
+
+#jouer .vision-section-eyebrow {
+  color: var(--actt-cyan);
+}
+
+
+#jouer .vision-section-title {
+  color: var(--actt-light);
+}
+
+
+#jouer .vision-section-description {
+  color: rgba(248, 250, 252, 0.72);
+}
+
+
+/* =========================================================
+   03 — ÉQUIPES
+   ========================================================= */
+
+#equipes {
+  background: var(--actt-light) !important;
+
+  color: var(--actt-navy);
+}
+
+
+#equipes .vision-section-eyebrow {
+  color: var(--actt-cyan);
+}
+
+
+#equipes .vision-section-title {
+  color: var(--actt-navy);
+}
+
+
+#equipes .vision-section-description {
+  color: #45617f;
+}
+
+
+/* =========================================================
+   04 — ACTUALITÉS
+   ========================================================= */
+
+#actualites {
+  background: var(--actt-navy) !important;
+
+  color: var(--actt-light);
+}
+
+
+#actualites .vision-section-eyebrow {
+  color: var(--actt-cyan);
+}
+
+
+#actualites .vision-section-title {
+  color: var(--actt-light);
+}
+
+
+#actualites .vision-section-description {
+  color: rgba(248, 250, 252, 0.72);
+}
+
+
+/* =========================================================
+   05 — CALENDRIER
+   ========================================================= */
+
+#calendrier {
+  background: var(--actt-light) !important;
+
+  color: var(--actt-navy);
+}
+
+
+#calendrier .vision-section-eyebrow {
+  color: var(--actt-cyan);
+}
+
+
+#calendrier .vision-section-title {
+  color: var(--actt-navy);
+}
+
+
+#calendrier .vision-section-description {
+  color: #45617f;
+}
+
+
+/* =========================================================
+   06 — PARTENAIRES
+   ========================================================= */
+
+#partenaires {
+  background: var(--actt-navy) !important;
+
+  color: var(--actt-light);
+}
+
+
+#partenaires .vision-section-eyebrow {
+  color: var(--actt-cyan);
+}
+
+
+#partenaires .vision-section-title {
+  color: var(--actt-light);
+}
+
+
+#partenaires .vision-section-description {
+  color: rgba(248, 250, 252, 0.72);
+}
+
+
+/* =========================================================
+   07 — PREMIÈRE SÉANCE
+   ========================================================= */
+
+#essayer {
+  background: var(--actt-green) !important;
+
+  color: var(--actt-navy);
+}
+
+
+#essayer .vision-section-eyebrow,
+#essayer .vision-section-title,
+#essayer .vision-section-description {
+  color: var(--actt-navy);
+}
+
+
+/* =========================================================
+   FOOTER
+   ========================================================= */
+
+footer {
+  background: var(--actt-navy-deep);
+}
+
+
+/* =========================================================
+   REDUCED MOTION
+   ========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (min-width: 768px) {
+  .vision-container {
+    width: min(
+      calc(100% - 64px),
+      var(--vision-container-xl)
+    );
+  }
+}
+
+
+@media (min-width: 1200px) {
+  .vision-container {
+    width: min(
+      calc(100% - 96px),
+      var(--vision-container-xl)
+    );
+  }
+}

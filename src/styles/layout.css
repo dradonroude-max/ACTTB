@@ -1,0 +1,143 @@
+.vision-page {
+  position: relative;
+  min-height: 100vh;
+  overflow-x: clip;
+}
+
+.vision-main {
+  position: relative;
+  width: 100%;
+}
+
+.vision-container {
+  width: min(calc(100% - 32px), var(--vision-container-xl));
+  margin-inline: auto;
+}
+
+.vision-section {
+  position: relative;
+  width: 100%;
+
+  padding-block: var(--vision-space-12);
+
+  /*
+   * Keeps anchored sections visible below the sticky navbar.
+   * This applies automatically to every VisionOS section.
+   */
+  scroll-margin-top: calc(
+    var(--vision-header-height) + var(--vision-space-6)
+  );
+}
+
+.vision-section-inner {
+  position: relative;
+  z-index: var(--vision-z-content);
+}
+
+.vision-grid-2 {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--vision-space-8);
+}
+
+.vision-grid-3 {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--vision-space-6);
+}
+
+.vision-grid-auto {
+  display: grid;
+  grid-template-columns: repeat(
+    auto-fit,
+    minmax(min(100%, 280px), 1fr)
+  );
+
+  gap: var(--vision-space-6);
+}
+
+.vision-flex {
+  display: flex;
+}
+
+.vision-flex-column {
+  display: flex;
+  flex-direction: column;
+}
+
+.vision-flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.vision-gap-sm {
+  gap: var(--vision-space-3);
+}
+
+.vision-gap-md {
+  gap: var(--vision-space-5);
+}
+
+.vision-gap-lg {
+  gap: var(--vision-space-7);
+}
+
+/* =======================================================
+   TABLET / DESKTOP
+   ======================================================= */
+
+@media (min-width: 768px) {
+
+  .vision-grid-2 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .vision-grid-3 {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .vision-section {
+    padding-block: var(--vision-space-13);
+
+    /*
+     * Desktop navbar is a single row.
+     */
+    scroll-margin-top: calc(
+      var(--vision-header-height) + var(--vision-space-6)
+    );
+  }
+
+}
+
+/* =======================================================
+   MOBILE
+   ======================================================= */
+
+@media (max-width: 767px) {
+
+  .vision-section {
+    /*
+     * Mobile navbar uses two rows, so it is taller
+     * than the desktop header.
+     */
+    scroll-margin-top: 176px;
+  }
+
+}
+
+/* =======================================================
+   LARGE DESKTOP
+   ======================================================= */
+
+@media (min-width: 1200px) {
+
+  .vision-grid-2 {
+    gap: var(--vision-space-10);
+  }
+
+  .vision-grid-3 {
+    gap: var(--vision-space-7);
+  }
+
+}

@@ -1,0 +1,736 @@
+---
+/**
+ * =========================================================
+ * ACTT — NAVBAR
+ * =========================================================
+ */
+
+import { site } from "../config/site";
+import { navigation } from "../config/navigation";
+
+const currentPath = Astro.url.pathname;
+const isHome = currentPath === "/";
+
+// Cible de suivi de scroll pour chaque entrée de navigation.
+const getTarget = (href: string) =>
+  href === "/" ? "top" : href.startsWith("#") ? href.slice(1) : "";
+---
+
+<header class="vision-navbar">
+
+  <div class="vision-navbar-color-line" aria-hidden="true">
+    <span class="color-blue"></span>
+    <span class="color-green"></span>
+    <span class="color-red"></span>
+  </div>
+
+  <div class="vision-container vision-navbar-inner">
+
+    <!-- BRAND -->
+    <a
+      class="vision-navbar-brand"
+      href="/"
+      aria-label={`${site.name} — Accueil`}
+    >
+      <span class="vision-navbar-wordmark" aria-hidden="true">
+        <span class="vision-navbar-name">ACTT</span>
+        <span class="vision-navbar-underline"></span>
+      </span>
+    </a>
+
+    <!-- NAVIGATION -->
+    <nav
+      class="vision-navbar-nav"
+      aria-label="Navigation principale"
+    >
+      <ul class="vision-navbar-list">
+        {
+          navigation.main.map((item) => {
+            const target = getTarget(item.href);
+
+            // Sans JS : seul « Accueil » est actif, et uniquement sur "/".
+            const isActive =
+              item.href === "/" ? isHome : false;
+
+            return (
+              <li>
+                <a
+                  class:list={[
+                    "vision-navbar-link",
+                    { "is-active": isActive },
+                  ]}
+                  href={item.href}
+                  data-target={target || undefined}
+                  aria-current={isActive ? "page" : undefined}
+                  target={item.external ? "_blank" : undefined}
+                  rel={
+                    item.external
+                      ? "noopener noreferrer"
+                      : undefined
+                  }
+                >
+                  {item.label}
+                </a>
+              </li>
+            );
+          })
+        }
+      </ul>
+    </nav>
+
+    <!-- CTA -->
+    {
+      navigation.cta && (
+        <div class="vision-navbar-cta">
+          <a
+            class="vision-navbar-cta-link"
+            href={navigation.cta.href}
+          >
+            {navigation.cta.label}
+          </a>
+        </div>
+      )
+    }
+
+  </div>
+</header>
+
+<script>
+  // Suivi de la section visible : marque le lien de navigation actif.
+  const links = Array.from(
+    document.querySelectorAll<HTMLAnchorElement>(
+      ".vision-navbar-link[data-target]"
+    )
+  );
+
+  if (links.length && "IntersectionObserver" in window) {
+    const linkByTarget = new Map<string, HTMLAnchorElement>();
+    links.forEach((link) => {
+      const key = link.dataset.target;
+      if (key) linkByTarget.set(key, link);
+    });
+
+    const resolveElement = (key: string): Element | null => {
+      if (key === "top") return document.querySelector(".visionos-hero");
+      // Le footer n'a pas d'identifiant : on l'observe par sa balise.
+      if (key === "contact") return document.querySelector("footer");
+      return document.getElementById(key);
+    };
+
+    const setActive = (key: string) => {
+      linkByTarget.forEach((link, linkKey) => {
+        const active = linkKey === key;
+        link.classList.toggle("is-active", active);
+        if (active) {
+          link.setAttribute("aria-current", "location");
+        } else {
+          link.removeAttribute("aria-current");
+        }
+      });
+    };
+
+    const visible = new Set<string>();
+
+    // Ordre d'apparition dans la page, pour trancher si deux sections se chevauchent.
+    const order = [
+      "top", "club", "jouer", "equipes", "actualites",
+      "calendrier", "partenaires", "essayer", "contact",
+    ];
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          const key = (entry.target as HTMLElement).dataset.navKey;
+          if (!key) return;
+          if (entry.isIntersecting) visible.add(key);
+          else visible.delete(key);
+        });
+
+        const current = order.find((key) => visible.has(key));
+        if (!current) return;
+
+        // Le lien « Contact » mène à #essayer : il reste aussi actif sur le footer.
+        const key = current === "contact" ? "essayer" : current;
+
+        // Si la cible n'est pas une entrée de menu connue, on conserve
+        // l'état actif courant plutôt que de tout effacer.
+        if (linkByTarget.has(key)) {
+          setActive(key);
+        }
+      },
+      // Bande de détection élargie pour un suivi plus stable au défilement.
+      { rootMargin: "-25% 0px -60% 0px", threshold: 0 }
+    );
+
+    order.forEach((key) => {
+      const element = resolveElement(key);
+      if (!element) return;
+      (element as HTMLElement).dataset.navKey = key;
+      observer.observe(element);
+    });
+
+    // Tant qu'on est en haut de la page, « Accueil » reste actif,
+    // même si le Hero n'est pas encore entré dans la bande de détection.
+    const forceTopOnTop = () => {
+      if (window.scrollY < 80 && linkByTarget.has("top")) {
+        setActive("top");
+      }
+    };
+
+    window.addEventListener("scroll", forceTopOnTop, { passive: true });
+    forceTopOnTop();
+  }
+</script>
+
+<style>
+  .vision-navbar {
+    position: sticky;
+    top: 0;
+    z-index: var(--vision-z-header);
+    width: 100%;
+    min-height: 88px;
+
+    border-bottom:
+      1px solid rgba(248, 250, 252, 0.10);
+
+    background:
+      radial-gradient(
+        circle at 78% 45%,
+        rgba(0, 174, 239, 0.08),
+        transparent 32%
+      ),
+      radial-gradient(
+        circle at 88% 82%,
+        rgba(53, 168, 83, 0.07),
+        transparent 28%
+      ),
+      #061a3a;
+
+    box-shadow:
+      0 8px 28px rgba(0, 0, 0, 0.18);
+  }
+
+  @supports (backdrop-filter: blur(1px)) {
+    .vision-navbar {
+      backdrop-filter: blur(22px);
+      -webkit-backdrop-filter: blur(22px);
+    }
+  }
+
+  /* =======================================================
+     TOP COLOR LINE
+     ======================================================= */
+
+  .vision-navbar-color-line {
+    position: absolute;
+    top: 0;
+    left: 0;
+
+    display: flex;
+
+    width: 100%;
+    height: 3px;
+
+    overflow: hidden;
+  }
+
+  .vision-navbar-color-line span {
+    display: block;
+    height: 100%;
+  }
+
+  .color-blue {
+    flex: 5;
+    background: var(--vision-color-primary);
+  }
+
+  .color-green {
+    flex: 3;
+    background: var(--vision-color-accent);
+  }
+
+  .color-red {
+    flex: 2;
+    background: var(--vision-color-danger);
+  }
+
+  /* =======================================================
+     INNER
+     ======================================================= */
+
+  .vision-navbar-inner {
+    display: flex;
+    align-items: center;
+
+    min-height: 88px;
+
+    gap: var(--vision-space-7);
+  }
+
+  /* =======================================================
+     BRAND — ACTT
+     ======================================================= */
+
+  .vision-navbar-brand {
+    display: inline-flex;
+    align-items: center;
+
+    flex-shrink: 0;
+
+    color: var(--vision-color-white);
+
+    text-decoration: none;
+  }
+
+  /*
+   * Wordmark ACTT : grosses lettres sportives, inclinées,
+   * dégradé blanc → bleu glacé, ombre adoucie,
+   * barre tricolore dessous (cyan / vert / rouge éclairci).
+   */
+
+  .vision-navbar-wordmark {
+    position: relative;
+
+    display: inline-flex;
+    flex-direction: column;
+
+    gap: 7px;
+
+    padding-inline: 4px 8px;
+
+    transform: skewX(-8deg);
+
+    transition:
+      transform
+        var(--vision-duration-normal)
+        var(--vision-ease-smooth),
+
+      filter
+        var(--vision-duration-normal)
+        var(--vision-ease-smooth);
+  }
+
+  .vision-navbar-name {
+    display: block;
+
+    /* Couleur de secours si le dégradé n'est pas supporté. */
+    color: #f8fafc;
+
+    font-size: 2.35rem;
+    font-weight: 900;
+
+    line-height: 0.85;
+
+    letter-spacing: 0.06em;
+
+    background:
+      linear-gradient(
+        180deg,
+        #ffffff 0%,
+        #f4fbff 35%,
+        #b8e2fa 70%,
+        #a9d9f7 100%
+      );
+
+    -webkit-background-clip: text;
+    background-clip: text;
+
+    -webkit-text-fill-color: transparent;
+
+    text-rendering: geometricPrecision;
+    -webkit-font-smoothing: antialiased;
+
+    filter:
+      drop-shadow(0 1px 0 rgba(0, 174, 239, 0.35))
+      drop-shadow(0 3px 8px rgba(0, 0, 0, 0.25));
+  }
+
+  .vision-navbar-underline {
+    display: block;
+
+    width: 100%;
+    height: 4px;
+
+    border-radius: 999px;
+
+    background:
+      linear-gradient(
+        90deg,
+        var(--vision-color-secondary) 0%,
+        var(--vision-color-secondary) 50%,
+        var(--vision-color-accent) 50%,
+        var(--vision-color-accent) 80%,
+        #c23a45 80%,
+        #c23a45 100%
+      );
+
+    box-shadow:
+      0 0 14px rgba(0, 174, 239, 0.45);
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+
+    .vision-navbar-brand:hover .vision-navbar-wordmark {
+      transform: skewX(-8deg) translateY(-1px);
+
+      filter:
+        drop-shadow(0 0 12px rgba(0, 174, 239, 0.45));
+    }
+
+  }
+
+  .vision-navbar-brand:focus-visible {
+    outline: 3px solid var(--vision-color-secondary);
+    outline-offset: 6px;
+
+    border-radius: 10px;
+  }
+
+  /* =======================================================
+     NAVIGATION
+     ======================================================= */
+
+  .vision-navbar-nav {
+    display: flex;
+    align-items: center;
+
+    flex: 1;
+    min-width: 0;
+  }
+
+  .vision-navbar-list {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    gap: 4px;
+
+    width: 100%;
+
+    margin: 0;
+    padding: 0;
+
+    list-style: none;
+  }
+
+  .vision-navbar-link {
+    position: relative;
+
+    display: inline-flex;
+    align-items: center;
+
+    min-height: 42px;
+
+    padding-inline: 14px;
+
+    border-radius:
+      var(--vision-radius-pill);
+
+    color:
+      rgba(248, 250, 252, 0.72);
+
+    font-size:
+      var(--vision-text-sm);
+
+    font-weight:
+      var(--vision-weight-semibold);
+
+    text-decoration: none;
+
+    transition:
+      color
+        var(--vision-duration-normal)
+        var(--vision-ease-standard),
+
+      background-color
+        var(--vision-duration-normal)
+        var(--vision-ease-standard),
+
+      transform
+        var(--vision-duration-normal)
+        var(--vision-ease-standard);
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+
+    .vision-navbar-link:hover {
+      color: var(--vision-color-white);
+
+      background:
+        rgba(248, 250, 252, 0.08);
+
+      transform:
+        translateY(-1px);
+    }
+
+  }
+
+  .vision-navbar-link.is-active {
+    color: var(--vision-color-white);
+
+    background:
+      rgba(248, 250, 252, 0.10);
+  }
+
+  .vision-navbar-link.is-active::after {
+    content: "";
+
+    position: absolute;
+
+    left: 50%;
+    bottom: 5px;
+
+    width: 18px;
+    height: 2px;
+
+    border-radius: 999px;
+
+    background:
+      linear-gradient(
+        90deg,
+        var(--vision-color-secondary),
+        var(--vision-color-accent)
+      );
+
+    transform:
+      translateX(-50%);
+  }
+
+  /* =======================================================
+     CTA — « Venir essayer »
+     ======================================================= */
+
+  .vision-navbar-cta {
+    flex-shrink: 0;
+  }
+
+  .vision-navbar-cta-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    min-height: 40px;
+
+    padding-inline: 18px;
+
+    border-radius: 999px;
+
+    background: var(--vision-color-accent);
+    color: #061a3a;
+
+    font-size: var(--vision-text-sm);
+    font-weight: 800;
+
+    line-height: 1;
+
+    letter-spacing: 0.01em;
+
+    text-decoration: none;
+
+    white-space: nowrap;
+
+    box-shadow:
+      0 4px 14px rgba(0, 0, 0, 0.18),
+      0 0 0 1px rgba(53, 168, 83, 0.35);
+
+    transition:
+      background-color
+        var(--vision-duration-normal)
+        var(--vision-ease-standard),
+
+      transform
+        var(--vision-duration-normal)
+        var(--vision-ease-standard),
+
+      box-shadow
+        var(--vision-duration-normal)
+        var(--vision-ease-standard);
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+
+    .vision-navbar-cta-link:hover {
+      background: #43bb61;
+
+      transform: translateY(-1px);
+
+      box-shadow:
+        0 6px 18px rgba(0, 0, 0, 0.22),
+        0 0 0 1px rgba(53, 168, 83, 0.55);
+    }
+
+  }
+
+  .vision-navbar-cta-link:focus-visible {
+    outline: 3px solid var(--vision-color-secondary);
+    outline-offset: 3px;
+  }
+
+  /* =======================================================
+     TABLET
+     ======================================================= */
+
+  @media (max-width: 1100px) {
+
+    .vision-navbar-inner {
+      gap: var(--vision-space-4);
+    }
+
+    .vision-navbar-link {
+      padding-inline: 10px;
+
+      font-size:
+        var(--vision-text-xs);
+    }
+
+    .vision-navbar-cta-link {
+      min-height: 36px;
+
+      padding-inline: 14px;
+
+      font-size: var(--vision-text-xs);
+    }
+  }
+
+  /* =======================================================
+     SMALL TABLET
+     ======================================================= */
+
+  @media (max-width: 900px) {
+
+    .vision-navbar-list {
+      justify-content: flex-start;
+
+      overflow-x: auto;
+
+      scrollbar-width: none;
+
+      /* Sécurise les bords du scroll horizontal. */
+      padding-inline: 4px;
+    }
+
+    .vision-navbar-list::-webkit-scrollbar {
+      display: none;
+    }
+
+    .vision-navbar-link {
+      white-space: nowrap;
+    }
+  }
+
+  /* =======================================================
+     MOBILE
+     ======================================================= */
+
+  @media (max-width: 767px) {
+
+    .vision-navbar {
+      min-height: 72px;
+    }
+
+    .vision-navbar-inner {
+      min-height: 72px;
+
+      flex-wrap: wrap;
+
+      gap: var(--vision-space-3);
+
+      padding-top: 7px;
+      padding-bottom: 8px;
+    }
+
+    .vision-navbar-name {
+      font-size: 1.85rem;
+    }
+
+    .vision-navbar-underline {
+      height: 3px;
+    }
+
+    .vision-navbar-cta {
+      margin-left: auto;
+    }
+
+    .vision-navbar-cta-link {
+      min-height: 34px;
+
+      padding-inline: 12px;
+
+      font-size: var(--vision-text-xs);
+    }
+
+    .vision-navbar-nav {
+      order: 3;
+
+      flex-basis: 100%;
+
+      width: 100%;
+    }
+
+    .vision-navbar-list {
+      justify-content: flex-start;
+
+      padding-bottom: 3px;
+    }
+
+    .vision-navbar-link {
+      min-height: 36px;
+
+      padding-inline: 12px;
+
+      font-size:
+        var(--vision-text-xs);
+    }
+
+    .vision-navbar-link.is-active::after {
+      bottom: 3px;
+    }
+  }
+
+  /* =======================================================
+     SMALL MOBILE
+     ======================================================= */
+
+  @media (max-width: 480px) {
+
+    .vision-navbar-inner {
+      gap: 8px;
+    }
+
+    .vision-navbar-name {
+      font-size: 1.6rem;
+    }
+
+    .vision-navbar-link {
+      padding-inline: 10px;
+    }
+
+    .vision-navbar-cta-link {
+      padding-inline: 10px;
+
+      font-size: 0.72rem;
+    }
+  }
+
+  /* =======================================================
+     REDUCED MOTION
+     ======================================================= */
+
+  @media (prefers-reduced-motion: reduce) {
+
+    .vision-navbar-wordmark,
+    .vision-navbar-link,
+    .vision-navbar-cta-link {
+      transition: none;
+    }
+
+    .vision-navbar-link:hover,
+    .vision-navbar-cta-link:hover {
+      transform: none;
+    }
+
+    .vision-navbar-brand:hover .vision-navbar-wordmark {
+      transform: skewX(-8deg);
+    }
+  }
+</style>

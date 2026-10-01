@@ -1,0 +1,227 @@
+/* =========================================================
+   VISIONOS — UTILITIES
+   ========================================================= */
+
+/* ---------------------------------------------------------
+   DISPLAY
+   --------------------------------------------------------- */
+
+.vision-hidden {
+  display: none !important;
+}
+
+.vision-block {
+  display: block;
+}
+
+.vision-inline {
+  display: inline;
+}
+
+.vision-inline-flex {
+  display: inline-flex;
+}
+
+/* ---------------------------------------------------------
+   TEXT ALIGNMENT
+   --------------------------------------------------------- */
+
+.vision-text-left {
+  text-align: left;
+}
+
+.vision-text-center {
+  text-align: center;
+}
+
+.vision-text-right {
+  text-align: right;
+}
+
+/* ---------------------------------------------------------
+   WIDTH
+   --------------------------------------------------------- */
+
+.vision-w-full {
+  width: 100%;
+}
+
+.vision-w-auto {
+  width: auto;
+}
+
+.vision-max-content {
+  max-width: max-content;
+}
+
+/* ---------------------------------------------------------
+   MARGIN
+   --------------------------------------------------------- */
+
+.vision-mx-auto {
+  margin-inline: auto;
+}
+
+.vision-mt-0 {
+  margin-top: 0;
+}
+
+.vision-mb-0 {
+  margin-bottom: 0;
+}
+
+.vision-mt-md {
+  margin-top: var(--vision-space-5);
+}
+
+.vision-mb-md {
+  margin-bottom: var(--vision-space-5);
+}
+
+.vision-mt-lg {
+  margin-top: var(--vision-space-7);
+}
+
+.vision-mb-lg {
+  margin-bottom: var(--vision-space-7);
+}
+
+/* ---------------------------------------------------------
+   PADDING
+   --------------------------------------------------------- */
+
+.vision-p-sm {
+  padding: var(--vision-space-4);
+}
+
+.vision-p-md {
+  padding: var(--vision-space-6);
+}
+
+.vision-p-lg {
+  padding: var(--vision-space-8);
+}
+
+/* ---------------------------------------------------------
+   FLEX ALIGNMENT
+   --------------------------------------------------------- */
+
+.vision-items-center {
+  align-items: center;
+}
+
+.vision-items-start {
+  align-items: flex-start;
+}
+
+.vision-items-end {
+  align-items: flex-end;
+}
+
+.vision-justify-center {
+  justify-content: center;
+}
+
+.vision-justify-between {
+  justify-content: space-between;
+}
+
+.vision-justify-end {
+  justify-content: flex-end;
+}
+
+/* ---------------------------------------------------------
+   OVERFLOW
+   --------------------------------------------------------- */
+
+.vision-overflow-hidden {
+  overflow: hidden;
+}
+
+.vision-overflow-visible {
+  overflow: visible;
+}
+
+/* ---------------------------------------------------------
+   POSITION
+   --------------------------------------------------------- */
+
+.vision-relative {
+  position: relative;
+}
+
+.vision-absolute {
+  position: absolute;
+}
+
+.vision-sticky {
+  position: sticky;
+}
+
+/* ---------------------------------------------------------
+   RADIUS
+   --------------------------------------------------------- */
+
+.vision-radius-sm {
+  border-radius: var(--vision-radius-sm);
+}
+
+.vision-radius-md {
+  border-radius: var(--vision-radius-md);
+}
+
+.vision-radius-lg {
+  border-radius: var(--vision-radius-lg);
+}
+
+.vision-radius-xl {
+  border-radius: var(--vision-radius-xl);
+}
+
+.vision-radius-pill {
+  border-radius: var(--vision-radius-pill);
+}
+
+/* ---------------------------------------------------------
+   ACCESSIBILITY
+   --------------------------------------------------------- */
+
+.vision-sr-only {
+  position: absolute;
+
+  width: 1px;
+  height: 1px;
+
+  padding: 0;
+  margin: -1px;
+
+  overflow: hidden;
+
+  clip: rect(0, 0, 0, 0);
+
+  white-space: nowrap;
+
+  border: 0;
+}
+
+/* ---------------------------------------------------------
+   RESPONSIVE VISIBILITY
+   --------------------------------------------------------- */
+
+.vision-mobile-only {
+  display: block;
+}
+
+.vision-desktop-only {
+  display: none;
+}
+
+@media (min-width: 768px) {
+  .vision-mobile-only {
+    display: none;
+  }
+
+  .vision-desktop-only {
+    display: block;
+  }
+}

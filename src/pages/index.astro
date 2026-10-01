@@ -1,17 +1,698 @@
 ---
+/**
+ * =========================================================
+ * ACTT — HOME PAGE
+ * =========================================================
+ */
 
+import PageLayout from "../layouts/PageLayout.astro";
+
+import VisionOSHero from "../components/VisionOSHero.astro";
+import VisionOSSection from "../components/VisionOSSection.astro";
+import VisionOSPanel from "../components/VisionOSPanel.astro";
+import VisionOSCard from "../components/VisionOSCard.astro";
+import VisionOSButton from "../components/VisionOSButton.astro";
+import VisionOSBadge from "../components/VisionOSBadge.astro";
+import VisionOSTeamCard from "../components/VisionOSTeamCard.astro";
+
+import { club } from "../data/club";
+import { teams } from "../data/teams";
+import { partners } from "../data/partners";
+import { site } from "../config/site";
 ---
 
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
-	</head>
-	<body>
-		<h1>Astro</h1>
-	</body>
-</html>
+<PageLayout
+  title="ACTT — Camphin-en-Carembault Tennis de Table"
+  description="Camphin-en-Carembault Tennis de Table — un club de tennis de table ouvert à tous, du loisir à la compétition."
+>
+
+  <!-- =====================================================
+       HERO
+       ===================================================== -->
+
+  <VisionOSHero
+    eyebrow="CAMPHIN-EN-CAREMBAULT"
+    title="UN CLUB. UNE ÉQUIPE. UNE PASSION."
+    description={club.description}
+    primaryCtaLabel="Jouer à l’ACTT"
+    primaryCtaHref="#jouer"
+    secondaryCtaLabel="Première séance"
+    secondaryCtaHref="#essayer"
+    badge="Tennis de table"
+    image={site.assets.logo}
+    imageAlt="ACTT — Camphin-en-Carembault Tennis de Table"
+  />
+
+
+  <!-- =====================================================
+       LE CLUB
+       ===================================================== -->
+
+  <VisionOSSection
+    id="club"
+    eyebrow="LE CLUB"
+    title="Camphin-en-Carembault Tennis de Table"
+    description="Un club de tennis de table à Camphin-en-Carembault, dans un esprit ouvert et collectif."
+    spacing="sm"
+  >
+
+    <div class="vision-grid-2 club-panels">
+
+      <VisionOSPanel
+        depth="raised"
+        padding="lg"
+        class="club-panel club-panel-primary"
+      >
+
+        <VisionOSBadge
+          label="ACTT"
+          variant="primary"
+        />
+
+        <h3>
+          {club.tagline}
+        </h3>
+
+        <p>
+          {club.description}
+        </p>
+
+      </VisionOSPanel>
+
+
+      <VisionOSPanel
+        depth="floating"
+        padding="lg"
+        class="club-panel club-panel-secondary"
+      >
+
+        <VisionOSBadge
+          label="Le club"
+          variant="success"
+        />
+
+        <h3>
+          Tennis de table à {club.city}
+        </h3>
+
+        <p>
+          Retrouvez ici les informations essentielles pour découvrir
+          le club, comprendre son fonctionnement et nous contacter.
+        </p>
+
+        <VisionOSButton
+          label="Découvrir le club"
+          href="#essayer"
+          variant="outline"
+        />
+
+      </VisionOSPanel>
+
+    </div>
+
+  </VisionOSSection>
+
+
+  <!-- =====================================================
+       JOUER
+       ===================================================== -->
+
+  <VisionOSSection
+    id="jouer"
+    eyebrow="JOUER"
+    title="Jouer à l’ACTT"
+    description="Les différentes pratiques du club seront présentées ici."
+    spacing="sm"
+  >
+
+    <div class="vision-grid-3">
+
+      <VisionOSCard
+        title="Pratique"
+        description="Les informations relatives aux pratiques proposées par le club seront bientôt disponibles."
+        badge="À venir"
+        variant="glass"
+      />
+
+      <VisionOSCard
+        title="Loisir"
+        description="Cette rubrique accueillera les informations concernant la pratique loisir."
+        badge="À venir"
+      />
+
+      <VisionOSCard
+        title="Compétition"
+        description="Cette rubrique accueillera les informations concernant la pratique en compétition."
+        badge="À venir"
+      />
+
+    </div>
+
+  </VisionOSSection>
+
+
+  <!-- =====================================================
+       ÉQUIPES
+       ===================================================== -->
+
+  <VisionOSSection
+    id="equipes"
+    eyebrow="ÉQUIPES"
+    title="Les équipes de l’ACTT"
+    description="Découvrez les équipes du club et leurs joueurs."
+    spacing="sm"
+  >
+
+    <div class="vision-grid-2 equipes-grid">
+
+      {teams.map((team) => (
+        <VisionOSTeamCard team={team} />
+      ))}
+
+    </div>
+
+  </VisionOSSection>
+
+
+  <!-- =====================================================
+       ACTUALITÉS
+       ===================================================== -->
+
+  <VisionOSSection
+    id="actualites"
+    eyebrow="ACTUALITÉS"
+    title="Les actualités du club"
+    description="Les dernières informations concernant la vie de l’ACTT seront publiées ici."
+    spacing="sm"
+  >
+
+    <div class="vision-grid-3">
+
+      <VisionOSCard
+        title="Actualités"
+        description="Les actualités du club seront publiées dans cette rubrique."
+        badge="À venir"
+        variant="glass"
+      />
+
+    </div>
+
+  </VisionOSSection>
+
+
+  <!-- =====================================================
+       CALENDRIER
+       ===================================================== -->
+
+  <VisionOSSection
+    id="calendrier"
+    eyebrow="CALENDRIER"
+    title="Le calendrier de l’ACTT"
+    description="Les prochains événements, rencontres et rendez-vous du club seront regroupés ici."
+    spacing="sm"
+  >
+
+    <VisionOSPanel
+      depth="floating"
+      padding="lg"
+    >
+
+      <VisionOSBadge
+        label="Calendrier"
+        variant="primary"
+      />
+
+      <h3>
+        Les prochains rendez-vous
+      </h3>
+
+      <p>
+        Le calendrier du club sera ajouté ici dès que les données
+        seront disponibles.
+      </p>
+
+    </VisionOSPanel>
+
+  </VisionOSSection>
+
+
+  <!-- =====================================================
+       PARTENAIRES
+       ===================================================== -->
+
+  <VisionOSSection
+    id="partenaires"
+    eyebrow="PARTENAIRES"
+    title="Nos partenaires"
+    description="Les partenaires qui accompagnent l’ACTT."
+    align="center"
+    spacing="sm"
+  >
+
+    {partners.length > 0 ? (
+      <ul class="vision-partners-grid">
+        {partners.map((partner) => (
+          <li class="vision-partner-item">
+
+            {partner.href ? (
+              <a
+                class="vision-partner-card vision-partner-card-link"
+                href={partner.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={partner.name}
+              >
+                <span class="vision-partner-logo">
+                  <img
+                    src={partner.logo}
+                    alt=""
+                    loading="lazy"
+                    decoding="async"
+                  />
+                </span>
+
+                {partner.description ? (
+                  <span class="vision-partner-description">
+                    {partner.description}
+                  </span>
+                ) : (
+                  <span class="vision-partner-name">
+                    {partner.name}
+                  </span>
+                )}
+              </a>
+            ) : (
+              <div class="vision-partner-card">
+                <span class="vision-partner-logo">
+                  <img
+                    src={partner.logo}
+                    alt={partner.name}
+                    loading="lazy"
+                    decoding="async"
+                  />
+                </span>
+
+                {partner.description ? (
+                  <span class="vision-partner-description">
+                    {partner.description}
+                  </span>
+                ) : (
+                  <span class="vision-partner-name">
+                    {partner.name}
+                  </span>
+                )}
+              </div>
+            )}
+
+          </li>
+        ))}
+      </ul>
+    ) : (
+      <div class="vision-grid-3">
+
+        <VisionOSCard
+          title="Partenaires"
+          description="Cette rubrique accueillera les partenaires du club."
+          badge="À venir"
+          variant="glass"
+        />
+
+      </div>
+    )}
+
+  </VisionOSSection>
+
+
+  <!-- =====================================================
+       PREMIÈRE SÉANCE
+       ===================================================== -->
+
+  <VisionOSSection
+    id="essayer"
+    eyebrow="PREMIÈRE SÉANCE"
+    title="Envie d’essayer ?"
+    description="Pour découvrir l’ACTT et obtenir les informations nécessaires pour une première séance, contactez-nous."
+    align="center"
+    spacing="sm"
+  >
+
+    <VisionOSPanel
+      depth="floating"
+      padding="lg"
+      class="essayer-panel"
+    >
+
+      <div class="vision-contact-content">
+
+        <VisionOSBadge
+          label="ACTT"
+          variant="primary"
+        />
+
+        <h3>
+          Votre première séance commence ici.
+        </h3>
+
+        <p>
+          Pour connaître les modalités et préparer votre venue,
+          contactez directement le club.
+        </p>
+
+        <div class="vision-contact-actions">
+
+          <VisionOSButton
+            label="Nous contacter par mail"
+            href={`mailto:${site.contact.email}`}
+            variant="primary"
+            size="lg"
+          />
+
+          <VisionOSButton
+            label="Appeler"
+            href={`tel:${site.contact.phone.replace(/\s+/g, "")}`}
+            variant="outline"
+            size="lg"
+          />
+
+        </div>
+
+      </div>
+
+    </VisionOSPanel>
+
+  </VisionOSSection>
+
+
+  <!-- =====================================================
+       CONTACT / FOOTER ANCHOR
+       ===================================================== -->
+
+  <div id="contact" aria-hidden="true"></div>
+
+</PageLayout>
+
+
+<style>
+
+  /* =======================================================
+     SECTIONS ALIGNÉES CENTER
+     =======================================================
+     VisionOSSection donne `width: fit-content` au titre,
+     ce qui empêche `text-align: center` de le centrer.
+     On force le centrage du bloc titre via margin-inline.
+     ======================================================= */
+
+  :global(.vision-section-align-center) :global(.vision-section-title) {
+    margin-inline: auto;
+  }
+
+
+  /* =======================================================
+     LE CLUB
+     ======================================================= */
+
+  :global(.club-panel)::before,
+  :global(.club-panel)::after {
+    display: none !important;
+    content: none !important;
+  }
+
+
+  .club-panel {
+    border-top: 1px solid var(--vision-border) !important;
+  }
+
+
+  .club-panel-primary {
+    border-top: 1px solid var(--vision-border) !important;
+  }
+
+
+  /* =======================================================
+     ÉQUIPES
+     ======================================================= */
+
+  .equipes-grid {
+    align-items: stretch;
+  }
+
+
+  /* =======================================================
+     PARTENAIRES
+     ======================================================= */
+
+  :global(.vision-section[id="partenaires"]) :global(.vision-section-content) {
+    display: flex;
+    justify-content: center;
+  }
+
+
+  .vision-partners-grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: stretch;
+
+    gap: var(--vision-space-5);
+
+    margin: 0;
+    padding: 0;
+
+    list-style: none;
+  }
+
+
+  .vision-partner-item {
+    display: flex;
+
+    width: 240px;
+    max-width: 240px;
+
+    margin: 0;
+    padding: 0;
+
+    list-style: none;
+  }
+
+
+  .vision-partner-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    gap: var(--vision-space-3);
+
+    width: 100%;
+    min-height: 200px;
+
+    padding: 28px 24px;
+
+    background: #ffffff;
+
+    border: 1px solid rgba(6, 26, 58, 0.10);
+    border-radius: 14px;
+
+    box-shadow:
+      0 8px 22px rgba(6, 26, 58, 0.06);
+
+    text-decoration: none;
+
+    transition:
+      transform var(--vision-duration-normal) var(--vision-ease-smooth),
+      box-shadow var(--vision-duration-normal) var(--vision-ease-smooth),
+      border-color var(--vision-duration-normal) var(--vision-ease-standard);
+  }
+
+
+  .vision-partner-logo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 100%;
+    height: 80px;
+
+    overflow: hidden;
+  }
+
+
+  .vision-partner-logo img {
+    display: block;
+
+    width: auto;
+    height: auto;
+
+    max-width: 160px;
+    max-height: 64px;
+
+    object-fit: contain;
+  }
+
+
+  .vision-partner-name {
+    color: #061a3a;
+
+    font-size: var(--vision-text-md);
+    font-weight: var(--vision-weight-bold);
+
+    letter-spacing: 0.02em;
+
+    text-align: center;
+  }
+
+
+  .vision-partner-description {
+    color: var(--vision-color-text-muted);
+
+    font-size: var(--vision-text-sm);
+    line-height: 1.5;
+
+    text-align: center;
+  }
+
+
+  @media (hover: hover) and (pointer: fine) {
+
+    .vision-partner-card-link:hover {
+      transform: translateY(-3px);
+
+      border-color: rgba(6, 26, 58, 0.18);
+
+      box-shadow:
+        0 14px 30px rgba(6, 26, 58, 0.10);
+    }
+
+  }
+
+
+  .vision-partner-card-link:focus-visible {
+    outline: 3px solid var(--vision-color-secondary);
+    outline-offset: 4px;
+  }
+
+
+  /* =======================================================
+     PREMIÈRE SÉANCE — PANEL CENTRÉ
+     ======================================================= */
+
+  .essayer-panel {
+    max-width: 900px;
+    margin-inline: auto;
+  }
+
+
+  /* =======================================================
+     CONTACT
+     ======================================================= */
+
+  .vision-contact-content {
+    max-width: 720px;
+
+    margin-inline: auto;
+
+    text-align: center;
+  }
+
+
+  .vision-contact-content h3 {
+    margin-top: var(--vision-space-5);
+    margin-bottom: var(--vision-space-4);
+
+    color: var(--vision-color-text);
+
+    font-size: clamp(
+      var(--vision-text-2xl),
+      5vw,
+      var(--vision-text-3xl)
+    );
+
+    line-height: var(--vision-line-tight);
+  }
+
+
+  .vision-contact-content p {
+    max-width: 600px;
+
+    margin-inline: auto;
+    margin-bottom: var(--vision-space-7);
+
+    color: var(--vision-color-text-muted);
+
+    font-size: var(--vision-text-lg);
+    line-height: var(--vision-line-relaxed);
+  }
+
+
+  /* =======================================================
+     ACTIONS
+     ======================================================= */
+
+  .vision-contact-actions {
+    display: flex;
+
+    flex-wrap: wrap;
+
+    justify-content: center;
+
+    gap: var(--vision-space-3);
+  }
+
+
+  /* =======================================================
+     MOBILE
+     ======================================================= */
+
+  @media (max-width: 767px) {
+
+    .vision-partner-item {
+      width: 200px;
+      max-width: 200px;
+    }
+
+    .vision-partner-card {
+      min-height: 180px;
+
+      padding: 24px 18px;
+    }
+
+    .vision-partner-logo {
+      height: 64px;
+    }
+
+    .vision-partner-logo img {
+      max-width: 130px;
+      max-height: 52px;
+    }
+
+    .vision-contact-actions {
+      flex-direction: column;
+
+      align-items: stretch;
+    }
+
+
+    .vision-contact-actions :global(.vision-button) {
+      width: 100%;
+    }
+
+  }
+
+
+  /* =======================================================
+     REDUCED MOTION
+     ======================================================= */
+
+  @media (prefers-reduced-motion: reduce) {
+
+    .vision-partner-card {
+      transition: none;
+    }
+
+    .vision-partner-card-link:hover {
+      transform: none;
+    }
+
+  }
+
+</style>

@@ -1,0 +1,280 @@
+---
+/**
+ * =========================================================
+ * VISIONOS — BADGE
+ * =========================================================
+ *
+ * Small contextual label for:
+ * - categories
+ * - statuses
+ * - technologies
+ * - metadata
+ * - features
+ *
+ * =========================================================
+ */
+
+export type BadgeVariant =
+  | "default"
+  | "primary"
+  | "success"
+  | "warning";
+
+interface Props {
+  label: string;
+  icon?: string;
+  variant?: BadgeVariant;
+  class?: string;
+}
+
+const {
+  label,
+  icon,
+  variant = "default",
+  class: className = "",
+} = Astro.props;
+
+const classes = [
+  "vision-badge",
+  `vision-badge-${variant}`,
+  className,
+]
+  .filter(Boolean)
+  .join(" ");
+---
+
+<span class={classes}>
+
+  {icon && (
+    <span
+      class="vision-badge-icon"
+      aria-hidden="true"
+    >
+      {icon}
+    </span>
+  )}
+
+  <span class="vision-badge-label">
+    {label}
+  </span>
+
+</span>
+
+<style>
+  /* =======================================================
+     BASE
+     ======================================================= */
+
+  .vision-badge {
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: var(--vision-space-2);
+
+    width: fit-content;
+    max-width: 100%;
+
+    padding: 8px 12px;
+
+    border: 1px solid var(--vision-border);
+
+    border-radius: var(--vision-radius-pill);
+
+    background: var(--vision-surface-soft);
+
+    color: var(--vision-color-text);
+
+    font-size: var(--vision-text-sm);
+    font-weight: var(--vision-weight-medium);
+
+    line-height: 1;
+
+    white-space: nowrap;
+
+    transition:
+      background-color var(--vision-duration-fast) var(--vision-ease-standard),
+      border-color var(--vision-duration-fast) var(--vision-ease-standard),
+      color var(--vision-duration-fast) var(--vision-ease-standard);
+  }
+
+
+  /* =======================================================
+     ICON
+     ======================================================= */
+
+  .vision-badge-icon {
+    display: inline-flex;
+
+    align-items: center;
+    justify-content: center;
+
+    flex: 0 0 auto;
+
+    line-height: 1;
+  }
+
+
+  .vision-badge-label {
+    min-width: 0;
+
+    overflow: hidden;
+
+    text-overflow: ellipsis;
+  }
+
+
+  /* =======================================================
+     DEFAULT
+     ======================================================= */
+
+  .vision-badge-default {
+    background: var(--vision-surface-soft);
+
+    border-color: var(--vision-border);
+
+    color: var(--vision-color-text-muted);
+  }
+
+
+  /* =======================================================
+     PRIMARY
+     ======================================================= */
+
+  .vision-badge-primary {
+    background: color-mix(
+      in srgb,
+      var(--vision-color-primary) 8%,
+      transparent
+    );
+
+    border-color: color-mix(
+      in srgb,
+      var(--vision-color-primary) 22%,
+      transparent
+    );
+
+    color: var(--vision-color-primary);
+  }
+
+
+  /* =======================================================
+     SUCCESS
+     ======================================================= */
+
+  .vision-badge-success {
+    background: color-mix(
+      in srgb,
+      var(--vision-color-accent) 9%,
+      transparent
+    );
+
+    border-color: color-mix(
+      in srgb,
+      var(--vision-color-accent) 24%,
+      transparent
+    );
+
+    color: var(--vision-color-accent);
+  }
+
+
+  /* =======================================================
+     WARNING
+     ======================================================= */
+
+  .vision-badge-warning {
+    background: color-mix(
+      in srgb,
+      var(--vision-color-warning) 10%,
+      transparent
+    );
+
+    border-color: color-mix(
+      in srgb,
+      var(--vision-color-warning) 25%,
+      transparent
+    );
+
+    color: var(--vision-color-warning);
+  }
+
+
+  /* =======================================================
+     ACTT — LE CLUB
+     =======================================================
+     
+     Sur le fond clair #f8fafc de la section Club,
+     les badges utilisent des surfaces pleines et lisibles.
+     ======================================================= */
+
+  :global(#club) .vision-badge-primary {
+    background: #e0ecf7;
+
+    border-color:
+      rgba(6, 26, 58, 0.18);
+
+    color: #061a3a;
+  }
+
+
+  :global(#club) .vision-badge-success {
+    background: #dff2e3;
+
+    border-color:
+      rgba(31, 107, 53, 0.20);
+
+    color: #1f6b35;
+  }
+
+
+  /* =======================================================
+     ACTT — LE CLUB — HOVER
+     ======================================================= */
+
+  :global(#club) .vision-badge-primary:hover {
+    background: #d7e6f3;
+
+    border-color:
+      rgba(6, 26, 58, 0.24);
+  }
+
+
+  :global(#club) .vision-badge-success:hover {
+    background: #d5edd9;
+
+    border-color:
+      rgba(31, 107, 53, 0.26);
+  }
+
+
+  /* =======================================================
+     SMALL SCREENS
+     ======================================================= */
+
+  @media (max-width: 420px) {
+
+    .vision-badge {
+      max-width: 100%;
+
+      padding: 7px 10px;
+
+      font-size: var(--vision-text-xs);
+    }
+
+  }
+
+
+  /* =======================================================
+     REDUCED MOTION
+     ======================================================= */
+
+  @media (prefers-reduced-motion: reduce) {
+
+    .vision-badge {
+      transition: none;
+    }
+
+  }
+
+</style>

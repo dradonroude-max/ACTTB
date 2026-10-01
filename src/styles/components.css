@@ -1,0 +1,298 @@
+/* =========================================================
+   VISIONOS — COMPONENTS
+   ========================================================= */
+
+/* ---------------------------------------------------------
+   SHARED SURFACE
+   --------------------------------------------------------- */
+
+.vision-surface {
+  position: relative;
+
+  background: var(--vision-surface);
+
+  border: 1px solid var(--vision-border);
+  border-radius: var(--vision-radius-lg);
+
+  box-shadow: var(--vision-shadow-md);
+}
+
+/* ---------------------------------------------------------
+   GLASS SURFACE
+   --------------------------------------------------------- */
+
+.vision-surface-glass {
+  position: relative;
+
+  background: var(--vision-surface);
+
+  border: 1px solid var(--vision-border);
+
+  border-radius: var(--vision-radius-lg);
+
+  box-shadow: var(--vision-shadow-md);
+}
+
+@supports (backdrop-filter: blur(1px)) {
+  .vision-surface-glass {
+    background: var(--vision-surface-glass);
+    backdrop-filter: blur(var(--vision-blur-md));
+    -webkit-backdrop-filter: blur(var(--vision-blur-md));
+  }
+}
+
+/* ---------------------------------------------------------
+   CARD
+   --------------------------------------------------------- */
+
+.vision-card {
+  position: relative;
+
+  padding: var(--vision-space-6);
+
+  background: var(--vision-surface);
+
+  border: 1px solid var(--vision-border);
+  border-radius: var(--vision-radius-lg);
+
+  box-shadow: var(--vision-shadow-sm);
+
+  transition:
+    transform var(--vision-duration-normal) var(--vision-ease-smooth),
+    box-shadow var(--vision-duration-normal) var(--vision-ease-smooth),
+    border-color var(--vision-duration-normal) var(--vision-ease-standard);
+}
+
+.vision-card:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--vision-shadow-md);
+  border-color: var(--vision-border-strong);
+}
+
+/* ---------------------------------------------------------
+   PANEL
+   --------------------------------------------------------- */
+
+.vision-panel {
+  position: relative;
+
+  padding: var(--vision-space-7);
+
+  background: var(--vision-surface-glass);
+
+  border: 1px solid var(--vision-border);
+  border-radius: var(--vision-radius-xl);
+
+  box-shadow: var(--vision-shadow-lg);
+}
+
+@supports (backdrop-filter: blur(1px)) {
+  .vision-panel {
+    backdrop-filter: blur(var(--vision-blur-md));
+    -webkit-backdrop-filter: blur(var(--vision-blur-md));
+  }
+}
+
+/* ---------------------------------------------------------
+   BADGE
+   --------------------------------------------------------- */
+
+.vision-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--vision-space-2);
+
+  min-height: 32px;
+  padding-inline: var(--vision-space-3);
+
+  border: 1px solid var(--vision-border);
+  border-radius: var(--vision-radius-pill);
+
+  background: var(--vision-surface-glass);
+
+  color: var(--vision-color-text);
+
+  font-size: var(--vision-text-sm);
+  font-weight: var(--vision-weight-medium);
+
+  white-space: nowrap;
+}
+
+/* ---------------------------------------------------------
+   BUTTON BASE
+   --------------------------------------------------------- */
+
+.vision-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--vision-space-2);
+
+  min-height: 44px;
+  padding-inline: var(--vision-space-5);
+
+  border: 1px solid transparent;
+  border-radius: var(--vision-radius-pill);
+
+  font-size: var(--vision-text-sm);
+  font-weight: var(--vision-weight-semibold);
+
+  text-align: center;
+  white-space: nowrap;
+
+  transition:
+    transform var(--vision-duration-fast) var(--vision-ease-standard),
+    background-color var(--vision-duration-normal) var(--vision-ease-standard),
+    border-color var(--vision-duration-normal) var(--vision-ease-standard),
+    box-shadow var(--vision-duration-normal) var(--vision-ease-standard);
+}
+
+.vision-button:hover {
+  transform: translateY(-1px);
+}
+
+.vision-button:active {
+  transform: translateY(0);
+}
+
+/* ---------------------------------------------------------
+   BUTTON — PRIMARY
+   --------------------------------------------------------- */
+
+.vision-button-primary {
+  background: var(--vision-color-primary);
+  color: var(--vision-color-text-inverse);
+
+  box-shadow: var(--vision-shadow-sm);
+}
+
+.vision-button-primary:hover {
+  background: var(--vision-color-primary-hover);
+  box-shadow: var(--vision-shadow-md);
+}
+
+/* ---------------------------------------------------------
+   BUTTON — SECONDARY
+   --------------------------------------------------------- */
+
+.vision-button-secondary {
+  background: var(--vision-color-secondary);
+  color: var(--vision-color-text-inverse);
+}
+
+.vision-button-secondary:hover {
+  filter: brightness(0.94);
+}
+
+/* ---------------------------------------------------------
+   BUTTON — OUTLINE
+   --------------------------------------------------------- */
+
+.vision-button-outline {
+  background: transparent;
+  border-color: var(--vision-border-strong);
+  color: var(--vision-color-text);
+}
+
+.vision-button-outline:hover {
+  background: var(--vision-surface-soft);
+}
+
+/* ---------------------------------------------------------
+   BUTTON — GHOST
+   --------------------------------------------------------- */
+
+.vision-button-ghost {
+  background: transparent;
+  color: var(--vision-color-text);
+}
+
+.vision-button-ghost:hover {
+  background: var(--vision-surface-soft);
+}
+
+/* ---------------------------------------------------------
+   BUTTON — DISABLED
+   --------------------------------------------------------- */
+
+.vision-button:disabled,
+.vision-button[aria-disabled="true"] {
+  cursor: not-allowed;
+  opacity: 0.5;
+  transform: none;
+  box-shadow: none;
+}
+
+/* ---------------------------------------------------------
+   IMAGE FRAME
+   --------------------------------------------------------- */
+
+.vision-image-frame {
+  position: relative;
+
+  overflow: hidden;
+
+  border-radius: var(--vision-radius-lg);
+
+  background: var(--vision-surface-soft);
+}
+
+.vision-image-frame img {
+  width: 100%;
+  height: 100%;
+
+  object-fit: cover;
+
+  transition:
+    transform var(--vision-duration-slow) var(--vision-ease-smooth);
+}
+
+.vision-image-frame:hover img {
+  transform: scale(1.02);
+}
+
+/* ---------------------------------------------------------
+   DIVIDER
+   --------------------------------------------------------- */
+
+.vision-divider {
+  width: 100%;
+  height: 1px;
+
+  background: var(--vision-border);
+}
+
+/* ---------------------------------------------------------
+   MOBILE
+   --------------------------------------------------------- */
+
+@media (max-width: 767px) {
+  .vision-card,
+  .vision-panel {
+    border-radius: var(--vision-radius-lg);
+  }
+
+  .vision-card:hover,
+  .vision-image-frame:hover img {
+    transform: none;
+  }
+}
+
+/* ---------------------------------------------------------
+   REDUCED MOTION
+   --------------------------------------------------------- */
+
+@media (prefers-reduced-motion: reduce) {
+  .vision-card,
+  .vision-button,
+  .vision-image-frame img {
+    transition: none;
+  }
+
+  .vision-card:hover,
+  .vision-button:hover,
+  .vision-button:active,
+  .vision-image-frame:hover img {
+    transform: none;
+  }
+}

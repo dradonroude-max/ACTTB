@@ -1,0 +1,1479 @@
+---
+/**
+ * =========================================================
+ * ACTT — HERO
+ * =========================================================
+ */
+
+interface Props {
+  eyebrow?: string;
+  title: string;
+  description?: string;
+
+  primaryCtaLabel?: string;
+  primaryCtaHref?: string;
+
+  secondaryCtaLabel?: string;
+  secondaryCtaHref?: string;
+
+  image?: string;
+  imageAlt?: string;
+
+  badge?: string;
+
+  align?: "left" | "center";
+  visualPosition?: "left" | "right";
+
+  class?: string;
+}
+
+const {
+  eyebrow,
+  title,
+  description,
+
+  primaryCtaLabel,
+  primaryCtaHref = "#contact",
+
+  secondaryCtaLabel,
+  secondaryCtaHref = "#about",
+
+  image = "/images/logo/logoactt.png",
+  imageAlt = "ACTT — Camphin-en-Carembault Tennis de Table",
+
+  badge,
+
+  align = "left",
+  visualPosition = "right",
+
+  class: className = "",
+} = Astro.props;
+
+const classes = [
+  "visionos-hero",
+  `visionos-hero-align-${align}`,
+  `visionos-hero-visual-${visualPosition}`,
+  className,
+]
+  .filter(Boolean)
+  .join(" ");
+
+/*
+ * Le titre est découpé en lignes à chaque point final.
+ * « UN CLUB. UNE ÉQUIPE. UNE PASSION. » donne 3 lignes.
+ * Les lignes impaires (la 2e, la 4e…) sont en vert ACTT.
+ */
+const titleLines = (title.match(/[^.!?]+[.!?]?/g) ?? [title])
+  .map((line) => line.trim())
+  .filter(Boolean);
+---
+
+<section class={classes}>
+
+  <!-- =====================================================
+       BACKGROUND
+       ===================================================== -->
+
+  <div class="hero-background" aria-hidden="true">
+
+    <span class="hero-grid-line hero-grid-line-1"></span>
+    <span class="hero-grid-line hero-grid-line-2"></span>
+
+    <span class="hero-circle hero-circle-1"></span>
+    <span class="hero-circle hero-circle-2"></span>
+
+    <span class="hero-light hero-light-blue"></span>
+    <span class="hero-light hero-light-green"></span>
+
+  </div>
+
+
+  <!-- =====================================================
+       PING-PONG BALL
+       ===================================================== -->
+
+  <div class="actt-travel-ball" aria-hidden="true">
+    <span></span>
+  </div>
+
+
+  <!-- =====================================================
+       CONTAINER
+       ===================================================== -->
+
+  <div class="vision-container">
+
+    <div class="visionos-hero-grid">
+
+      <!-- =================================================
+           CONTENT
+           ================================================= -->
+
+      <div class="visionos-hero-content actt-hero-content">
+
+        <!-- BADGE -->
+
+        {badge && (
+          <div class="actt-hero-badge">
+
+            <span class="actt-badge-dot"></span>
+
+            <span>
+              {badge}
+            </span>
+
+          </div>
+        )}
+
+
+        <!-- EYEBROW -->
+
+        {eyebrow && (
+          <p class="visionos-hero-eyebrow">
+            {eyebrow}
+          </p>
+        )}
+
+
+        <!-- TITLE -->
+
+        <h1 class="visionos-hero-title">
+
+          {titleLines.map((line, index) => (
+            <span
+              class:list={[
+                "title-line",
+                index % 2 === 1 ? "title-green" : "title-white",
+              ]}
+            >
+              {line}
+            </span>
+          ))}
+
+        </h1>
+
+
+        <!-- DESCRIPTION -->
+
+        {description && (
+          <p class="visionos-hero-description">
+            {description}
+          </p>
+        )}
+
+
+        <!-- ACTIONS -->
+
+        {(primaryCtaLabel || secondaryCtaLabel) && (
+          <div class="visionos-hero-actions">
+
+            {primaryCtaLabel && (
+              <a
+                href={primaryCtaHref}
+                class="actt-hero-button actt-hero-button-primary"
+              >
+                {primaryCtaLabel}
+              </a>
+            )}
+
+            {secondaryCtaLabel && (
+              <a
+                href={secondaryCtaHref}
+                class="actt-hero-button actt-hero-button-secondary"
+              >
+                {secondaryCtaLabel}
+              </a>
+            )}
+
+          </div>
+        )}
+
+
+        <slot name="content" />
+
+      </div>
+
+
+      <!-- =================================================
+           ACTT VISUAL
+           ================================================= -->
+
+      <div class="visionos-hero-visual actt-hero-visual">
+
+        <div
+          class="actt-visual"
+          aria-label="Logo ACTT"
+        >
+
+          <!-- =================================================
+               ATMOSPHERE
+               ================================================= -->
+
+          <div
+            class="actt-visual-glow actt-glow-blue"
+            aria-hidden="true"
+          ></div>
+
+          <div
+            class="actt-visual-glow actt-glow-green"
+            aria-hidden="true"
+          ></div>
+
+
+          <!-- =================================================
+               LOGO FLOTTANT
+               ================================================= -->
+
+          <div class="actt-logo-wrapper">
+
+            <div
+              class="actt-logo-aura"
+              aria-hidden="true"
+            ></div>
+
+            <img
+              class="actt-hero-logo"
+              src={image}
+              alt={imageAlt}
+              width="520"
+              height="520"
+              fetchpriority="high"
+              decoding="async"
+            />
+
+          </div>
+
+
+          <!-- =================================================
+               COLOR SIGNATURE
+               ================================================= -->
+
+          <div
+            class="actt-color-signature"
+            aria-hidden="true"
+          >
+            <span></span>
+            <span></span>
+            <span></span>
+          </div>
+
+
+        </div>
+
+
+        <slot name="visual" />
+
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<style>
+
+/* =========================================================
+   HERO
+   ========================================================= */
+
+.visionos-hero {
+  position: relative;
+
+  display: flex;
+  align-items: center;
+
+  min-height:
+    calc(100vh - var(--vision-header-height));
+
+  padding-top: 42px;
+  padding-bottom: 58px;
+
+  overflow: hidden;
+
+  background:
+    radial-gradient(
+      circle at 78% 45%,
+      rgba(0, 174, 239, 0.10),
+      transparent 31%
+    ),
+    radial-gradient(
+      circle at 91% 80%,
+      rgba(53, 168, 83, 0.08),
+      transparent 29%
+    ),
+    #061a3a;
+
+  color: #f8fafc;
+}
+
+
+/* =========================================================
+   BACKGROUND
+   ========================================================= */
+
+.hero-background {
+  position: absolute;
+
+  inset: 0;
+
+  overflow: hidden;
+
+  pointer-events: none;
+
+  z-index: 0;
+}
+
+
+.hero-grid-line {
+  position: absolute;
+
+  display: block;
+
+  width: 100%;
+  height: 1px;
+
+  opacity: 0.45;
+
+  background:
+    linear-gradient(
+      90deg,
+      transparent,
+      rgba(0, 174, 239, 0.14),
+      transparent
+    );
+}
+
+
+.hero-grid-line-1 {
+  top: 34%;
+}
+
+
+.hero-grid-line-2 {
+  top: 74%;
+
+  background:
+    linear-gradient(
+      90deg,
+      transparent,
+      rgba(53, 168, 83, 0.10),
+      transparent
+    );
+}
+
+
+.hero-circle {
+  position: absolute;
+
+  display: block;
+
+  border: 1px solid rgba(0, 174, 239, 0.08);
+
+  border-radius: 50%;
+}
+
+
+.hero-circle-1 {
+  top: 5%;
+  right: -70px;
+
+  width: 650px;
+  height: 650px;
+}
+
+
+.hero-circle-2 {
+  top: 17%;
+  right: 60px;
+
+  width: 470px;
+  height: 470px;
+
+  border-color:
+    rgba(53, 168, 83, 0.07);
+}
+
+
+.hero-light {
+  position: absolute;
+
+  border-radius: 50%;
+
+  filter: blur(100px);
+}
+
+
+.hero-light-blue {
+  top: 20%;
+  right: 20%;
+
+  width: 330px;
+  height: 330px;
+
+  background:
+    rgba(0, 174, 239, 0.07);
+}
+
+
+.hero-light-green {
+  right: -90px;
+  bottom: -100px;
+
+  width: 340px;
+  height: 340px;
+
+  background:
+    rgba(53, 168, 83, 0.07);
+}
+
+
+/* =========================================================
+   GRID
+   ========================================================= */
+
+.visionos-hero-grid {
+  position: relative;
+
+  z-index: 2;
+
+  display: grid;
+
+  grid-template-columns:
+    minmax(0, 1fr)
+    minmax(460px, 0.90fr);
+
+  align-items: center;
+
+  gap: 38px;
+}
+
+
+/* =========================================================
+   CONTENT
+   ========================================================= */
+
+.visionos-hero-content {
+  position: relative;
+
+  z-index: 5;
+
+  max-width: 700px;
+}
+
+
+.actt-hero-content {
+  animation:
+    actt-content-in
+    750ms
+    cubic-bezier(0.22, 1, 0.36, 1)
+    both;
+}
+
+
+@keyframes actt-content-in {
+
+  from {
+    opacity: 0;
+
+    transform:
+      translateY(22px);
+  }
+
+  to {
+    opacity: 1;
+
+    transform:
+      translateY(0);
+  }
+
+}
+
+
+/* =========================================================
+   BADGE
+   ========================================================= */
+
+.actt-hero-badge {
+  display: inline-flex;
+
+  align-items: center;
+
+  gap: 9px;
+
+  margin-bottom: 22px;
+
+  padding:
+    8px 13px;
+
+  border:
+    1px solid
+    rgba(248, 250, 252, 0.18);
+
+  border-radius: 999px;
+
+  background:
+    rgba(248, 250, 252, 0.08);
+
+  color: #f8fafc;
+
+  font-size: 0.72rem;
+  font-weight: 800;
+
+  letter-spacing: 0.14em;
+
+  text-transform: uppercase;
+
+  backdrop-filter:
+    blur(12px);
+
+  -webkit-backdrop-filter:
+    blur(12px);
+}
+
+
+.actt-badge-dot {
+  width: 8px;
+  height: 8px;
+
+  flex-shrink: 0;
+
+  border-radius: 50%;
+
+  background:
+    #35a853;
+
+  box-shadow:
+    0 0 0 4px
+    rgba(53, 168, 83, 0.14),
+
+    0 0 12px
+    rgba(53, 168, 83, 0.45);
+}
+
+
+/* =========================================================
+   EYEBROW
+   ========================================================= */
+
+.visionos-hero-eyebrow {
+  position: relative;
+
+  margin:
+    0 0 18px;
+
+  padding-left: 20px;
+
+  color:
+    #00aeef;
+
+  font-size: 0.82rem;
+  font-weight: 800;
+
+  letter-spacing: 0.16em;
+
+  text-transform: uppercase;
+}
+
+
+.visionos-hero-eyebrow::before {
+  content: "";
+
+  position: absolute;
+
+  top: 50%;
+  left: 0;
+
+  width: 8px;
+  height: 8px;
+
+  transform:
+    translateY(-50%);
+
+  border-radius: 50%;
+
+  background:
+    #35a853;
+
+  box-shadow:
+    0 0 0 4px
+    rgba(53, 168, 83, 0.12);
+}
+
+
+/* =========================================================
+   TITLE
+   ========================================================= */
+
+.visionos-hero-title {
+  max-width: 760px;
+
+  margin:
+    0 0 26px;
+
+  font-size:
+    clamp(
+      3.25rem,
+      5.4vw,
+      5.25rem
+    );
+
+  font-weight: 900;
+
+  line-height: 0.92;
+
+  letter-spacing: -0.055em;
+
+  text-transform: uppercase;
+}
+
+
+.title-line {
+  display: block;
+}
+
+
+.title-white {
+  color:
+    #f8fafc;
+
+  text-shadow:
+    0 4px 25px
+    rgba(0, 0, 0, 0.14);
+}
+
+
+.title-green {
+  color:
+    #35a853;
+
+  text-shadow:
+    0 4px 25px
+    rgba(53, 168, 83, 0.13);
+}
+
+
+/* =========================================================
+   DESCRIPTION
+   ========================================================= */
+
+.visionos-hero-description {
+  max-width: 600px;
+
+  margin:
+    0 0 30px;
+
+  color:
+    rgba(248, 250, 252, 0.72);
+
+  font-size:
+    1.05rem;
+
+  line-height:
+    1.65;
+}
+
+
+/* =========================================================
+   ACTIONS
+   ========================================================= */
+
+.visionos-hero-actions {
+  position: relative;
+
+  z-index: 20;
+
+  display: flex;
+
+  flex-wrap: wrap;
+
+  align-items: center;
+
+  gap: 16px;
+}
+
+
+/* =========================================================
+   BOUTONS ACTT
+   ========================================================= */
+
+.actt-hero-button {
+  display: inline-flex;
+
+  align-items: center;
+  justify-content: center;
+
+  min-height: 58px;
+
+  padding:
+    0 28px;
+
+  border-radius: 999px;
+
+  font-size:
+    0.96rem;
+
+  font-weight:
+    700;
+
+  line-height: 1;
+
+  text-decoration: none;
+
+  transition:
+    transform 180ms ease,
+    box-shadow 180ms ease,
+    background-color 180ms ease,
+    border-color 180ms ease,
+    filter 180ms ease;
+}
+
+
+.actt-hero-button:hover {
+  transform:
+    translateY(-2px);
+}
+
+
+/* =========================================================
+   BOUTON PRINCIPAL — VERT ACTT
+   ========================================================= */
+
+.actt-hero-button-primary {
+  color:
+    #061a3a;
+
+  background:
+    #35a853;
+
+  border:
+    1px solid
+    #35a853;
+
+  box-shadow:
+    0 10px 28px
+    rgba(0, 0, 0, 0.24),
+
+    0 0 22px
+    rgba(53, 168, 83, 0.14);
+
+  font-weight:
+    800;
+}
+
+
+.actt-hero-button-primary:hover {
+  color:
+    #061a3a;
+
+  background:
+    #43bb61;
+
+  border-color:
+    #43bb61;
+
+  box-shadow:
+    0 14px 34px
+    rgba(0, 0, 0, 0.28),
+
+    0 0 30px
+    rgba(53, 168, 83, 0.24);
+
+  filter:
+    brightness(1.04);
+}
+
+
+/* =========================================================
+   BOUTON SECONDAIRE
+   ========================================================= */
+
+.actt-hero-button-secondary {
+  color:
+    #f8fafc;
+
+  background:
+    rgba(248, 250, 252, 0.04);
+
+  border:
+    1px solid
+    rgba(248, 250, 252, 0.55);
+
+  box-shadow:
+    0 8px 24px
+    rgba(0, 0, 0, 0.12);
+}
+
+
+.actt-hero-button-secondary:hover {
+  color:
+    #ffffff;
+
+  background:
+    rgba(248, 250, 252, 0.12);
+
+  border-color:
+    #ffffff;
+}
+
+
+/* =========================================================
+   VISUAL
+   ========================================================= */
+
+.visionos-hero-visual {
+  position: relative;
+
+  width: 100%;
+
+  max-width: 570px;
+
+  margin-inline: auto;
+}
+
+
+.actt-hero-visual {
+  animation:
+    actt-visual-in
+    850ms
+    cubic-bezier(0.22, 1, 0.36, 1)
+    120ms
+    both;
+}
+
+
+@keyframes actt-visual-in {
+
+  from {
+    opacity: 0;
+
+    transform:
+      translateY(18px)
+      scale(0.97);
+  }
+
+  to {
+    opacity: 1;
+
+    transform:
+      translateY(0)
+      scale(1);
+  }
+
+}
+
+
+/* =========================================================
+   ACTT VISUAL
+   ========================================================= */
+
+.actt-visual {
+  position: relative;
+
+  width: 100%;
+
+  height: 500px;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  isolation: isolate;
+}
+
+
+/* =========================================================
+   GLOWS
+   ========================================================= */
+
+.actt-visual-glow {
+  position: absolute;
+
+  border-radius: 50%;
+
+  pointer-events: none;
+
+  filter:
+    blur(70px);
+
+  z-index: 0;
+}
+
+
+.actt-glow-blue {
+  width: 360px;
+  height: 360px;
+
+  background:
+    rgba(0, 174, 239, 0.12);
+}
+
+
+.actt-glow-green {
+  width: 250px;
+  height: 250px;
+
+  right: 8%;
+  bottom: 8%;
+
+  background:
+    rgba(53, 168, 83, 0.08);
+}
+
+
+/* =========================================================
+   LOGO FLOTTANT
+   ========================================================= */
+
+.actt-logo-wrapper {
+  position: relative;
+
+  z-index: 5;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  width:
+    min(500px, 90%);
+
+  aspect-ratio: 1;
+
+  animation:
+    actt-logo-float
+    5.5s
+    ease-in-out
+    infinite;
+}
+
+
+/*
+ * Halo clair derrière le logo.
+ * Il rend lisibles les textes bleu foncé du logo
+ * (« Camphin en Carembault » et « ACTT ») sur le fond navy.
+ */
+
+.actt-logo-aura {
+  position: absolute;
+
+  width: 78%;
+  height: 78%;
+
+  border-radius: 50%;
+
+  background:
+    radial-gradient(
+      circle,
+      rgba(248, 250, 252, 0.88) 0%,
+      rgba(248, 250, 252, 0.50) 45%,
+      transparent 72%
+    );
+
+  filter:
+    blur(18px);
+
+  transform:
+    scale(1.08);
+
+  pointer-events: none;
+}
+
+
+.actt-hero-logo {
+  position: relative;
+
+  z-index: 2;
+
+  display: block;
+
+  width: 82%;
+  height: 82%;
+
+  object-fit: contain;
+
+  filter:
+    drop-shadow(
+      0 18px 22px
+      rgba(0, 0, 0, 0.22)
+    )
+
+    drop-shadow(
+      0 0 22px
+      rgba(0, 174, 239, 0.08)
+    );
+
+  pointer-events: none;
+}
+
+
+/* =========================================================
+   FLOTTEMENT DU LOGO
+   ========================================================= */
+
+@keyframes actt-logo-float {
+
+  0%,
+  100% {
+    transform:
+      translateY(0)
+      rotate(-0.8deg);
+  }
+
+  50% {
+    transform:
+      translateY(-12px)
+      rotate(0.8deg);
+  }
+
+}
+
+
+/* =========================================================
+   COLOR SIGNATURE
+   ========================================================= */
+
+.actt-color-signature {
+  position: absolute;
+
+  right: 7%;
+  bottom: 5%;
+
+  z-index: 7;
+
+  display: flex;
+
+  width: 125px;
+  height: 6px;
+
+  overflow: hidden;
+
+  border-radius: 999px;
+
+  box-shadow:
+    0 5px 16px
+    rgba(0, 0, 0, 0.22);
+}
+
+
+.actt-color-signature span {
+  flex: 1;
+}
+
+
+.actt-color-signature span:nth-child(1) {
+  background:
+    #073b7a;
+}
+
+
+.actt-color-signature span:nth-child(2) {
+  background:
+    #35a853;
+}
+
+
+.actt-color-signature span:nth-child(3) {
+  background:
+    #8f1520;
+}
+
+
+/* =========================================================
+   TRAVERSÉE DE LA BALLE
+   ========================================================= */
+
+/*
+ * La balle passe derrière le contenu (grille z-index: 2)
+ * mais reste devant le fond (z-index: 0).
+ */
+
+.actt-travel-ball {
+  position: absolute;
+
+  z-index: 1;
+
+  left: 72%;
+  top: 54%;
+
+  width: 16px;
+  height: 16px;
+
+  pointer-events: none;
+
+  animation:
+    actt-ball-travel
+    8s
+    cubic-bezier(0.45, 0.05, 0.35, 1)
+    infinite;
+}
+
+
+.actt-travel-ball span {
+  display: block;
+
+  width: 100%;
+  height: 100%;
+
+  border-radius: 50%;
+
+  background:
+    radial-gradient(
+      circle at 32% 28%,
+      #ffffff 0%,
+      #ffffff 45%,
+      #d9e0e5 100%
+    );
+
+  box-shadow:
+    0 3px 8px
+    rgba(0, 0, 0, 0.30),
+
+    0 0 16px
+    rgba(255, 255, 255, 0.35);
+}
+
+
+@keyframes actt-ball-travel {
+
+  0% {
+    left: 72%;
+    top: 54%;
+
+    opacity: 0;
+
+    transform:
+      scale(0.72);
+  }
+
+  7% {
+    opacity: 1;
+  }
+
+  22% {
+    left: 61%;
+    top: 49%;
+
+    transform:
+      scale(1);
+  }
+
+  37% {
+    left: 49%;
+    top: 57%;
+
+    transform:
+      scale(0.95);
+  }
+
+  52% {
+    left: 37%;
+    top: 48%;
+
+    transform:
+      scale(1);
+  }
+
+  67% {
+    left: 25%;
+    top: 55%;
+
+    transform:
+      scale(0.95);
+  }
+
+  82% {
+    left: 13%;
+    top: 47%;
+
+    transform:
+      scale(0.90);
+  }
+
+  94% {
+    left: 2%;
+    top: 43%;
+
+    opacity: 1;
+
+    transform:
+      scale(0.84);
+  }
+
+  100% {
+    left: -2%;
+    top: 43%;
+
+    opacity: 0;
+
+    transform:
+      scale(0.75);
+  }
+
+}
+
+
+/* =========================================================
+   DESKTOP
+   ========================================================= */
+
+@media (min-width: 1200px) {
+
+  .visionos-hero {
+    padding-top: 38px;
+    padding-bottom: 58px;
+  }
+
+
+  .visionos-hero-grid {
+    grid-template-columns:
+      minmax(0, 1fr)
+      minmax(500px, 0.88fr);
+
+    gap: 24px;
+  }
+
+
+  .actt-visual {
+    height: 530px;
+  }
+
+
+  .actt-logo-wrapper {
+    width: 500px;
+  }
+
+}
+
+
+/* =========================================================
+   TABLET
+   ========================================================= */
+
+@media (max-width: 1100px) {
+
+  .visionos-hero-grid {
+    grid-template-columns:
+      minmax(0, 1fr)
+      minmax(390px, 0.82fr);
+
+    gap: 30px;
+  }
+
+
+  .visionos-hero-title {
+    font-size:
+      clamp(
+        3rem,
+        5.8vw,
+        4.7rem
+      );
+  }
+
+
+  .actt-logo-wrapper {
+    width:
+      min(440px, 90%);
+  }
+
+
+  .actt-visual {
+    height: 470px;
+  }
+
+}
+
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media (max-width: 899px) {
+
+  .visionos-hero {
+    min-height: auto;
+
+    padding-top: 48px;
+    padding-bottom: 65px;
+  }
+
+
+  .visionos-hero-grid {
+    grid-template-columns: 1fr;
+
+    gap: 42px;
+  }
+
+
+  .visionos-hero-content {
+    max-width: none;
+  }
+
+
+  .visionos-hero-title {
+    font-size:
+      clamp(
+        2.8rem,
+        11vw,
+        4.1rem
+      );
+
+    line-height: 0.94;
+  }
+
+
+  .visionos-hero-description {
+    font-size: 1rem;
+  }
+
+
+  .visionos-hero-actions {
+    flex-direction: column;
+
+    align-items: stretch;
+
+    width: 100%;
+  }
+
+
+  .actt-hero-button {
+    width: 100%;
+  }
+
+
+  .visionos-hero-visual {
+    max-width: 560px;
+  }
+
+
+  .actt-visual {
+    height: 430px;
+  }
+
+
+  .actt-logo-wrapper {
+    width:
+      min(390px, 86%);
+  }
+
+
+  .actt-color-signature {
+    right: 5%;
+  }
+
+
+  .actt-travel-ball {
+    display: none;
+  }
+
+}
+
+
+/* =========================================================
+   PETIT MOBILE
+   ========================================================= */
+
+@media (max-width: 560px) {
+
+  .visionos-hero {
+    padding-top: 40px;
+    padding-bottom: 55px;
+  }
+
+
+  .visionos-hero-title {
+    font-size:
+      2.55rem;
+
+    line-height:
+      0.95;
+  }
+
+
+  .visionos-hero-eyebrow {
+    font-size:
+      0.74rem;
+
+    letter-spacing:
+      0.13em;
+  }
+
+
+  .actt-hero-badge {
+    font-size:
+      0.66rem;
+  }
+
+
+  .actt-visual {
+    height: 360px;
+  }
+
+
+  .actt-logo-wrapper {
+    width:
+      min(320px, 88%);
+  }
+
+
+  .actt-color-signature {
+    right: 0;
+    bottom: 4%;
+
+    width: 90px;
+    height: 5px;
+  }
+
+}
+
+
+/* =========================================================
+   ACCESSIBILITÉ
+   ========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+
+  .actt-hero-content,
+  .actt-hero-visual,
+  .actt-logo-wrapper,
+  .actt-travel-ball {
+    animation: none !important;
+  }
+
+
+  .actt-hero-content,
+  .actt-hero-visual,
+  .actt-logo-wrapper {
+    opacity: 1;
+
+    transform: none;
+  }
+
+
+  .actt-travel-ball {
+    display: none;
+  }
+
+
+  .actt-hero-button {
+    transition: none;
+  }
+
+}
+
+
+/* =========================================================
+   TOUCH
+   ========================================================= */
+
+@media (hover: none), (pointer: coarse) {
+
+  .actt-visual {
+    transform: none;
+  }
+
+}
+
+</style>

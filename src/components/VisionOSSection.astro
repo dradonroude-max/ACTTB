@@ -1,0 +1,363 @@
+---
+/**
+ * =========================================================
+ * VISIONOS — SECTION
+ * =========================================================
+ */
+
+interface Props {
+  id?: string;
+  eyebrow?: string;
+  title?: string;
+  description?: string;
+  align?: "left" | "center";
+  spacing?: "sm" | "md" | "lg";
+  class?: string;
+}
+
+const {
+  id,
+  eyebrow,
+  title,
+  description,
+  align = "left",
+  spacing = "md",
+  class: className = "",
+} = Astro.props;
+
+const classes = [
+  "vision-section",
+  `vision-section-align-${align}`,
+  `vision-section-spacing-${spacing}`,
+  className,
+]
+  .filter(Boolean)
+  .join(" ");
+---
+
+<section id={id} class={classes}>
+  <div class="vision-container">
+    <div class="vision-section-inner">
+
+      {
+        (eyebrow || title || description) && (
+          <header class="vision-section-header">
+
+            {eyebrow && (
+              <span class="vision-section-eyebrow">
+                <span
+                  class="vision-section-eyebrow-dot"
+                  aria-hidden="true"
+                ></span>
+
+                <span>{eyebrow}</span>
+              </span>
+            )}
+
+            {title && (
+              <h2 class="vision-section-title">
+                {title}
+              </h2>
+            )}
+
+            {description && (
+              <p class="vision-section-description">
+                {description}
+              </p>
+            )}
+
+          </header>
+        )
+      }
+
+      <div class="vision-section-content">
+        <slot />
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<style>
+  /* =======================================================
+     HEADER
+     ======================================================= */
+
+  .vision-section-header {
+    max-width: 760px;
+    margin-bottom: var(--vision-space-8);
+  }
+
+  .vision-section-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 9px;
+
+    margin-bottom: var(--vision-space-3);
+
+    color: var(--vision-color-primary);
+
+    font-size: var(--vision-text-sm);
+    font-weight: var(--vision-weight-bold);
+
+    letter-spacing: 0.12em;
+    line-height: 1;
+
+    text-transform: uppercase;
+  }
+
+  .vision-section-eyebrow-dot {
+    width: 8px;
+    height: 8px;
+
+    flex: 0 0 auto;
+
+    border-radius: 50%;
+
+    background: var(--vision-color-accent);
+
+    box-shadow:
+      0 0 0 4px rgba(53, 168, 83, 0.12);
+  }
+
+  .vision-section-title {
+    position: relative;
+
+    width: fit-content;
+    max-width: 100%;
+
+    margin-bottom: var(--vision-space-4);
+
+    color: var(--vision-color-text);
+
+    font-size: clamp(
+      var(--vision-text-2xl),
+      5vw,
+      var(--vision-text-4xl)
+    );
+
+    line-height: var(--vision-line-tight);
+  }
+
+  .vision-section-description {
+    max-width: 680px;
+
+    margin-bottom: 0;
+
+    color: var(--vision-color-text-muted);
+
+    font-size: var(--vision-text-lg);
+    line-height: var(--vision-line-relaxed);
+  }
+
+  .vision-section-content {
+    width: 100%;
+  }
+
+  /* =======================================================
+     ALIGNMENT
+     ======================================================= */
+
+  .vision-section-align-left {
+    text-align: left;
+  }
+
+  .vision-section-align-left .vision-section-header {
+    margin-right: auto;
+  }
+
+  .vision-section-align-center {
+    text-align: center;
+  }
+
+  .vision-section-align-center .vision-section-header {
+    margin-inline: auto;
+  }
+
+  .vision-section-align-center .vision-section-description {
+    margin-inline: auto;
+  }
+
+  /* =======================================================
+     SPACING
+     ======================================================= */
+
+  .vision-section-spacing-sm {
+    padding-block: var(--vision-space-8);
+  }
+
+  .vision-section-spacing-md {
+    padding-block: var(--vision-space-12);
+  }
+
+  .vision-section-spacing-lg {
+    padding-block: var(--vision-space-13);
+  }
+
+  /* =======================================================
+     LE CLUB — IDENTITÉ VISUELLE
+     ======================================================= */
+
+  .vision-section[id="club"] .vision-section-header {
+    max-width: 680px;
+  }
+
+  .vision-section[id="club"] .vision-section-eyebrow {
+    font-size: 15px;
+    letter-spacing: 0.18em;
+  }
+
+  .vision-section[id="club"] .vision-section-eyebrow-dot {
+    width: 9px;
+    height: 9px;
+
+    box-shadow:
+      0 0 0 5px rgba(53, 168, 83, 0.12);
+  }
+
+  .vision-section[id="club"] .vision-section-title {
+    margin-bottom: 22px;
+  }
+
+  .vision-section[id="club"] .vision-section-title::after {
+    content: "";
+
+    display: block;
+
+    width: 54px;
+    height: 4px;
+
+    margin-top: 18px;
+
+    border-radius: 999px;
+
+    background: linear-gradient(
+      90deg,
+      var(--vision-color-accent),
+      var(--vision-color-warning)
+    );
+  }
+
+  .vision-section[id="club"] .vision-section-description {
+    max-width: 560px;
+
+    color: var(--vision-color-text);
+
+    font-size: var(--vision-text-lg);
+    font-weight: var(--vision-weight-medium);
+
+    line-height: 1.65;
+  }
+
+  /* =======================================================
+     LE CLUB — CARTES
+     ======================================================= */
+
+  .vision-section[id="club"] :global(.vision-card),
+  .vision-section[id="club"] :global(.visionos-card) {
+    border-radius: 14px;
+
+    box-shadow:
+      0 8px 22px rgba(6, 26, 58, 0.08);
+
+    transition:
+      transform var(--vision-duration-normal) var(--vision-ease-smooth),
+      box-shadow var(--vision-duration-normal) var(--vision-ease-smooth),
+      border-color var(--vision-duration-normal) var(--vision-ease-standard);
+  }
+
+  .vision-section[id="club"] :global(.vision-card:hover),
+  .vision-section[id="club"] :global(.visionos-card-interactive:hover) {
+    box-shadow:
+      0 14px 30px rgba(6, 26, 58, 0.11);
+  }
+
+  /* =======================================================
+     LE CLUB — HIÉRARCHIE
+     ======================================================= */
+
+  .vision-section[id="club"] :global(.visionos-card:first-child) {
+    border-top: 3px solid var(--vision-color-accent);
+  }
+
+  .vision-section[id="club"] :global(.visionos-card:first-child .visionos-card-heading h3) {
+    font-size: 1.35rem;
+    font-weight: var(--vision-weight-bold);
+  }
+
+  .vision-section[id="club"] :global(.visionos-card:nth-child(2) .visionos-card-heading h3) {
+    color: var(--vision-color-text);
+  }
+
+  /* =======================================================
+     LE CLUB — BADGES
+     ======================================================= */
+
+  .vision-section[id="club"] :global(.visionos-card-badge) {
+    border-radius: var(--vision-radius-pill);
+  }
+
+  /* =======================================================
+     DESKTOP
+     ======================================================= */
+
+  @media (min-width: 768px) {
+
+    .vision-section-header {
+      margin-bottom: var(--vision-space-10);
+    }
+
+    .vision-section-spacing-sm {
+      padding-block: var(--vision-space-10);
+    }
+
+    .vision-section-spacing-md {
+      padding-block: var(--vision-space-13);
+    }
+
+    .vision-section[id="club"] .vision-section-header {
+      margin-bottom: 48px;
+    }
+
+  }
+
+  /* =======================================================
+     MOBILE
+     ======================================================= */
+
+  @media (max-width: 767px) {
+
+    .vision-section-description {
+      font-size: var(--vision-text-md);
+    }
+
+    .vision-section[id="club"] .vision-section-eyebrow {
+      font-size: var(--vision-text-sm);
+      letter-spacing: 0.15em;
+    }
+
+    .vision-section[id="club"] .vision-section-description {
+      font-size: var(--vision-text-md);
+    }
+
+    .vision-section[id="club"] .vision-section-title::after {
+      width: 46px;
+      height: 3px;
+      margin-top: 14px;
+    }
+
+  }
+
+  /* =======================================================
+     REDUCED MOTION
+     ======================================================= */
+
+  @media (prefers-reduced-motion: reduce) {
+
+    .vision-section[id="club"] :global(.vision-card),
+    .vision-section[id="club"] :global(.visionos-card) {
+      transition: none;
+    }
+
+  }
+</style>

@@ -1,0 +1,217 @@
+---
+/**
+ * =========================================================
+ * VISIONOS — PANEL
+ * =========================================================
+ *
+ * Flexible premium surface for:
+ * - content blocks
+ * - forms
+ * - CTA areas
+ * - dashboards
+ * - information sections
+ * - feature presentations
+ *
+ * The panel is intentionally content-agnostic.
+ * =========================================================
+ */
+
+export type PanelDepth = "flat" | "raised" | "floating";
+export type PanelPadding = "sm" | "md" | "lg";
+
+interface Props {
+  depth?: PanelDepth;
+  padding?: PanelPadding;
+  glass?: boolean;
+  class?: string;
+}
+
+const {
+  depth = "raised",
+  padding = "md",
+  glass = true,
+  class: className = "",
+} = Astro.props;
+
+const classes = [
+  "vision-panel",
+  `vision-panel-depth-${depth}`,
+  `vision-panel-padding-${padding}`,
+  glass ? "vision-panel-glass" : "vision-panel-solid",
+  className,
+]
+  .filter(Boolean)
+  .join(" ");
+---
+
+<div class={classes}>
+  <slot />
+</div>
+
+<style>
+  /* =======================================================
+     BASE
+     ======================================================= */
+
+  .vision-panel {
+    position: relative;
+
+    width: 100%;
+    min-width: 0;
+
+    overflow: hidden;
+
+    background: var(--vision-surface);
+
+    border: 1px solid var(--vision-border);
+
+    border-radius: 14px;
+
+    color: var(--vision-color-text);
+
+    transition:
+      transform var(--vision-duration-normal) var(--vision-ease-smooth),
+      box-shadow var(--vision-duration-normal) var(--vision-ease-smooth),
+      border-color var(--vision-duration-normal) var(--vision-ease-standard);
+  }
+
+
+  /* =======================================================
+     SURFACE
+     ======================================================= */
+
+  .vision-panel-glass {
+    background: var(--vision-surface-glass);
+  }
+
+  .vision-panel-solid {
+    background: var(--vision-surface);
+  }
+
+
+  @supports (backdrop-filter: blur(1px)) {
+
+    .vision-panel-glass {
+      backdrop-filter: blur(var(--vision-blur-md));
+
+      -webkit-backdrop-filter: blur(var(--vision-blur-md));
+    }
+
+  }
+
+
+  /* =======================================================
+     DEPTH
+     ======================================================= */
+
+  .vision-panel-depth-flat {
+    box-shadow: none;
+  }
+
+  .vision-panel-depth-raised {
+    box-shadow:
+      0 8px 22px rgba(6, 26, 58, 0.08);
+  }
+
+  .vision-panel-depth-floating {
+    box-shadow:
+      0 14px 30px rgba(6, 26, 58, 0.11);
+  }
+
+
+  /* =======================================================
+     PADDING
+     ======================================================= */
+
+  .vision-panel-padding-sm {
+    padding: var(--vision-space-5);
+  }
+
+  .vision-panel-padding-md {
+    padding: var(--vision-space-7);
+  }
+
+  .vision-panel-padding-lg {
+    padding: var(--vision-space-8);
+  }
+
+
+  /* =======================================================
+     CONTENT NORMALIZATION
+     ======================================================= */
+
+  .vision-panel :global(h1),
+  .vision-panel :global(h2),
+  .vision-panel :global(h3),
+  .vision-panel :global(h4),
+  .vision-panel :global(h5),
+  .vision-panel :global(h6) {
+    color: var(--vision-color-text);
+  }
+
+  .vision-panel :global(p) {
+    color: var(--vision-color-text-muted);
+
+    line-height: var(--vision-line-relaxed);
+  }
+
+  .vision-panel :global(.vision-badge) {
+    margin-bottom: var(--vision-space-5);
+  }
+
+
+  /* =======================================================
+     INTERACTION
+     ======================================================= */
+
+  @media (hover: hover) and (pointer: fine) {
+
+    .vision-panel:hover {
+      border-color: var(--vision-border-strong);
+    }
+
+  }
+
+
+  /* =======================================================
+     RESPONSIVE
+     ======================================================= */
+
+  @media (max-width: 767px) {
+
+    .vision-panel {
+      border-radius: 12px;
+    }
+
+    .vision-panel-padding-sm {
+      padding: var(--vision-space-4);
+    }
+
+    .vision-panel-padding-md {
+      padding: var(--vision-space-6);
+    }
+
+    .vision-panel-padding-lg {
+      padding: var(--vision-space-7);
+    }
+
+    .vision-panel-depth-floating {
+      box-shadow:
+        0 12px 26px rgba(6, 26, 58, 0.10);
+    }
+
+  }
+
+
+  /* =======================================================
+     REDUCED MOTION
+     ======================================================= */
+
+  @media (prefers-reduced-motion: reduce) {
+
+    .vision-panel {
+      transition: none;
+    }
+
+  }
+</style>
