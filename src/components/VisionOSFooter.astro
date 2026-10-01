@@ -10,6 +10,7 @@
  * - contact
  * - legal links
  * - social links
+ * - credit
  *
  * =========================================================
  */
@@ -134,24 +135,25 @@ import { navigation } from "../config/navigation";
                   site.contact.postalCode ||
                   site.contact.country
                 ) && (
-                  <span>
+                  <>
+                    <span>Salle omnisports</span>
+
                     {site.contact.address && (
-                      <>
-                        {site.contact.address}
-                        <br />
-                      </>
+                      <span>{site.contact.address}</span>
                     )}
 
-                    {site.contact.postalCode}{" "}
-                    {site.contact.city}
+                    {(site.contact.postalCode ||
+                      site.contact.city) && (
+                      <span>
+                        {site.contact.postalCode}{" "}
+                        {site.contact.city}
+                      </span>
+                    )}
 
                     {site.contact.country && (
-                      <>
-                        <br />
-                        {site.contact.country}
-                      </>
+                      <span>{site.contact.country}</span>
                     )}
-                  </span>
+                  </>
                 )
               }
 
@@ -171,6 +173,9 @@ import { navigation } from "../config/navigation";
 
       <p class="vision-footer-copyright">
         © {new Date().getFullYear()} {site.name}
+        <span class="vision-footer-credit">
+          · Site réalisé par Rodolphe Dinde
+        </span>
       </p>
 
       <nav
@@ -411,7 +416,7 @@ import { navigation } from "../config/navigation";
     color: var(--vision-color-text-muted);
 
     font-size: var(--vision-text-sm);
-    line-height: var(--vision-line-relaxed);
+    line-height: var(--vision-line-normal);
   }
 
   .vision-footer-bottom {
@@ -437,6 +442,14 @@ import { navigation } from "../config/navigation";
     color: var(--vision-color-text-muted);
 
     font-size: var(--vision-text-xs);
+  }
+
+  .vision-footer-credit {
+    display: inline-block;
+
+    margin-left: 4px;
+
+    opacity: 0.78;
   }
 
   .vision-footer-legal ul,

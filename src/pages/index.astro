@@ -15,6 +15,7 @@ import VisionOSButton from "../components/VisionOSButton.astro";
 import VisionOSBadge from "../components/VisionOSBadge.astro";
 import VisionOSTeamCard from "../components/VisionOSTeamCard.astro";
 import VisionOSGallery from "../components/VisionOSGallery.astro";
+import VisionOSMap from "../components/VisionOSMap.astro";
 
 import { club } from "../data/club";
 import { teams } from "../data/teams";
@@ -55,7 +56,7 @@ import { site } from "../config/site";
     <div class="vision-grid-2 club-panels">
 
       <VisionOSPanel depth="raised" padding="lg" class="club-panel club-panel-primary">
-        <VisionOSBadge label="ACTT" variant="primary" />
+        <VisionOSBadge label="Notre histoire" variant="primary" />
         <h3>{club.tagline}</h3>
         <p>{club.description}</p>
       </VisionOSPanel>
@@ -83,9 +84,22 @@ import { site } from "../config/site";
     spacing="sm"
   >
     <div class="vision-grid-3">
-      <VisionOSCard title="Jeunes" description="Les informations relatives aux pratiques proposées par le club seront bientôt disponibles." badge="À venir" variant="glass" />
-      <VisionOSCard title="Loisir" description="Cette rubrique accueillera les informations concernant la pratique loisir." badge="À venir" />
-      <VisionOSCard title="Compétition" description="Cette rubrique accueillera les informations concernant la pratique en compétition." badge="À venir" />
+      <VisionOSCard
+        title="Jeunes"
+        description="Dès le plus jeune âge, on apprend les bases, on progresse à son rythme et on se fait des copains."
+        badge="Dès le plus jeune âge"
+        variant="glass"
+      />
+      <VisionOSCard
+        title="Loisir"
+        description="Jouer pour le plaisir, sans pression ni classement. À son rythme, quand on veut."
+        badge="Pour le plaisir"
+      />
+      <VisionOSCard
+        title="Compétition"
+        description="Des équipes engagées en championnat, un esprit collectif, une vraie progression sportive."
+        badge="En championnat"
+      />
     </div>
   </VisionOSSection>
 
@@ -359,30 +373,42 @@ import { site } from "../config/site";
     align="center"
     spacing="sm"
   >
-    <VisionOSPanel depth="floating" padding="lg" class="essayer-panel">
-      <div class="vision-contact-content">
-        <VisionOSBadge label="ACTT" variant="primary" />
-        <h3>Votre première séance commence ici.</h3>
-        <p>
-          Pour connaître les modalités et préparer votre venue,
-          contactez directement le club.
-        </p>
-        <div class="vision-contact-actions">
-          <VisionOSButton
-            label="Nous contacter par mail"
-            href={`mailto:${site.contact.email}`}
-            variant="primary"
-            size="lg"
-          />
-          <VisionOSButton
-            label="Appeler"
-            href={`tel:${site.contact.phone.replace(/\s+/g, "")}`}
-            variant="outline"
-            size="lg"
-          />
+
+    <div class="essayer-grid">
+
+      <VisionOSPanel depth="floating" padding="lg" class="essayer-panel">
+        <div class="vision-contact-content">
+          <VisionOSBadge label="ACTT" variant="primary" />
+          <h3>Votre première séance commence ici.</h3>
+          <p>
+            Pour connaître les modalités et préparer votre venue,
+            contactez directement le club.
+          </p>
+          <div class="vision-contact-actions">
+            <VisionOSButton
+              label="Nous contacter par mail"
+              href={`mailto:${site.contact.email}`}
+              variant="primary"
+              size="lg"
+            />
+            <VisionOSButton
+              label="Appeler"
+              href={`tel:${site.contact.phone.replace(/\s+/g, "")}`}
+              variant="outline"
+              size="lg"
+            />
+          </div>
         </div>
-      </div>
-    </VisionOSPanel>
+      </VisionOSPanel>
+
+      <VisionOSMap
+        label="Salle omnisports"
+        address="7 Rue du Joncquoy, 59133 Camphin-en-Carembault"
+        class="essayer-map"
+      />
+
+    </div>
+
   </VisionOSSection>
 
 
@@ -963,13 +989,22 @@ import { site } from "../config/site";
      PREMIÈRE SÉANCE
      ======================================================= */
 
-  .essayer-panel {
-    max-width: 900px;
+  .essayer-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 48px;
+    max-width: 1100px;
     margin-inline: auto;
+    align-items: stretch;
+  }
+
+  .essayer-panel {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
   }
 
   .vision-contact-content {
-    max-width: 720px;
     margin-inline: auto;
     text-align: center;
   }
@@ -998,10 +1033,28 @@ import { site } from "../config/site";
     gap: var(--vision-space-3);
   }
 
+  :global(.essayer-map) {
+    height: 100%;
+    min-height: 340px;
+  }
+
 
   /* =======================================================
-     MOBILE
+     TABLETTE / MOBILE
      ======================================================= */
+
+  @media (max-width: 899px) {
+
+    .essayer-grid {
+      grid-template-columns: 1fr;
+      gap: 36px;
+    }
+
+    :global(.essayer-map) {
+      min-height: 300px;
+    }
+
+  }
 
   @media (max-width: 767px) {
 

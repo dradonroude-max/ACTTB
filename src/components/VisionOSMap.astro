@@ -1,0 +1,357 @@
+---
+/**
+ * =========================================================
+ * ACTT — CARTE CLICK-TO-LOAD
+ * =========================================================
+ */
+
+interface Props {
+  address: string;
+  label?: string;
+  buttonLabel?: string;
+  class?: string;
+}
+
+const {
+  address,
+  label = "Salle omnisports",
+  buttonLabel = "Voir la carte",
+  class: className = "",
+} = Astro.props;
+
+const encodedAddress = encodeURIComponent(address);
+const iframeSrc = `https://www.google.com/maps?q=${encodedAddress}&output=embed`;
+---
+
+<div
+  class:list={["vision-map", className]}
+  data-map
+  data-map-src={iframeSrc}
+>
+  <button
+    type="button"
+    class="vision-map-trigger"
+    data-map-trigger
+    aria-label={`Afficher la carte : ${address}`}
+  >
+
+    <span class="vision-map-pattern" aria-hidden="true"></span>
+
+    <span class="vision-map-icon" aria-hidden="true">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      >
+        <path d="M12 22s-8-7.58-8-13a8 8 0 1 1 16 0c0 5.42-8 13-8 13z" />
+        <circle cx="12" cy="9" r="3" />
+      </svg>
+    </span>
+
+    <span class="vision-map-label">{label}</span>
+
+    <span class="vision-map-address">{address}</span>
+
+    <span class="vision-map-cta">{buttonLabel}</span>
+
+  </button>
+</div>
+
+
+<script>
+  (() => {
+    const maps = document.querySelectorAll("[data-map]");
+
+    maps.forEach((map) => {
+      const trigger = map.querySelector("[data-map-trigger]");
+      const src = map.getAttribute("data-map-src");
+
+      if (!trigger || !src) return;
+
+      trigger.addEventListener("click", () => {
+        const iframe = document.createElement("iframe");
+
+        iframe.src = src;
+        iframe.width = "100%";
+        iframe.height = "100%";
+        iframe.style.border = "0";
+        iframe.style.display = "block";
+        iframe.setAttribute("loading", "lazy");
+        iframe.setAttribute("allowfullscreen", "");
+        iframe.setAttribute(
+          "referrerpolicy",
+          "no-referrer-when-downgrade"
+        );
+        iframe.setAttribute(
+          "title",
+          "Carte de la salle omnisports"
+        );
+
+        map.replaceChild(iframe, trigger);
+        map.classList.add("is-loaded");
+      });
+    });
+  })();
+</script>
+
+
+<style>
+  .vision-map {
+    position: relative;
+
+    width: 100%;
+
+    min-height: 340px;
+
+    overflow: hidden;
+
+    border: 1px solid rgba(6, 26, 58, 0.10);
+    border-radius: 16px;
+
+    background: #ffffff;
+
+    box-shadow:
+      0 14px 34px rgba(6, 26, 58, 0.10);
+  }
+
+
+  /* -------------------------------------------------------
+     PLACEHOLDER
+     ------------------------------------------------------- */
+
+  .vision-map-trigger {
+    position: relative;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    gap: 12px;
+
+    width: 100%;
+    height: 100%;
+    min-height: 340px;
+
+    padding: 36px 28px;
+
+    border: none;
+
+    background: transparent;
+
+    font-family: inherit;
+
+    cursor: pointer;
+
+    text-align: center;
+
+    transition: background-color 200ms ease;
+
+    -webkit-tap-highlight-color: transparent;
+  }
+
+
+  /* Fond décoratif évoquant une carte */
+  .vision-map-pattern {
+    position: absolute;
+    inset: 0;
+
+    pointer-events: none;
+
+    background-image:
+      linear-gradient(
+        rgba(6, 26, 58, 0.035) 1px,
+        transparent 1px
+      ),
+      linear-gradient(
+        90deg,
+        rgba(6, 26, 58, 0.035) 1px,
+        transparent 1px
+      );
+
+    background-size: 42px 42px;
+
+    opacity: 0.9;
+  }
+
+
+  @media (hover: hover) and (pointer: fine) {
+
+    .vision-map-trigger:hover {
+      background: rgba(0, 174, 239, 0.04);
+    }
+
+    .vision-map-trigger:hover .vision-map-cta {
+      background: #43bb61;
+      transform: translateY(-1px);
+    }
+
+  }
+
+
+  .vision-map-trigger:focus-visible {
+    outline: 3px solid #00aeef;
+    outline-offset: -3px;
+    border-radius: 16px;
+  }
+
+
+  .vision-map-icon {
+    position: relative;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 56px;
+    height: 56px;
+
+    border-radius: 50%;
+
+    background: linear-gradient(
+      135deg,
+      rgba(0, 174, 239, 0.15) 0%,
+      rgba(53, 168, 83, 0.15) 100%
+    );
+
+    color: #073b7a;
+  }
+
+
+  .vision-map-icon svg {
+    width: 28px;
+    height: 28px;
+  }
+
+
+  .vision-map-label {
+    position: relative;
+
+    margin-top: 6px;
+
+    color: #061a3a;
+
+    font-size: 0.72rem;
+    font-weight: 800;
+
+    letter-spacing: 0.14em;
+
+    text-transform: uppercase;
+  }
+
+
+  .vision-map-address {
+    position: relative;
+
+    max-width: 340px;
+
+    color: var(--vision-color-text-muted);
+
+    font-size: 0.95rem;
+    line-height: 1.5;
+  }
+
+
+  .vision-map-cta {
+    position: relative;
+
+    display: inline-flex;
+    align-items: center;
+
+    margin-top: 8px;
+
+    padding: 11px 24px;
+
+    border-radius: 999px;
+
+    background: #35a853;
+    color: #061a3a;
+
+    font-size: 0.85rem;
+    font-weight: 800;
+
+    letter-spacing: 0.02em;
+
+    box-shadow:
+      0 6px 18px rgba(0, 0, 0, 0.15);
+
+    transition:
+      background-color 180ms ease,
+      transform 180ms ease;
+  }
+
+
+  /* -------------------------------------------------------
+     IFRAME APRÈS CLIC
+     ------------------------------------------------------- */
+
+  .vision-map.is-loaded {
+    background: transparent;
+    min-height: 0;
+  }
+
+
+  .vision-map iframe {
+    display: block;
+
+    width: 100%;
+    height: 100%;
+
+    border: 0;
+
+    min-height: 340px;
+  }
+
+
+  /* -------------------------------------------------------
+     MOBILE
+     ------------------------------------------------------- */
+
+  @media (max-width: 767px) {
+
+    .vision-map {
+      border-radius: 12px;
+    }
+
+    .vision-map-trigger {
+      padding: 28px 20px;
+    }
+
+    .vision-map-icon {
+      width: 48px;
+      height: 48px;
+    }
+
+    .vision-map-icon svg {
+      width: 24px;
+      height: 24px;
+    }
+
+    .vision-map-address {
+      font-size: 0.88rem;
+    }
+
+  }
+
+
+  /* -------------------------------------------------------
+     REDUCED MOTION
+     ------------------------------------------------------- */
+
+  @media (prefers-reduced-motion: reduce) {
+
+    .vision-map-trigger,
+    .vision-map-cta {
+      transition: none;
+    }
+
+    .vision-map-trigger:hover .vision-map-cta {
+      transform: none;
+    }
+
+  }
+</style>
