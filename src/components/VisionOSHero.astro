@@ -89,15 +89,6 @@ const titleLines = (title.match(/[^.!?]+[.!?]?/g) ?? [title])
 
 
   <!-- =====================================================
-       PING-PONG BALL
-       ===================================================== -->
-
-  <div class="actt-travel-ball" aria-hidden="true">
-    <span></span>
-  </div>
-
-
-  <!-- =====================================================
        CONTAINER
        ===================================================== -->
 
@@ -242,6 +233,16 @@ const titleLines = (title.match(/[^.!?]+[.!?]?/g) ?? [title])
             />
 
           </div>
+
+
+          <!-- =================================================
+               EXPLOSION DE BALLES
+               ================================================= -->
+
+          <div
+            class="actt-hero-burst"
+            aria-hidden="true"
+          ></div>
 
 
           <!-- =================================================
@@ -1032,6 +1033,25 @@ const titleLines = (title.match(/[^.!?]+[.!?]?/g) ?? [title])
 
 
 /* =========================================================
+   EXPLOSION DE BALLES
+   ========================================================= */
+
+.actt-hero-burst {
+  position: absolute;
+
+  top: 50%;
+  left: 50%;
+
+  width: 0;
+  height: 0;
+
+  pointer-events: none;
+
+  z-index: 6;
+}
+
+
+/* =========================================================
    COLOR SIGNATURE
    ========================================================= */
 
@@ -1078,140 +1098,6 @@ const titleLines = (title.match(/[^.!?]+[.!?]?/g) ?? [title])
 .actt-color-signature span:nth-child(3) {
   background:
     #8f1520;
-}
-
-
-/* =========================================================
-   TRAVERSÉE DE LA BALLE
-   ========================================================= */
-
-/*
- * La balle passe derrière le contenu (grille z-index: 2)
- * mais reste devant le fond (z-index: 0).
- */
-
-.actt-travel-ball {
-  position: absolute;
-
-  z-index: 1;
-
-  left: 72%;
-  top: 54%;
-
-  width: 16px;
-  height: 16px;
-
-  pointer-events: none;
-
-  animation:
-    actt-ball-travel
-    8s
-    cubic-bezier(0.45, 0.05, 0.35, 1)
-    infinite;
-}
-
-
-.actt-travel-ball span {
-  display: block;
-
-  width: 100%;
-  height: 100%;
-
-  border-radius: 50%;
-
-  background:
-    radial-gradient(
-      circle at 32% 28%,
-      #ffffff 0%,
-      #ffffff 45%,
-      #d9e0e5 100%
-    );
-
-  box-shadow:
-    0 3px 8px
-    rgba(0, 0, 0, 0.30),
-
-    0 0 16px
-    rgba(255, 255, 255, 0.35);
-}
-
-
-@keyframes actt-ball-travel {
-
-  0% {
-    left: 72%;
-    top: 54%;
-
-    opacity: 0;
-
-    transform:
-      scale(0.72);
-  }
-
-  7% {
-    opacity: 1;
-  }
-
-  22% {
-    left: 61%;
-    top: 49%;
-
-    transform:
-      scale(1);
-  }
-
-  37% {
-    left: 49%;
-    top: 57%;
-
-    transform:
-      scale(0.95);
-  }
-
-  52% {
-    left: 37%;
-    top: 48%;
-
-    transform:
-      scale(1);
-  }
-
-  67% {
-    left: 25%;
-    top: 55%;
-
-    transform:
-      scale(0.95);
-  }
-
-  82% {
-    left: 13%;
-    top: 47%;
-
-    transform:
-      scale(0.90);
-  }
-
-  94% {
-    left: 2%;
-    top: 43%;
-
-    opacity: 1;
-
-    transform:
-      scale(0.84);
-  }
-
-  100% {
-    left: -2%;
-    top: 43%;
-
-    opacity: 0;
-
-    transform:
-      scale(0.75);
-  }
-
 }
 
 
@@ -1363,11 +1249,6 @@ const titleLines = (title.match(/[^.!?]+[.!?]?/g) ?? [title])
     right: 5%;
   }
 
-
-  .actt-travel-ball {
-    display: none;
-  }
-
 }
 
 
@@ -1437,8 +1318,7 @@ const titleLines = (title.match(/[^.!?]+[.!?]?/g) ?? [title])
 
   .actt-hero-content,
   .actt-hero-visual,
-  .actt-logo-wrapper,
-  .actt-travel-ball {
+  .actt-logo-wrapper {
     animation: none !important;
   }
 
@@ -1452,7 +1332,7 @@ const titleLines = (title.match(/[^.!?]+[.!?]?/g) ?? [title])
   }
 
 
-  .actt-travel-ball {
+  .actt-hero-burst {
     display: none;
   }
 

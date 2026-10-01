@@ -2,20 +2,6 @@
  * =========================================================
  * ACTT — EFFECTS ENGINE (GSAP)
  * =========================================================
- *
- * Sept effets coordonnés :
- * 1. Barre de progression de scroll
- * 2. Révélation des en-têtes de section
- * 3. Compteurs animés sur les tarifs
- * 4. Spotlight souris sur les cartes
- * 5. Boutons magnétiques
- * 6. Parallaxe subtile du Hero
- * 7. Reveals historiques (.reveal) conservés
- *
- * Règles :
- * - prefers-reduced-motion respecté partout
- * - Aucun effet sur pointeur grossier (tactile)
- * - Aucun blocage de scroll ou de lecture
  */
 
 import gsap from "gsap";
@@ -35,49 +21,18 @@ const init = () => {
   document.documentElement.classList.add("js");
 
   try {
-    /* =====================================================
-       1. REVEAL HISTORIQUE (.reveal)
-       ===================================================== */
-
     initializeReveal(reducedMotion);
-
-    /* =====================================================
-       2. BARRE DE PROGRESSION
-       ===================================================== */
-
     initializeProgressBar(reducedMotion);
 
     if (!reducedMotion) {
-      /* ===================================================
-         3. RÉVÉLATION DES EN-TÊTES
-         =================================================== */
-
       initializeSectionHeaders();
-
-      /* ===================================================
-         4. COMPTEURS ANIMÉS
-         =================================================== */
-
       initializeCounters();
+      initializeHeroBurst();
     }
 
     if (!reducedMotion && finePointer) {
-      /* ===================================================
-         5. SPOTLIGHT SUR LES CARTES
-         =================================================== */
-
       initializeSpotlight();
-
-      /* ===================================================
-         6. BOUTONS MAGNÉTIQUES
-         =================================================== */
-
       initializeMagneticButtons();
-
-      /* ===================================================
-         7. PARALLAXE DU HERO
-         =================================================== */
-
       initializeHeroParallax();
     }
 
@@ -149,7 +104,7 @@ function initializeProgressBar(reducedMotion) {
 }
 
 /* =========================================================
-   3. RÉVÉLATION DES EN-TÊTES DE SECTION
+   3. RÉVÉLATION DES EN-TÊTES
    ========================================================= */
 
 function initializeSectionHeaders() {
@@ -234,8 +189,7 @@ function initializeCounters() {
           duration: 1.3,
           ease: "power2.out",
           onUpdate: () => {
-            el.textContent =
-              prefix + Math.round(counter.value) + suffix;
+            el.textContent = prefix + Math.round(counter.value) + suffix;
           },
         });
       },
@@ -244,7 +198,7 @@ function initializeCounters() {
 }
 
 /* =========================================================
-   5. SPOTLIGHT SUR LES CARTES
+   5. SPOTLIGHT
    ========================================================= */
 
 function initializeSpotlight() {
@@ -334,11 +288,8 @@ function initializeMagneticButtons() {
       const rect = button.getBoundingClientRect();
       if (!rect.width || !rect.height) return;
 
-      const x =
-        ((event.clientX - rect.left) / rect.width - 0.5) * strength;
-
-      const y =
-        ((event.clientY - rect.top) / rect.height - 0.5) * strength;
+      const x = ((event.clientX - rect.left) / rect.width - 0.5) * strength;
+      const y = ((event.clientY - rect.top) / rect.height - 0.5) * strength;
 
       xTo(x);
       yTo(y);
@@ -385,6 +336,143 @@ function initializeHeroParallax() {
         scrub: 0.4,
       },
     });
+  }
+}
+
+/* =========================================================
+   8. EXPLOSION DE BALLES AU NIVEAU DU LOGO HERO
+   =========================================================
+   Note importante : tous les styles des balles sont
+   appliqués en JavaScript. C'est nécessaire car Astro
+   scope automatiquement le CSS des composants .astro,
+   et les balles créées dynamiquement n'ont pas les
+   attributs data-astro-cid nécessaires pour que le CSS
+   scopé s'applique.
+   ========================================================= */
+
+function initializeHeroBurst() {
+  const container = document.querySelector(".actt-hero-burst");
+  const hero = document.querySelector(".visionos-hero");
+
+  if (!container || !hero) return;
+
+  let played = false;
+
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting || played) return;
+        played = true;
+        observer.disconnect();
+        playBurst();
+      });
+    },
+    { threshold: 0.3 }
+  );
+
+  observer.observe(hero);
+
+  function playBurst() {
+    const BALL_COUNT = 18;
+    const balls = [];
+
+    for (let i = 0; i < BALL_COUNT; i++) {
+      const ball = document.createElement("span");
+
+      // Styles inline (indépendants du CSS scopé)
+      Object.assign(ball.style, {
+        position: "absolute",
+        top: "0",
+        left: "0",
+        display: "block",
+        borderRadius: "50%",
+        background: "radial-gradient(circle at 32% 28%, #ffffff 0%, #ffffff 42%, #dde3e8 100%)",
+        boxShadow: "0 2px 6px rgba(0,0,0,0.22), 0 0 10px rgba(255,255,255,0.40)",
+        willChange: "transform, opacity",
+        opacity: "0",
+        pointerEvents: "none",
+      });
+
+      container.appendChild(ball);
+      balls.push(ball);
+    }
+
+    const tl = gsap.timeline({
+      onComplete: () => {
+        balls.forEach((b) => b.remove());
+      },
+    });
+
+    // Petit délai pour laisser le Hero se poser
+    tl.to({}, { duration: 0.5 });
+
+    balls.forEach((ball, index) => {
+      const angle =
+        (index / BALL_COUNT) * Math.PI * 2 +
+        (Math.random() - 0.5) * 0.35;
+
+      const distance = 150 + Math.random() * 280;
+      const size = 10 + Math.random() * 14;
+      const duration = 1.2 + Math.random() * 0.8;
+
+      const dx = Math.cos(angle) * distance;
+      const dy = Math.sin(angle) * distance;
+
+      ball.style.width = `${size}px`;
+      ball.style.height = `${size}px`;
+      ball.style.margin = `-${size / 2}px 0 0 -${size / 2}px`;
+
+      tl.fromTo(
+        ball,
+        {
+          x: 0,
+          y: 0,
+          scale: 0.3,
+          opacity: 0,
+        },
+        {
+          x: dx,
+          y: dy,
+          scale: 1,
+          opacity: 1,
+          duration: duration * 0.3,
+          ease: "power2.out",
+        },
+        "<"
+      );
+
+      tl.to(
+        ball,
+        {
+          x: dx * 1.15,
+          y: dy * 1.15,
+          opacity: 0,
+          scale: 0.6,
+          duration: duration * 0.7,
+          ease: "power1.out",
+        },
+        ">"
+      );
+    });
+
+    // Pulse du halo
+    const aura = document.querySelector(".actt-logo-aura");
+
+    if (aura) {
+      tl.fromTo(
+        aura,
+        { scale: 1.08, opacity: 1 },
+        {
+          scale: 1.30,
+          opacity: 0.65,
+          duration: 0.35,
+          ease: "power2.out",
+          yoyo: true,
+          repeat: 1,
+        },
+        0.5
+      );
+    }
   }
 }
 
