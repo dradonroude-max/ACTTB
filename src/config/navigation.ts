@@ -36,6 +36,11 @@ export const navigation = {
     },
 
     {
+      label: "Tarifs",
+      href: "#tarifs",
+    },
+
+    {
       label: "Contact",
       href: "#essayer",
     },
@@ -46,8 +51,8 @@ export const navigation = {
   // -------------------------------------------------------
 
   cta: {
-    label: "Venir essayer",
-    href: "#essayer",
+    label: "S’inscrire",
+    href: "#inscription",
   },
 
   // -------------------------------------------------------
