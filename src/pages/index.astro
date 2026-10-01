@@ -214,14 +214,31 @@ import { site } from "../config/site";
         {partners.map((partner) => (
           <li class="vision-partner-item">
             {partner.href ? (
-              <a class="vision-partner-card vision-partner-card-link" href={partner.href} target="_blank" rel="noopener noreferrer" aria-label={partner.name}>
-                <span class="vision-partner-logo"><img src={partner.logo} alt="" loading="lazy" decoding="async" /></span>
-                {partner.description ? (<span class="vision-partner-description">{partner.description}</span>) : (<span class="vision-partner-name">{partner.name}</span>)}
+              <a
+                class:list={[
+                  "vision-partner-card",
+                  "vision-partner-card-link",
+                  partner.size === "large" && "vision-partner-card-large",
+                ]}
+                href={partner.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={partner.name}
+              >
+                <span class="vision-partner-logo">
+                  <img src={partner.logo} alt={partner.name} loading="lazy" decoding="async" />
+                </span>
               </a>
             ) : (
-              <div class="vision-partner-card">
-                <span class="vision-partner-logo"><img src={partner.logo} alt={partner.name} loading="lazy" decoding="async" /></span>
-                {partner.description ? (<span class="vision-partner-description">{partner.description}</span>) : (<span class="vision-partner-name">{partner.name}</span>)}
+              <div
+                class:list={[
+                  "vision-partner-card",
+                  partner.size === "large" && "vision-partner-card-large",
+                ]}
+              >
+                <span class="vision-partner-logo">
+                  <img src={partner.logo} alt={partner.name} loading="lazy" decoding="async" />
+                </span>
               </div>
             )}
           </li>
@@ -859,6 +876,26 @@ import { site } from "../config/site";
     object-fit: contain;
   }
 
+  /* -------------------------------------------------------
+     LOGO PLUS GRAND (Mairie) — Solution 2 : zoom CSS
+     -------------------------------------------------------
+     Le JPG de la Mairie contient une marge blanche interne.
+     On zoome à 1.8× pour la compenser visuellement.
+     ------------------------------------------------------- */
+
+   .vision-partner-card-large .vision-partner-logo {
+    height: 130px;
+    padding: 0;
+    overflow: hidden;
+  }
+
+  .vision-partner-card-large .vision-partner-logo img {
+    max-width: 100%;
+    max-height: 100%;
+    transform: scale(1.25);
+    transform-origin: center center;
+  }
+
   .vision-partner-name {
     color: #061a3a;
     font-size: var(--vision-text-md);
@@ -1085,6 +1122,9 @@ import { site } from "../config/site";
     .vision-partner-card { min-height: 180px; padding: 24px 18px; }
     .vision-partner-logo { height: 64px; }
     .vision-partner-logo img { max-width: 130px; max-height: 52px; }
+
+    .vision-partner-card-large .vision-partner-logo { height: 110px; }
+    .vision-partner-card-large .vision-partner-logo img { transform: scale(1.15); }
 
     .vision-contact-actions { flex-direction: column; align-items: stretch; }
     .vision-contact-actions :global(.vision-button) { width: 100%; }
