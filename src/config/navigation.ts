@@ -41,6 +41,11 @@ export const navigation = {
     },
 
     {
+      label: "Galerie",
+      href: "#galerie",
+    },
+
+    {
       label: "Contact",
       href: "#essayer",
     },

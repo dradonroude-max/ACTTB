@@ -14,6 +14,7 @@ import VisionOSCard from "../components/VisionOSCard.astro";
 import VisionOSButton from "../components/VisionOSButton.astro";
 import VisionOSBadge from "../components/VisionOSBadge.astro";
 import VisionOSTeamCard from "../components/VisionOSTeamCard.astro";
+import VisionOSGallery from "../components/VisionOSGallery.astro";
 
 import { club } from "../data/club";
 import { teams } from "../data/teams";
@@ -382,6 +383,19 @@ import { site } from "../config/site";
         </div>
       </div>
     </VisionOSPanel>
+  </VisionOSSection>
+
+
+  <!-- GALERIE -->
+  <VisionOSSection
+    id="galerie"
+    eyebrow="GALERIE"
+    title="L’ACTT en images"
+    description="Quelques moments forts de la vie du club."
+    align="center"
+    spacing="sm"
+  >
+    <VisionOSGallery />
   </VisionOSSection>
 
 

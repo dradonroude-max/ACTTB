@@ -522,3 +522,24 @@ footer {
 #inscription .vision-section-description {
   color: rgba(248, 250, 252, 0.72);
 }
+
+/* =========================================================
+   GALERIE
+   ========================================================= */
+
+#galerie {
+  background: var(--actt-light) !important;
+  color: var(--vision-color-text);
+}
+
+#galerie .vision-section-eyebrow {
+  color: var(--actt-cyan);
+}
+
+#galerie .vision-section-title {
+  color: var(--actt-navy);
+}
+
+#galerie .vision-section-description {
+  color: #45617f;
+}

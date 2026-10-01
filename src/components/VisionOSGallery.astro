@@ -1,0 +1,645 @@
+---
+/**
+ * =========================================================
+ * ACTT — GALLERY
+ * =========================================================
+ *
+ * Grille Bento (6 photos) + lightbox au clic.
+ * Vanilla JS, aucune dépendance.
+ * Accessible au clavier, respecte prefers-reduced-motion.
+ */
+
+import { photos } from "../data/photos";
+---
+
+<div class="gallery-wrapper">
+
+  <div class="gallery-grid" data-gallery>
+    {photos.map((photo, index) => (
+      <button
+        type="button"
+        class="gallery-item"
+        data-index={index}
+        data-src={photo.src}
+        data-caption={photo.caption ?? ""}
+        aria-label={`Ouvrir la photo ${index + 1} sur ${photos.length}`}
+      >
+        <img
+          src={photo.src}
+          alt={photo.alt}
+          loading="lazy"
+          decoding="async"
+        />
+        <span class="gallery-item-overlay" aria-hidden="true"></span>
+      </button>
+    ))}
+  </div>
+
+</div>
+
+
+<!-- =====================================================
+     LIGHTBOX
+     ===================================================== -->
+
+<div
+  class="gallery-lightbox"
+  data-lightbox
+  role="dialog"
+  aria-modal="true"
+  aria-hidden="true"
+  aria-label="Visionneuse de photos"
+>
+  <button
+    type="button"
+    class="gallery-lb-btn gallery-lb-close"
+    data-lb-close
+    aria-label="Fermer"
+  >
+    ×
+  </button>
+
+  <button
+    type="button"
+    class="gallery-lb-btn gallery-lb-prev"
+    data-lb-prev
+    aria-label="Photo précédente"
+  >
+    ‹
+  </button>
+
+  <button
+    type="button"
+    class="gallery-lb-btn gallery-lb-next"
+    data-lb-next
+    aria-label="Photo suivante"
+  >
+    ›
+  </button>
+
+  <figure class="gallery-lb-figure">
+    <img
+      class="gallery-lb-image"
+      src=""
+      alt=""
+      decoding="async"
+    />
+
+    <figcaption class="gallery-lb-caption">
+      <span class="gallery-lb-text"></span>
+      <span class="gallery-lb-counter"></span>
+    </figcaption>
+  </figure>
+</div>
+
+
+<script>
+  (() => {
+    const lightbox = document.querySelector("[data-lightbox]") as HTMLElement | null;
+    if (!lightbox) return;
+
+    const items = Array.from(
+      document.querySelectorAll<HTMLButtonElement>("[data-gallery] .gallery-item")
+    );
+
+    if (!items.length) return;
+
+    const imageEl = lightbox.querySelector(".gallery-lb-image") as HTMLImageElement | null;
+    const textEl = lightbox.querySelector(".gallery-lb-text") as HTMLElement | null;
+    const counterEl = lightbox.querySelector(".gallery-lb-counter") as HTMLElement | null;
+    const closeBtn = lightbox.querySelector("[data-lb-close]") as HTMLButtonElement | null;
+    const prevBtn = lightbox.querySelector("[data-lb-prev]") as HTMLButtonElement | null;
+    const nextBtn = lightbox.querySelector("[data-lb-next]") as HTMLButtonElement | null;
+
+    if (!imageEl || !textEl || !counterEl || !closeBtn || !prevBtn || !nextBtn) return;
+
+    let currentIndex = 0;
+    let lastFocused: HTMLElement | null = null;
+
+    const isOpen = () => lightbox.classList.contains("is-open");
+
+    const update = () => {
+      const item = items[currentIndex];
+      const src = item.dataset.src ?? "";
+      const caption = item.dataset.caption ?? "";
+      const innerImg = item.querySelector("img");
+
+      imageEl.src = src;
+      imageEl.alt = innerImg?.alt ?? "";
+      textEl.textContent = caption;
+      counterEl.textContent = `${currentIndex + 1} / ${items.length}`;
+    };
+
+    const open = (index: number) => {
+      currentIndex = index;
+      lastFocused = document.activeElement as HTMLElement | null;
+      update();
+      lightbox.classList.add("is-open");
+      lightbox.setAttribute("aria-hidden", "false");
+      document.body.style.overflow = "hidden";
+      closeBtn.focus();
+    };
+
+    const close = () => {
+      lightbox.classList.remove("is-open");
+      lightbox.setAttribute("aria-hidden", "true");
+      document.body.style.overflow = "";
+      if (lastFocused) lastFocused.focus();
+    };
+
+    const next = () => {
+      currentIndex = (currentIndex + 1) % items.length;
+      update();
+    };
+
+    const prev = () => {
+      currentIndex = (currentIndex - 1 + items.length) % items.length;
+      update();
+    };
+
+    items.forEach((item, index) => {
+      item.addEventListener("click", () => open(index));
+    });
+
+    closeBtn.addEventListener("click", close);
+    prevBtn.addEventListener("click", prev);
+    nextBtn.addEventListener("click", next);
+
+    // Clic sur le fond → fermer
+    lightbox.addEventListener("click", (event) => {
+      if (event.target === lightbox) close();
+    });
+
+    // Navigation clavier
+    document.addEventListener("keydown", (event) => {
+      if (!isOpen()) return;
+
+      if (event.key === "Escape") {
+        event.preventDefault();
+        close();
+      } else if (event.key === "ArrowRight") {
+        event.preventDefault();
+        next();
+      } else if (event.key === "ArrowLeft") {
+        event.preventDefault();
+        prev();
+      }
+    });
+
+    // Swipe tactile (mobile)
+    let touchStartX = 0;
+    let touchStartY = 0;
+
+    lightbox.addEventListener(
+      "touchstart",
+      (event) => {
+        const t = event.touches[0];
+        touchStartX = t.clientX;
+        touchStartY = t.clientY;
+      },
+      { passive: true }
+    );
+
+    lightbox.addEventListener(
+      "touchend",
+      (event) => {
+        const t = event.changedTouches[0];
+        const dx = t.clientX - touchStartX;
+        const dy = t.clientY - touchStartY;
+
+        if (Math.abs(dx) < 40) return;
+        if (Math.abs(dy) > Math.abs(dx)) return;
+
+        if (dx < 0) next();
+        else prev();
+      },
+      { passive: true }
+    );
+  })();
+</script>
+
+
+<style>
+
+/* =========================================================
+   GALERIE — GRILLE BENTO
+   ========================================================= */
+
+.gallery-wrapper {
+  max-width: 1100px;
+  margin-inline: auto;
+}
+
+
+.gallery-grid {
+  display: grid;
+
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-rows: repeat(2, minmax(0, 1fr)) minmax(0, 0.65fr);
+
+  gap: 14px;
+
+  aspect-ratio: 16 / 11;
+
+  list-style: none;
+}
+
+
+.gallery-item {
+  position: relative;
+
+  display: block;
+
+  width: 100%;
+  height: 100%;
+
+  padding: 0;
+
+  overflow: hidden;
+
+  border: none;
+  border-radius: 14px;
+
+  background: #e8eef4;
+
+  cursor: pointer;
+
+  -webkit-tap-highlight-color: transparent;
+
+  transition:
+    transform 250ms cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 250ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+
+.gallery-item img {
+  display: block;
+
+  width: 100%;
+  height: 100%;
+
+  object-fit: cover;
+
+  transition: transform 400ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+
+.gallery-item-overlay {
+  position: absolute;
+  inset: 0;
+
+  background: linear-gradient(
+    180deg,
+    rgba(6, 26, 58, 0) 55%,
+    rgba(6, 26, 58, 0.35) 100%
+  );
+
+  opacity: 0;
+
+  transition: opacity 250ms ease;
+
+  pointer-events: none;
+}
+
+
+@media (hover: hover) and (pointer: fine) {
+
+  .gallery-item:hover {
+    transform: translateY(-3px);
+
+    box-shadow:
+      0 14px 30px rgba(6, 26, 58, 0.16);
+  }
+
+  .gallery-item:hover img {
+    transform: scale(1.05);
+  }
+
+  .gallery-item:hover .gallery-item-overlay {
+    opacity: 1;
+  }
+
+}
+
+
+.gallery-item:focus-visible {
+  outline: 3px solid #00aeef;
+  outline-offset: 3px;
+}
+
+
+/* ---------------------------------------------------------
+   POSITIONNEMENT BENTO
+   --------------------------------------------------------- */
+
+.gallery-item:nth-child(1) {
+  grid-column: 1 / span 2;
+  grid-row: 1 / span 2;
+}
+
+.gallery-item:nth-child(2) {
+  grid-column: 3;
+  grid-row: 1;
+}
+
+.gallery-item:nth-child(3) {
+  grid-column: 4;
+  grid-row: 1;
+}
+
+.gallery-item:nth-child(4) {
+  grid-column: 3;
+  grid-row: 2;
+}
+
+.gallery-item:nth-child(5) {
+  grid-column: 4;
+  grid-row: 2;
+}
+
+.gallery-item:nth-child(6) {
+  grid-column: 1 / span 4;
+  grid-row: 3;
+}
+
+
+/* =========================================================
+   LIGHTBOX
+   ========================================================= */
+
+.gallery-lightbox {
+  position: fixed;
+
+  inset: 0;
+
+  z-index: 2000;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 24px;
+
+  background: rgba(6, 26, 58, 0.92);
+
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+
+  opacity: 0;
+  visibility: hidden;
+
+  transition:
+    opacity 250ms ease,
+    visibility 250ms ease;
+}
+
+
+.gallery-lightbox.is-open {
+  opacity: 1;
+  visibility: visible;
+}
+
+
+.gallery-lb-figure {
+  position: relative;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  gap: 16px;
+
+  max-width: 100%;
+  max-height: 100%;
+
+  margin: 0;
+}
+
+
+.gallery-lb-image {
+  display: block;
+
+  max-width: 100%;
+  max-height: 78vh;
+
+  object-fit: contain;
+
+  border-radius: 10px;
+
+  box-shadow:
+    0 30px 70px rgba(0, 0, 0, 0.5);
+}
+
+
+.gallery-lb-caption {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  gap: 4px;
+
+  text-align: center;
+}
+
+
+.gallery-lb-text {
+  color: #f8fafc;
+
+  font-size: 0.95rem;
+  font-weight: 600;
+
+  line-height: 1.4;
+}
+
+
+.gallery-lb-counter {
+  color: rgba(248, 250, 252, 0.6);
+
+  font-size: 0.75rem;
+  font-weight: 700;
+
+  letter-spacing: 0.14em;
+}
+
+
+/* ---------------------------------------------------------
+   BOUTONS DE LA LIGHTBOX
+   --------------------------------------------------------- */
+
+.gallery-lb-btn {
+  position: absolute;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 48px;
+  height: 48px;
+
+  padding: 0;
+
+  border: none;
+  border-radius: 50%;
+
+  background: rgba(248, 250, 252, 0.10);
+  color: #f8fafc;
+
+  font-family: inherit;
+  font-size: 1.6rem;
+  font-weight: 400;
+
+  line-height: 1;
+
+  cursor: pointer;
+
+  transition:
+    background-color 180ms ease,
+    transform 180ms ease;
+
+  z-index: 3;
+}
+
+
+@media (hover: hover) and (pointer: fine) {
+
+  .gallery-lb-btn:hover {
+    background: rgba(248, 250, 252, 0.20);
+    transform: scale(1.06);
+  }
+
+}
+
+
+.gallery-lb-btn:focus-visible {
+  outline: 3px solid #00aeef;
+  outline-offset: 3px;
+}
+
+
+.gallery-lb-close {
+  top: 20px;
+  right: 20px;
+
+  font-size: 1.8rem;
+}
+
+
+.gallery-lb-prev {
+  top: 50%;
+  left: 20px;
+
+  transform: translateY(-50%);
+}
+
+
+.gallery-lb-next {
+  top: 50%;
+  right: 20px;
+
+  transform: translateY(-50%);
+}
+
+
+@media (hover: hover) and (pointer: fine) {
+
+  .gallery-lb-prev:hover,
+  .gallery-lb-next:hover {
+    transform: translateY(-50%) scale(1.06);
+  }
+
+}
+
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media (max-width: 767px) {
+
+  .gallery-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-rows: auto;
+
+    aspect-ratio: auto;
+
+    gap: 10px;
+  }
+
+
+  .gallery-item:nth-child(1) {
+    grid-column: 1 / span 2;
+    grid-row: auto;
+    aspect-ratio: 1 / 1;
+  }
+
+
+  .gallery-item:nth-child(2),
+  .gallery-item:nth-child(3),
+  .gallery-item:nth-child(4),
+  .gallery-item:nth-child(5) {
+    grid-column: span 1;
+    grid-row: auto;
+    aspect-ratio: 1 / 1;
+  }
+
+
+  .gallery-item:nth-child(6) {
+    grid-column: 1 / span 2;
+    grid-row: auto;
+    aspect-ratio: 4 / 2;
+  }
+
+
+  .gallery-lb-btn {
+    width: 42px;
+    height: 42px;
+
+    font-size: 1.4rem;
+  }
+
+
+  .gallery-lb-close {
+    top: 12px;
+    right: 12px;
+  }
+
+
+  .gallery-lb-prev {
+    left: 12px;
+  }
+
+
+  .gallery-lb-next {
+    right: 12px;
+  }
+
+
+  .gallery-lb-image {
+    max-height: 70vh;
+  }
+
+}
+
+
+/* =========================================================
+   REDUCED MOTION
+   ========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+
+  .gallery-item,
+  .gallery-item img,
+  .gallery-lightbox,
+  .gallery-lb-btn {
+    transition: none;
+  }
+
+
+  .gallery-item:hover,
+  .gallery-item:hover img {
+    transform: none;
+  }
+
+}
+
+</style>
