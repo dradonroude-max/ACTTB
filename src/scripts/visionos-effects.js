@@ -1,225 +1,399 @@
 /**
+ * =========================================================
+ * ACTT — EFFECTS ENGINE (GSAP)
+ * =========================================================
+ *
+ * Sept effets coordonnés :
+ * 1. Barre de progression de scroll
+ * 2. Révélation des en-têtes de section
+ * 3. Compteurs animés sur les tarifs
+ * 4. Spotlight souris sur les cartes
+ * 5. Boutons magnétiques
+ * 6. Parallaxe subtile du Hero
+ * 7. Reveals historiques (.reveal) conservés
+ *
+ * Règles :
+ * - prefers-reduced-motion respecté partout
+ * - Aucun effet sur pointeur grossier (tactile)
+ * - Aucun blocage de scroll ou de lecture
+ */
 
-=========================================================
-ACTT — EFFECTS ENGINE
-=========================================================
-*/
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 
-(() => {
-"use strict";
+gsap.registerPlugin(ScrollTrigger);
 
-const start = () => {
-const reducedMotionQuery = window.matchMedia(
-"(prefers-reduced-motion: reduce)"
-);
-const finePointerQuery = window.matchMedia(
-  "(hover: hover) and (pointer: fine)"
-);
+const init = () => {
+  const reducedMotion = window.matchMedia(
+    "(prefers-reduced-motion: reduce)"
+  ).matches;
 
-const prefersReducedMotion = () =>
-  reducedMotionQuery.matches;
+  const finePointer = window.matchMedia(
+    "(hover: hover) and (pointer: fine)"
+  ).matches;
 
-const hasFinePointer = () =>
-  finePointerQuery.matches;
+  document.documentElement.classList.add("js");
 
-document.documentElement.classList.add("js");
+  try {
+    /* =====================================================
+       1. REVEAL HISTORIQUE (.reveal)
+       ===================================================== */
 
-try {
-  initializeReveal();
-  initializeTilt();
+    initializeReveal(reducedMotion);
 
-  document.documentElement.classList.add("js-ready");
+    /* =====================================================
+       2. BARRE DE PROGRESSION
+       ===================================================== */
 
-} catch (error) {
-  console.warn(
-    "[ACTT] Effects initialization failed.",
-    error
-  );
-}
+    initializeProgressBar(reducedMotion);
 
-function initializeReveal() {
-  const revealElements =
-    document.querySelectorAll(".reveal");
+    if (!reducedMotion) {
+      /* ===================================================
+         3. RÉVÉLATION DES EN-TÊTES
+         =================================================== */
 
-  if (!revealElements.length) {
-    return;
+      initializeSectionHeaders();
+
+      /* ===================================================
+         4. COMPTEURS ANIMÉS
+         =================================================== */
+
+      initializeCounters();
+    }
+
+    if (!reducedMotion && finePointer) {
+      /* ===================================================
+         5. SPOTLIGHT SUR LES CARTES
+         =================================================== */
+
+      initializeSpotlight();
+
+      /* ===================================================
+         6. BOUTONS MAGNÉTIQUES
+         =================================================== */
+
+      initializeMagneticButtons();
+
+      /* ===================================================
+         7. PARALLAXE DU HERO
+         =================================================== */
+
+      initializeHeroParallax();
+    }
+
+    document.documentElement.classList.add("js-ready");
+  } catch (error) {
+    console.warn("[ACTT] Effects initialization failed.", error);
+    document.documentElement.classList.add("js-ready");
   }
+};
 
-  if (prefersReducedMotion()) {
-    revealElements.forEach((element) => {
-      element.classList.add("is-visible");
-    });
+/* =========================================================
+   1. REVEAL HISTORIQUE
+   ========================================================= */
+
+function initializeReveal(reducedMotion) {
+  const elements = document.querySelectorAll(".reveal");
+
+  if (!elements.length) return;
+
+  if (reducedMotion) {
+    elements.forEach((el) => el.classList.add("is-visible"));
     return;
   }
 
   if (!("IntersectionObserver" in window)) {
-    revealElements.forEach((element) => {
-      element.classList.add("is-visible");
-    });
+    elements.forEach((el) => el.classList.add("is-visible"));
     return;
   }
 
   const observer = new IntersectionObserver(
-    (entries, observerInstance) => {
+    (entries, obs) => {
       entries.forEach((entry) => {
-        if (!entry.isIntersecting) {
-          return;
-        }
-
+        if (!entry.isIntersecting) return;
         entry.target.classList.add("is-visible");
-
-        observerInstance.unobserve(entry.target);
+        obs.unobserve(entry.target);
       });
     },
-    {
-      threshold: 0.12,
-      rootMargin: "0px 0px -40px 0px",
-    }
+    { threshold: 0.12, rootMargin: "0px 0px -40px 0px" }
   );
 
-  revealElements.forEach((element) => {
-    observer.observe(element);
-  });
+  elements.forEach((el) => observer.observe(el));
 }
 
-function initializeTilt() {
-  if (
-    prefersReducedMotion() ||
-    !hasFinePointer()
-  ) {
+/* =========================================================
+   2. BARRE DE PROGRESSION
+   ========================================================= */
+
+function initializeProgressBar(reducedMotion) {
+  const bar = document.createElement("div");
+  bar.className = "scroll-progress-bar";
+  bar.setAttribute("aria-hidden", "true");
+  document.body.appendChild(bar);
+
+  if (reducedMotion) {
+    bar.style.transform = "scaleX(0)";
     return;
   }
 
-  const tiltElements =
-    document.querySelectorAll(".vision-tilt");
-
-  if (!tiltElements.length) {
-    return;
-  }
-
-  tiltElements.forEach((element) => {
-    setupTilt(element);
+  gsap.to(bar, {
+    scaleX: 1,
+    ease: "none",
+    scrollTrigger: {
+      trigger: document.documentElement,
+      start: "top top",
+      end: "bottom bottom",
+      scrub: 0.2,
+    },
   });
 }
 
-function setupTilt(element) {
-  let frameId = null;
-  let pointerX = 0;
-  let pointerY = 0;
-  let isInside = false;
+/* =========================================================
+   3. RÉVÉLATION DES EN-TÊTES DE SECTION
+   ========================================================= */
 
-  const maxRotation = 4;
+function initializeSectionHeaders() {
+  const headers = gsap.utils.toArray(".vision-section-header");
 
-  const updateTransform = () => {
-    frameId = null;
+  headers.forEach((header) => {
+    const eyebrow = header.querySelector(".vision-section-eyebrow");
+    const title = header.querySelector(".vision-section-title");
+    const description = header.querySelector(".vision-section-description");
 
-    if (!isInside) {
-      return;
+    const tl = gsap.timeline({
+      scrollTrigger: {
+        trigger: header,
+        start: "top 85%",
+        toggleActions: "play none none none",
+      },
+    });
+
+    if (eyebrow) {
+      tl.from(eyebrow, {
+        y: 16,
+        autoAlpha: 0,
+        duration: 0.5,
+        ease: "power2.out",
+      });
     }
 
-    const rect =
-      element.getBoundingClientRect();
-
-    if (!rect.width || !rect.height) {
-      return;
-    }
-
-    const normalizedX =
-      (pointerX - rect.left) /
-        rect.width -
-      0.5;
-
-    const normalizedY =
-      (pointerY - rect.top) /
-        rect.height -
-      0.5;
-
-    const rotateY =
-      normalizedX *
-      maxRotation *
-      2;
-
-    const rotateX =
-      normalizedY *
-      -maxRotation *
-      2;
-
-    element.style.transform =
-      `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateZ(0)`;
-  };
-
-  const requestUpdate = () => {
-    if (frameId !== null) {
-      return;
-    }
-
-    frameId =
-      requestAnimationFrame(
-        updateTransform
+    if (title) {
+      tl.from(
+        title,
+        {
+          y: 26,
+          autoAlpha: 0,
+          duration: 0.7,
+          ease: "power3.out",
+        },
+        "-=0.30"
       );
-  };
-
-  const handlePointerEnter = () => {
-    isInside = true;
-
-    element.style.transition =
-      "transform 150ms cubic-bezier(0.2, 0, 0, 1)";
-  };
-
-  const handlePointerMove = (event) => {
-    pointerX = event.clientX;
-    pointerY = event.clientY;
-
-    requestUpdate();
-  };
-
-  const reset = () => {
-    isInside = false;
-
-    if (frameId !== null) {
-      cancelAnimationFrame(frameId);
-      frameId = null;
     }
 
-    element.style.transition =
-      "transform 400ms cubic-bezier(0.22, 1, 0.36, 1)";
-
-    element.style.transform = "";
-  };
-
-  element.addEventListener(
-    "pointerenter",
-    handlePointerEnter,
-    { passive: true }
-  );
-
-  element.addEventListener(
-    "pointermove",
-    handlePointerMove,
-    { passive: true }
-  );
-
-  element.addEventListener(
-    "pointerleave",
-    reset,
-    { passive: true }
-  );
-
-  element.addEventListener(
-    "pointercancel",
-    reset,
-    { passive: true }
-  );
+    if (description) {
+      tl.from(
+        description,
+        {
+          y: 18,
+          autoAlpha: 0,
+          duration: 0.6,
+          ease: "power2.out",
+        },
+        "-=0.40"
+      );
+    }
+  });
 }
-};
+
+/* =========================================================
+   4. COMPTEURS ANIMÉS
+   ========================================================= */
+
+function initializeCounters() {
+  const counters = gsap.utils.toArray(".vision-pricing-price");
+
+  counters.forEach((el) => {
+    const text = (el.textContent || "").trim();
+    const match = text.match(/^([^\d]*)(\d+)(.*)$/);
+
+    if (!match) return;
+
+    const prefix = match[1];
+    const target = parseInt(match[2], 10);
+    const suffix = match[3];
+
+    const counter = { value: 0 };
+
+    ScrollTrigger.create({
+      trigger: el,
+      start: "top 85%",
+      once: true,
+      onEnter: () => {
+        gsap.to(counter, {
+          value: target,
+          duration: 1.3,
+          ease: "power2.out",
+          onUpdate: () => {
+            el.textContent =
+              prefix + Math.round(counter.value) + suffix;
+          },
+        });
+      },
+    });
+  });
+}
+
+/* =========================================================
+   5. SPOTLIGHT SUR LES CARTES
+   ========================================================= */
+
+function initializeSpotlight() {
+  const cards = document.querySelectorAll(
+    [
+      ".vision-pricing-card",
+      ".vision-partner-card",
+      ".calendrier-card",
+      ".team-card",
+      ".visionos-card",
+    ].join(", ")
+  );
+
+  cards.forEach((card) => {
+    let frameId = null;
+
+    const reset = () => {
+      if (frameId) {
+        cancelAnimationFrame(frameId);
+        frameId = null;
+      }
+    };
+
+    card.addEventListener("pointermove", (event) => {
+      if (frameId) return;
+
+      frameId = requestAnimationFrame(() => {
+        frameId = null;
+
+        const rect = card.getBoundingClientRect();
+        if (!rect.width || !rect.height) return;
+
+        const x = ((event.clientX - rect.left) / rect.width) * 100;
+        const y = ((event.clientY - rect.top) / rect.height) * 100;
+
+        gsap.to(card, {
+          "--spotlight-x": x,
+          "--spotlight-y": y,
+          duration: 0.5,
+          ease: "power2.out",
+          overwrite: "auto",
+        });
+      });
+    });
+
+    card.addEventListener("pointerleave", () => {
+      reset();
+      gsap.to(card, {
+        "--spotlight-x": 50,
+        "--spotlight-y": 50,
+        duration: 0.6,
+        ease: "power2.out",
+        overwrite: "auto",
+      });
+    });
+  });
+}
+
+/* =========================================================
+   6. BOUTONS MAGNÉTIQUES
+   ========================================================= */
+
+function initializeMagneticButtons() {
+  const buttons = document.querySelectorAll(
+    [
+      ".actt-hero-button-primary",
+      ".actt-hero-button-secondary",
+      ".inscription-download-button",
+      ".vision-navbar-cta-link",
+    ].join(", ")
+  );
+
+  const strength = 18;
+
+  buttons.forEach((button) => {
+    const xTo = gsap.quickTo(button, "x", {
+      duration: 0.4,
+      ease: "power3.out",
+    });
+
+    const yTo = gsap.quickTo(button, "y", {
+      duration: 0.4,
+      ease: "power3.out",
+    });
+
+    button.addEventListener("pointermove", (event) => {
+      const rect = button.getBoundingClientRect();
+      if (!rect.width || !rect.height) return;
+
+      const x =
+        ((event.clientX - rect.left) / rect.width - 0.5) * strength;
+
+      const y =
+        ((event.clientY - rect.top) / rect.height - 0.5) * strength;
+
+      xTo(x);
+      yTo(y);
+    });
+
+    button.addEventListener("pointerleave", () => {
+      xTo(0);
+      yTo(0);
+    });
+  });
+}
+
+/* =========================================================
+   7. PARALLAXE DU HERO
+   ========================================================= */
+
+function initializeHeroParallax() {
+  const visual = document.querySelector(".visionos-hero-visual");
+  const hero = document.querySelector(".visionos-hero");
+
+  if (!visual || !hero) return;
+
+  gsap.to(visual, {
+    yPercent: 18,
+    ease: "none",
+    scrollTrigger: {
+      trigger: hero,
+      start: "top top",
+      end: "bottom top",
+      scrub: 0.4,
+    },
+  });
+
+  const content = document.querySelector(".visionos-hero-content");
+
+  if (content) {
+    gsap.to(content, {
+      yPercent: 8,
+      ease: "none",
+      scrollTrigger: {
+        trigger: hero,
+        start: "top top",
+        end: "bottom top",
+        scrub: 0.4,
+      },
+    });
+  }
+}
+
+/* =========================================================
+   BOOT
+   ========================================================= */
 
 if (document.readyState === "loading") {
-document.addEventListener(
-"DOMContentLoaded",
-start,
-{ once: true }
-);
+  document.addEventListener("DOMContentLoaded", init, { once: true });
 } else {
-start();
+  init();
 }
-})();

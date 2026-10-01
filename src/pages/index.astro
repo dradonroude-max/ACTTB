@@ -18,6 +18,8 @@ import VisionOSTeamCard from "../components/VisionOSTeamCard.astro";
 import { club } from "../data/club";
 import { teams } from "../data/teams";
 import { partners } from "../data/partners";
+import { pricing } from "../data/pricing";
+import { upcomingMatches, recentResults } from "../data/calendar";
 import { site } from "../config/site";
 ---
 
@@ -26,10 +28,7 @@ import { site } from "../config/site";
   description="Camphin-en-Carembault Tennis de Table — un club de tennis de table ouvert à tous, du loisir à la compétition."
 >
 
-  <!-- =====================================================
-       HERO
-       ===================================================== -->
-
+  <!-- HERO -->
   <VisionOSHero
     eyebrow="CAMPHIN-EN-CAREMBAULT"
     title="UN CLUB. UNE ÉQUIPE. UNE PASSION."
@@ -44,10 +43,7 @@ import { site } from "../config/site";
   />
 
 
-  <!-- =====================================================
-       LE CLUB
-       ===================================================== -->
-
+  <!-- LE CLUB -->
   <VisionOSSection
     id="club"
     eyebrow="LE CLUB"
@@ -55,68 +51,29 @@ import { site } from "../config/site";
     description="Un club de tennis de table à Camphin-en-Carembault, dans un esprit ouvert et collectif."
     spacing="sm"
   >
-
     <div class="vision-grid-2 club-panels">
 
-      <VisionOSPanel
-        depth="raised"
-        padding="lg"
-        class="club-panel club-panel-primary"
-      >
-
-        <VisionOSBadge
-          label="ACTT"
-          variant="primary"
-        />
-
-        <h3>
-          {club.tagline}
-        </h3>
-
-        <p>
-          {club.description}
-        </p>
-
+      <VisionOSPanel depth="raised" padding="lg" class="club-panel club-panel-primary">
+        <VisionOSBadge label="ACTT" variant="primary" />
+        <h3>{club.tagline}</h3>
+        <p>{club.description}</p>
       </VisionOSPanel>
 
-
-      <VisionOSPanel
-        depth="floating"
-        padding="lg"
-        class="club-panel club-panel-secondary"
-      >
-
-        <VisionOSBadge
-          label="Le club"
-          variant="success"
-        />
-
-        <h3>
-          Tennis de table à {club.city}
-        </h3>
-
+      <VisionOSPanel depth="floating" padding="lg" class="club-panel club-panel-secondary">
+        <VisionOSBadge label="Le club" variant="success" />
+        <h3>Tennis de table à {club.city}</h3>
         <p>
           Retrouvez ici les informations essentielles pour découvrir
           le club, comprendre son fonctionnement et nous contacter.
         </p>
-
-        <VisionOSButton
-          label="Découvrir le club"
-          href="#essayer"
-          variant="outline"
-        />
-
+        <VisionOSButton label="Découvrir le club" href="#essayer" variant="outline" />
       </VisionOSPanel>
 
     </div>
-
   </VisionOSSection>
 
 
-  <!-- =====================================================
-       JOUER
-       ===================================================== -->
-
+  <!-- JOUER -->
   <VisionOSSection
     id="jouer"
     eyebrow="JOUER"
@@ -124,37 +81,15 @@ import { site } from "../config/site";
     description="Les différentes pratiques du club seront présentées ici."
     spacing="sm"
   >
-
     <div class="vision-grid-3">
-
-      <VisionOSCard
-        title="Pratique"
-        description="Les informations relatives aux pratiques proposées par le club seront bientôt disponibles."
-        badge="À venir"
-        variant="glass"
-      />
-
-      <VisionOSCard
-        title="Loisir"
-        description="Cette rubrique accueillera les informations concernant la pratique loisir."
-        badge="À venir"
-      />
-
-      <VisionOSCard
-        title="Compétition"
-        description="Cette rubrique accueillera les informations concernant la pratique en compétition."
-        badge="À venir"
-      />
-
+      <VisionOSCard title="Pratique" description="Les informations relatives aux pratiques proposées par le club seront bientôt disponibles." badge="À venir" variant="glass" />
+      <VisionOSCard title="Loisir" description="Cette rubrique accueillera les informations concernant la pratique loisir." badge="À venir" />
+      <VisionOSCard title="Compétition" description="Cette rubrique accueillera les informations concernant la pratique en compétition." badge="À venir" />
     </div>
-
   </VisionOSSection>
 
 
-  <!-- =====================================================
-       ÉQUIPES
-       ===================================================== -->
-
+  <!-- ÉQUIPES -->
   <VisionOSSection
     id="equipes"
     eyebrow="ÉQUIPES"
@@ -162,22 +97,13 @@ import { site } from "../config/site";
     description="Découvrez les équipes du club et leurs joueurs."
     spacing="sm"
   >
-
     <div class="vision-grid-2 equipes-grid">
-
-      {teams.map((team) => (
-        <VisionOSTeamCard team={team} />
-      ))}
-
+      {teams.map((team) => (<VisionOSTeamCard team={team} />))}
     </div>
-
   </VisionOSSection>
 
 
-  <!-- =====================================================
-       ACTUALITÉS
-       ===================================================== -->
-
+  <!-- ACTUALITÉS -->
   <VisionOSSection
     id="actualites"
     eyebrow="ACTUALITÉS"
@@ -185,61 +111,81 @@ import { site } from "../config/site";
     description="Les dernières informations concernant la vie de l’ACTT seront publiées ici."
     spacing="sm"
   >
-
     <div class="vision-grid-3">
-
-      <VisionOSCard
-        title="Actualités"
-        description="Les actualités du club seront publiées dans cette rubrique."
-        badge="À venir"
-        variant="glass"
-      />
-
+      <VisionOSCard title="Actualités" description="Les actualités du club seront publiées dans cette rubrique." badge="À venir" variant="glass" />
     </div>
-
   </VisionOSSection>
 
 
-  <!-- =====================================================
-       CALENDRIER
-       ===================================================== -->
-
+  <!-- CALENDRIER ET RÉSULTATS -->
   <VisionOSSection
     id="calendrier"
     eyebrow="CALENDRIER"
-    title="Le calendrier de l’ACTT"
-    description="Les prochains événements, rencontres et rendez-vous du club seront regroupés ici."
+    title="Calendrier et résultats"
+    description="Les prochains rendez-vous et les derniers résultats du club."
     spacing="sm"
   >
+    <div class="calendrier-grid">
 
-    <VisionOSPanel
-      depth="floating"
-      padding="lg"
-    >
+      {recentResults.length > 0 && (
+        <article class="calendrier-card calendrier-card-results">
+          <span class="calendrier-card-accent" aria-hidden="true"></span>
+          <header class="calendrier-card-header">
+            <span class="calendrier-card-eyebrow">Résultats</span>
+            <h3 class="calendrier-card-title">Derniers matchs</h3>
+          </header>
+          <ul class="calendar-list">
+            {recentResults.map((result) => (
+              <li class="calendar-item">
+                <div class="calendar-item-main">
+                  <span class="calendar-item-team">{result.team}</span>
+                  <span class="calendar-item-vs">vs</span>
+                  <span class="calendar-item-opponent">{result.opponent}</span>
+                </div>
+                <div class="calendar-item-meta">
+                  <span class="calendar-item-date">{result.date}</span>
+                  <span class:list={["calendar-result-badge", `calendar-result-badge-${result.outcome}`]}>
+                    {result.score}
+                  </span>
+                </div>
+              </li>
+            ))}
+          </ul>
+        </article>
+      )}
 
-      <VisionOSBadge
-        label="Calendrier"
-        variant="primary"
-      />
+      {upcomingMatches.length > 0 && (
+        <article class="calendrier-card calendrier-card-upcoming">
+          <span class="calendrier-card-accent" aria-hidden="true"></span>
+          <header class="calendrier-card-header">
+            <span class="calendrier-card-eyebrow">À venir</span>
+            <h3 class="calendrier-card-title">Prochains matchs</h3>
+          </header>
+          <ul class="calendar-list">
+            {upcomingMatches.map((match) => (
+              <li class="calendar-item">
+                <div class="calendar-item-main">
+                  <span class="calendar-item-team">{match.team}</span>
+                  <span class="calendar-item-vs">vs</span>
+                  <span class="calendar-item-opponent">{match.opponent}</span>
+                </div>
+                <div class="calendar-item-meta">
+                  <span class="calendar-item-date">{match.date} · {match.time}</span>
+                  <span class:list={["calendar-item-location", match.location === "domicile" ? "calendar-item-location-home" : "calendar-item-location-away"]}>
+                    {match.location}
+                  </span>
+                </div>
+              </li>
+            ))}
+          </ul>
+        </article>
+      )}
 
-      <h3>
-        Les prochains rendez-vous
-      </h3>
-
-      <p>
-        Le calendrier du club sera ajouté ici dès que les données
-        seront disponibles.
-      </p>
-
-    </VisionOSPanel>
-
+    </div>
   </VisionOSSection>
 
 
-  <!-- =====================================================
-       PARTENAIRES
-       ===================================================== -->
-
+  <!-- PARTENAIRES -->
   <VisionOSSection
     id="partenaires"
     eyebrow="PARTENAIRES"
@@ -248,85 +194,162 @@ import { site } from "../config/site";
     align="center"
     spacing="sm"
   >
-
     {partners.length > 0 ? (
       <ul class="vision-partners-grid">
         {partners.map((partner) => (
           <li class="vision-partner-item">
-
             {partner.href ? (
-              <a
-                class="vision-partner-card vision-partner-card-link"
-                href={partner.href}
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label={partner.name}
-              >
-                <span class="vision-partner-logo">
-                  <img
-                    src={partner.logo}
-                    alt=""
-                    loading="lazy"
-                    decoding="async"
-                  />
-                </span>
-
-                {partner.description ? (
-                  <span class="vision-partner-description">
-                    {partner.description}
-                  </span>
-                ) : (
-                  <span class="vision-partner-name">
-                    {partner.name}
-                  </span>
-                )}
+              <a class="vision-partner-card vision-partner-card-link" href={partner.href} target="_blank" rel="noopener noreferrer" aria-label={partner.name}>
+                <span class="vision-partner-logo"><img src={partner.logo} alt="" loading="lazy" decoding="async" /></span>
+                {partner.description ? (<span class="vision-partner-description">{partner.description}</span>) : (<span class="vision-partner-name">{partner.name}</span>)}
               </a>
             ) : (
               <div class="vision-partner-card">
-                <span class="vision-partner-logo">
-                  <img
-                    src={partner.logo}
-                    alt={partner.name}
-                    loading="lazy"
-                    decoding="async"
-                  />
-                </span>
-
-                {partner.description ? (
-                  <span class="vision-partner-description">
-                    {partner.description}
-                  </span>
-                ) : (
-                  <span class="vision-partner-name">
-                    {partner.name}
-                  </span>
-                )}
+                <span class="vision-partner-logo"><img src={partner.logo} alt={partner.name} loading="lazy" decoding="async" /></span>
+                {partner.description ? (<span class="vision-partner-description">{partner.description}</span>) : (<span class="vision-partner-name">{partner.name}</span>)}
               </div>
             )}
-
           </li>
         ))}
       </ul>
     ) : (
       <div class="vision-grid-3">
-
-        <VisionOSCard
-          title="Partenaires"
-          description="Cette rubrique accueillera les partenaires du club."
-          badge="À venir"
-          variant="glass"
-        />
-
+        <VisionOSCard title="Partenaires" description="Cette rubrique accueillera les partenaires du club." badge="À venir" variant="glass" />
       </div>
     )}
+  </VisionOSSection>
+
+
+  <!-- TARIFS -->
+  <VisionOSSection
+    id="tarifs"
+    eyebrow="TARIFS"
+    title="Les tarifs de l’ACTT"
+    description="Deux formules simples, pour les enfants et les adultes."
+    align="center"
+    spacing="sm"
+  >
+    <ul class="vision-pricing-grid">
+      {pricing.map((tier) => (
+        <li class="vision-pricing-item">
+          <article class="vision-pricing-card">
+            <span class="vision-pricing-label">{tier.label}</span>
+            <p class="vision-pricing-audience">{tier.audience}</p>
+            <p class="vision-pricing-price">{tier.price}</p>
+            <p class="vision-pricing-period">par saison</p>
+            <p class="vision-pricing-schedule">{tier.schedule}</p>
+            {tier.note && (<p class="vision-pricing-note">{tier.note}</p>)}
+          </article>
+        </li>
+      ))}
+    </ul>
+  </VisionOSSection>
+
+
+  <!-- INSCRIPTION -->
+  <VisionOSSection
+    id="inscription"
+    eyebrow="INSCRIPTION"
+    title="S’inscrire à l’ACTT"
+    description="Téléchargez la fiche, remplissez-la et renvoyez-la au club."
+    align="center"
+    spacing="sm"
+  >
+
+    <!-- 3 ÉTAPES -->
+    <div class="inscription-steps">
+
+      <div class="inscription-step">
+        <span class="inscription-step-number">1</span>
+        <h3 class="inscription-step-title">Télécharger la fiche</h3>
+        <p class="inscription-step-text">
+          La fiche officielle contient toutes les informations
+          nécessaires : identité, contact, engagements et
+          autorisations.
+        </p>
+      </div>
+
+      <div class="inscription-step">
+        <span class="inscription-step-number">2</span>
+        <h3 class="inscription-step-title">Remplir et signer</h3>
+        <p class="inscription-step-text">
+          Remplissez la fiche, imprimez-la et signez-la.
+          La signature manuscrite est obligatoire, y compris
+          pour les mineurs (représentant légal).
+        </p>
+      </div>
+
+      <div class="inscription-step">
+        <span class="inscription-step-number">3</span>
+        <h3 class="inscription-step-title">Renvoyer au club</h3>
+        <p class="inscription-step-text">
+          Renvoyez la fiche signée accompagnée de votre
+          règlement. L’inscription est effective à réception
+          du paiement.
+        </p>
+      </div>
+
+    </div>
+
+    <!-- PANNEAU FINAL : bouton + infos -->
+    <VisionOSPanel
+      depth="floating"
+      padding="lg"
+      class="inscription-panel"
+    >
+      <div class="inscription-panel-content">
+
+        <!-- Bouton de téléchargement -->
+        <a
+          class="vision-button vision-button-primary vision-button-lg inscription-download-button"
+          href="/documents/fiche_inscription_ACTT_2026-2027.pdf"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <span>↓&nbsp;&nbsp;Télécharger la fiche d'inscription 2026-2027</span>
+        </a>
+
+        <p class="inscription-download-note">
+          Format PDF · à imprimer et signer
+        </p>
+
+        <!-- Séparateur visuel -->
+        <div class="inscription-separator" aria-hidden="true"></div>
+
+        <!-- Informations pratiques -->
+        <div class="inscription-info-grid">
+
+          <div class="inscription-info-item">
+            <span class="inscription-info-label">Paiement</span>
+            <span class="inscription-info-value">
+              Virement bancaire ou chèque à l'ordre de L'ACTT
+            </span>
+          </div>
+
+          <div class="inscription-info-item">
+            <span class="inscription-info-label">Contact</span>
+            <span class="inscription-info-value">
+              <a href={`mailto:${site.contact.email}`}>{site.contact.email}</a>
+              <span class="inscription-info-sep"> · </span>
+              <a href={`tel:${site.contact.phone.replace(/\s+/g, "")}`}>{site.contact.phone}</a>
+            </span>
+          </div>
+
+        </div>
+
+        <!-- Renvoi vers Première séance -->
+        <p class="inscription-hint">
+          Nouveau au club ?
+          <a href="#essayer">Venez d'abord essayer une séance</a>
+        </p>
+
+      </div>
+    </VisionOSPanel>
 
   </VisionOSSection>
 
 
-  <!-- =====================================================
-       PREMIÈRE SÉANCE
-       ===================================================== -->
-
+  <!-- PREMIÈRE SÉANCE -->
   <VisionOSSection
     id="essayer"
     eyebrow="PREMIÈRE SÉANCE"
@@ -335,57 +358,32 @@ import { site } from "../config/site";
     align="center"
     spacing="sm"
   >
-
-    <VisionOSPanel
-      depth="floating"
-      padding="lg"
-      class="essayer-panel"
-    >
-
+    <VisionOSPanel depth="floating" padding="lg" class="essayer-panel">
       <div class="vision-contact-content">
-
-        <VisionOSBadge
-          label="ACTT"
-          variant="primary"
-        />
-
-        <h3>
-          Votre première séance commence ici.
-        </h3>
-
+        <VisionOSBadge label="ACTT" variant="primary" />
+        <h3>Votre première séance commence ici.</h3>
         <p>
           Pour connaître les modalités et préparer votre venue,
           contactez directement le club.
         </p>
-
         <div class="vision-contact-actions">
-
           <VisionOSButton
             label="Nous contacter par mail"
             href={`mailto:${site.contact.email}`}
             variant="primary"
             size="lg"
           />
-
           <VisionOSButton
             label="Appeler"
             href={`tel:${site.contact.phone.replace(/\s+/g, "")}`}
             variant="outline"
             size="lg"
           />
-
         </div>
-
       </div>
-
     </VisionOSPanel>
-
   </VisionOSSection>
 
-
-  <!-- =====================================================
-       CONTACT / FOOTER ANCHOR
-       ===================================================== -->
 
   <div id="contact" aria-hidden="true"></div>
 
@@ -395,11 +393,7 @@ import { site } from "../config/site";
 <style>
 
   /* =======================================================
-     SECTIONS ALIGNÉES CENTER
-     =======================================================
-     VisionOSSection donne `width: fit-content` au titre,
-     ce qui empêche `text-align: center` de le centrer.
-     On force le centrage du bloc titre via margin-inline.
+     CENTRAGE DES TITRES DE SECTION
      ======================================================= */
 
   :global(.vision-section-align-center) :global(.vision-section-title) {
@@ -417,11 +411,9 @@ import { site } from "../config/site";
     content: none !important;
   }
 
-
   .club-panel {
     border-top: 1px solid var(--vision-border) !important;
   }
-
 
   .club-panel-primary {
     border-top: 1px solid var(--vision-border) !important;
@@ -438,6 +430,332 @@ import { site } from "../config/site";
 
 
   /* =======================================================
+     CALENDRIER ET RÉSULTATS
+     ======================================================= */
+
+  .calendrier-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: start;
+    gap: 28px;
+    max-width: 1100px;
+    margin-inline: auto;
+  }
+
+  .calendrier-card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    background: #ffffff;
+    border: 1px solid rgba(6, 26, 58, 0.10);
+    border-radius: 16px;
+    box-shadow: 0 14px 34px rgba(6, 26, 58, 0.10);
+  }
+
+  .calendrier-card-accent {
+    display: block;
+    width: 100%;
+    height: 4px;
+    flex: 0 0 4px;
+  }
+
+  .calendrier-card-results .calendrier-card-accent {
+    background: linear-gradient(90deg, #35a853 0%, #8bcf32 100%);
+  }
+
+  .calendrier-card-upcoming .calendrier-card-accent {
+    background: linear-gradient(90deg, #00aeef 0%, #073b7a 100%);
+  }
+
+  .calendrier-card-header {
+    padding: 22px 26px 18px;
+    border-bottom: 1px solid rgba(6, 26, 58, 0.08);
+  }
+
+  .calendrier-card-eyebrow {
+    display: block;
+    margin-bottom: 6px;
+    color: #45617f;
+    font-size: 0.72rem;
+    font-weight: 800;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+
+  .calendrier-card-title {
+    margin: 0;
+    color: #061a3a;
+    font-size: 1.3rem;
+    font-weight: 800;
+    letter-spacing: -0.01em;
+  }
+
+  .calendar-list {
+    display: flex;
+    flex-direction: column;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .calendar-item {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    padding: 16px 26px;
+    border-bottom: 1px solid rgba(6, 26, 58, 0.06);
+  }
+
+  .calendar-item:last-child {
+    border-bottom: none;
+  }
+
+  .calendar-item-main {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    min-width: 0;
+    flex: 1 1 auto;
+  }
+
+  .calendar-item-team,
+  .calendar-item-opponent {
+    color: #061a3a;
+    font-size: var(--vision-text-md);
+    font-weight: 600;
+    line-height: 1.3;
+  }
+
+  .calendar-item-vs {
+    color: #45617f;
+    font-size: 0.72rem;
+    font-weight: 800;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  .calendar-item-meta {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-shrink: 0;
+  }
+
+  .calendar-item-date {
+    color: #45617f;
+    font-size: var(--vision-text-sm);
+    white-space: nowrap;
+  }
+
+  .calendar-item-location {
+    display: inline-flex;
+    align-items: center;
+    padding: 4px 10px;
+    border-radius: 999px;
+    font-size: 0.68rem;
+    font-weight: 800;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+
+  .calendar-item-location-home {
+    background: rgba(53, 168, 83, 0.14);
+    color: #1f6b35;
+  }
+
+  .calendar-item-location-away {
+    background: rgba(0, 174, 239, 0.14);
+    color: #073b7a;
+  }
+
+  .calendar-result-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 5px 13px;
+    border-radius: 999px;
+    font-size: var(--vision-text-sm);
+    font-weight: 800;
+    letter-spacing: 0.02em;
+    white-space: nowrap;
+  }
+
+  .calendar-result-badge-victoire {
+    background: rgba(53, 168, 83, 0.16);
+    color: #1f6b35;
+  }
+
+  .calendar-result-badge-defaite {
+    background: rgba(143, 21, 32, 0.12);
+    color: #8f1520;
+  }
+
+  .calendar-result-badge-nul {
+    background: rgba(6, 26, 58, 0.10);
+    color: #17345c;
+  }
+
+
+  /* =======================================================
+     INSCRIPTION — ÉTAPES
+     ======================================================= */
+
+  .inscription-steps {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 20px;
+    max-width: 1000px;
+    margin-inline: auto;
+    margin-bottom: 40px;
+  }
+
+  .inscription-step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 14px;
+    padding: 32px 22px;
+    background: rgba(248, 250, 252, 0.05);
+    border: 1px solid rgba(248, 250, 252, 0.10);
+    border-radius: 16px;
+    text-align: center;
+  }
+
+  .inscription-step-number {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #00aeef 0%, #35a853 100%);
+    color: #061a3a;
+    font-size: 1.4rem;
+    font-weight: 900;
+    line-height: 1;
+    box-shadow: 0 6px 18px rgba(0, 174, 239, 0.28);
+  }
+
+  .inscription-step-title {
+    margin: 0;
+    color: #f8fafc;
+    font-size: 1.05rem;
+    font-weight: 800;
+    line-height: 1.25;
+  }
+
+  .inscription-step-text {
+    margin: 0;
+    color: rgba(248, 250, 252, 0.68);
+    font-size: 0.9rem;
+    line-height: 1.55;
+  }
+
+
+  /* =======================================================
+     INSCRIPTION — PANNEAU FINAL
+     ======================================================= */
+
+  .inscription-panel {
+    max-width: 720px;
+    margin-inline: auto;
+  }
+
+  .inscription-panel-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 18px;
+  }
+
+  .inscription-download-button {
+    width: 100%;
+    max-width: 500px;
+  }
+
+  .inscription-download-note {
+    margin: 0;
+    color: var(--vision-color-text-muted);
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  .inscription-separator {
+    width: 100%;
+    height: 1px;
+    background: rgba(6, 26, 58, 0.10);
+    margin-block: 4px;
+  }
+
+   .inscription-info-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    width: 100%;
+    max-width: 640px;
+    margin-inline: auto;
+  }
+
+  .inscription-info-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    text-align: center;
+  }
+
+  .inscription-info-label {
+    color: var(--vision-color-secondary);
+    font-size: 0.68rem;
+    font-weight: 800;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+
+  .inscription-info-value {
+    color: var(--vision-color-text);
+    font-size: 0.9rem;
+    line-height: 1.5;
+  }
+
+  .inscription-info-value a {
+    color: var(--vision-color-text);
+    text-decoration: underline;
+    text-decoration-color: rgba(6, 26, 58, 0.25);
+    text-underline-offset: 3px;
+  }
+
+  .inscription-info-sep {
+    color: rgba(6, 26, 58, 0.35);
+    margin-inline: 4px;
+  }
+
+  .inscription-hint {
+    margin: 8px 0 0;
+    color: var(--vision-color-text-muted);
+    font-size: 0.9rem;
+    text-align: center;
+  }
+
+  .inscription-hint a {
+    color: var(--vision-color-accent);
+    font-weight: 700;
+    text-decoration: none;
+    margin-left: 4px;
+  }
+
+  .inscription-hint a:hover {
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+
+  /* =======================================================
      PARTENAIRES
      ======================================================= */
 
@@ -446,125 +764,83 @@ import { site } from "../config/site";
     justify-content: center;
   }
 
-
   .vision-partners-grid {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
     align-items: stretch;
-
     gap: var(--vision-space-5);
-
     margin: 0;
     padding: 0;
-
     list-style: none;
   }
-
 
   .vision-partner-item {
     display: flex;
-
     width: 240px;
     max-width: 240px;
-
     margin: 0;
     padding: 0;
-
     list-style: none;
   }
-
 
   .vision-partner-card {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-
     gap: var(--vision-space-3);
-
     width: 100%;
     min-height: 200px;
-
     padding: 28px 24px;
-
     background: #ffffff;
-
     border: 1px solid rgba(6, 26, 58, 0.10);
     border-radius: 14px;
-
-    box-shadow:
-      0 8px 22px rgba(6, 26, 58, 0.06);
-
+    box-shadow: 0 8px 22px rgba(6, 26, 58, 0.06);
     text-decoration: none;
-
-    transition:
-      transform var(--vision-duration-normal) var(--vision-ease-smooth),
-      box-shadow var(--vision-duration-normal) var(--vision-ease-smooth),
-      border-color var(--vision-duration-normal) var(--vision-ease-standard);
+    transition: transform var(--vision-duration-normal) var(--vision-ease-smooth), box-shadow var(--vision-duration-normal) var(--vision-ease-smooth), border-color var(--vision-duration-normal) var(--vision-ease-standard);
   }
-
 
   .vision-partner-logo {
     display: flex;
     align-items: center;
     justify-content: center;
-
     width: 100%;
     height: 80px;
-
     overflow: hidden;
   }
 
-
   .vision-partner-logo img {
     display: block;
-
     width: auto;
     height: auto;
-
     max-width: 160px;
     max-height: 64px;
-
     object-fit: contain;
   }
 
-
   .vision-partner-name {
     color: #061a3a;
-
     font-size: var(--vision-text-md);
     font-weight: var(--vision-weight-bold);
-
     letter-spacing: 0.02em;
-
     text-align: center;
   }
-
 
   .vision-partner-description {
     color: var(--vision-color-text-muted);
-
     font-size: var(--vision-text-sm);
     line-height: 1.5;
-
     text-align: center;
   }
 
-
   @media (hover: hover) and (pointer: fine) {
-
     .vision-partner-card-link:hover {
       transform: translateY(-3px);
-
       border-color: rgba(6, 26, 58, 0.18);
-
-      box-shadow:
-        0 14px 30px rgba(6, 26, 58, 0.10);
+      box-shadow: 0 14px 30px rgba(6, 26, 58, 0.10);
     }
-
   }
-
 
   .vision-partner-card-link:focus-visible {
     outline: 3px solid var(--vision-color-secondary);
@@ -573,7 +849,104 @@ import { site } from "../config/site";
 
 
   /* =======================================================
-     PREMIÈRE SÉANCE — PANEL CENTRÉ
+     TARIFS
+     ======================================================= */
+
+  :global(.vision-section[id="tarifs"]) :global(.vision-section-content) {
+    display: flex;
+    justify-content: center;
+  }
+
+  .vision-pricing-grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: stretch;
+    gap: var(--vision-space-6);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .vision-pricing-item {
+    display: flex;
+    width: 300px;
+    max-width: 300px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .vision-pricing-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--vision-space-1);
+    width: 100%;
+    padding: 40px 28px;
+    background: #ffffff;
+    border: 1px solid rgba(6, 26, 58, 0.10);
+    border-radius: 16px;
+    box-shadow: 0 8px 22px rgba(6, 26, 58, 0.06);
+    text-align: center;
+  }
+
+  .vision-pricing-label {
+    color: #061a3a;
+    font-size: 1.35rem;
+    font-weight: 800;
+    letter-spacing: -0.01em;
+    text-transform: uppercase;
+  }
+
+  .vision-pricing-audience {
+    margin: 0;
+    color: #45617f;
+    font-size: var(--vision-text-sm);
+    line-height: 1.4;
+  }
+
+  .vision-pricing-price {
+    margin: var(--vision-space-5) 0 0;
+    color: #35a853;
+    font-size: 4rem;
+    font-weight: 900;
+    line-height: 1;
+    letter-spacing: -0.04em;
+  }
+
+  .vision-pricing-period {
+    margin: 0;
+    color: #45617f;
+    font-size: var(--vision-text-sm);
+  }
+
+  .vision-pricing-schedule {
+    margin: var(--vision-space-5) 0 0;
+    padding: var(--vision-space-3) var(--vision-space-4);
+    width: 100%;
+    background: #f1f6fa;
+    border-radius: 8px;
+    color: #061a3a;
+    font-size: var(--vision-text-sm);
+    font-weight: 600;
+    line-height: 1.4;
+    text-align: center;
+  }
+
+  .vision-pricing-note {
+    margin: var(--vision-space-3) 0 0;
+    padding-top: var(--vision-space-3);
+    width: 100%;
+    border-top: 1px solid rgba(6, 26, 58, 0.10);
+    color: #45617f;
+    font-size: var(--vision-text-xs);
+    line-height: 1.4;
+  }
+
+
+  /* =======================================================
+     PREMIÈRE SÉANCE
      ======================================================= */
 
   .essayer-panel {
@@ -581,60 +954,33 @@ import { site } from "../config/site";
     margin-inline: auto;
   }
 
-
-  /* =======================================================
-     CONTACT
-     ======================================================= */
-
   .vision-contact-content {
     max-width: 720px;
-
     margin-inline: auto;
-
     text-align: center;
   }
-
 
   .vision-contact-content h3 {
     margin-top: var(--vision-space-5);
     margin-bottom: var(--vision-space-4);
-
     color: var(--vision-color-text);
-
-    font-size: clamp(
-      var(--vision-text-2xl),
-      5vw,
-      var(--vision-text-3xl)
-    );
-
+    font-size: clamp(var(--vision-text-2xl), 5vw, var(--vision-text-3xl));
     line-height: var(--vision-line-tight);
   }
 
-
   .vision-contact-content p {
     max-width: 600px;
-
     margin-inline: auto;
     margin-bottom: var(--vision-space-7);
-
     color: var(--vision-color-text-muted);
-
     font-size: var(--vision-text-lg);
     line-height: var(--vision-line-relaxed);
   }
 
-
-  /* =======================================================
-     ACTIONS
-     ======================================================= */
-
   .vision-contact-actions {
     display: flex;
-
     flex-wrap: wrap;
-
     justify-content: center;
-
     gap: var(--vision-space-3);
   }
 
@@ -645,36 +991,36 @@ import { site } from "../config/site";
 
   @media (max-width: 767px) {
 
-    .vision-partner-item {
-      width: 200px;
-      max-width: 200px;
-    }
+    .calendrier-grid { grid-template-columns: 1fr; gap: 22px; }
+    .calendrier-card-header { padding: 18px 20px 14px; }
+    .calendrier-card-title { font-size: 1.15rem; }
 
-    .vision-partner-card {
-      min-height: 180px;
-
-      padding: 24px 18px;
-    }
-
-    .vision-partner-logo {
-      height: 64px;
-    }
-
-    .vision-partner-logo img {
-      max-width: 130px;
-      max-height: 52px;
-    }
-
-    .vision-contact-actions {
+    .calendar-item {
       flex-direction: column;
-
-      align-items: stretch;
+      align-items: flex-start;
+      gap: 8px;
+      padding: 14px 20px;
     }
 
+    .calendar-item-main { width: 100%; }
+    .calendar-item-meta { width: 100%; justify-content: space-between; }
 
-    .vision-contact-actions :global(.vision-button) {
-      width: 100%;
-    }
+    .inscription-steps { grid-template-columns: 1fr; gap: 14px; margin-bottom: 28px; }
+    .inscription-step { padding: 26px 20px; }
+    .inscription-info-grid { grid-template-columns: 1fr; gap: 18px; }
+
+    .vision-pricing-item { width: 100%; max-width: 320px; }
+    .vision-pricing-card { padding: 32px 22px; }
+    .vision-pricing-price { font-size: 3.25rem; }
+    .vision-pricing-schedule { font-size: var(--vision-text-xs); }
+
+    .vision-partner-item { width: 200px; max-width: 200px; }
+    .vision-partner-card { min-height: 180px; padding: 24px 18px; }
+    .vision-partner-logo { height: 64px; }
+    .vision-partner-logo img { max-width: 130px; max-height: 52px; }
+
+    .vision-contact-actions { flex-direction: column; align-items: stretch; }
+    .vision-contact-actions :global(.vision-button) { width: 100%; }
 
   }
 
@@ -684,15 +1030,8 @@ import { site } from "../config/site";
      ======================================================= */
 
   @media (prefers-reduced-motion: reduce) {
-
-    .vision-partner-card {
-      transition: none;
-    }
-
-    .vision-partner-card-link:hover {
-      transform: none;
-    }
-
+    .vision-partner-card { transition: none; }
+    .vision-partner-card-link:hover { transform: none; }
   }
 
 </style>

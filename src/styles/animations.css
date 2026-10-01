@@ -252,3 +252,178 @@ transform: none;
 transition: none;
 }
 }
+
+/* =========================================================
+   GSAP — EFFETS PREMIUM
+   ========================================================= */
+
+/* ---------------------------------------------------------
+   BARRE DE PROGRESSION DE SCROLL
+   --------------------------------------------------------- */
+
+.scroll-progress-bar {
+  position: fixed;
+
+  top: 0;
+  left: 0;
+
+  width: 100%;
+  height: 3px;
+
+  transform: scaleX(0);
+  transform-origin: 0 50%;
+
+  background: linear-gradient(
+    90deg,
+    #00aeef 0%,
+    #35a853 60%,
+    #8bcf32 100%
+  );
+
+  box-shadow:
+    0 0 10px rgba(0, 174, 239, 0.45);
+
+  z-index: 1001;
+
+  pointer-events: none;
+
+  will-change: transform;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .scroll-progress-bar {
+    display: none;
+  }
+}
+
+/* ---------------------------------------------------------
+   SPOTLIGHT SUR LES CARTES
+   --------------------------------------------------------- */
+
+.vision-pricing-card,
+.vision-partner-card,
+.calendrier-card,
+.team-card,
+.visionos-card {
+  --spotlight-x: 50;
+  --spotlight-y: 50;
+}
+
+.vision-pricing-card::after,
+.vision-partner-card::after,
+.calendrier-card::after,
+.team-card::after,
+.visionos-card::after {
+  content: "";
+
+  position: absolute;
+  inset: 0;
+
+  border-radius: inherit;
+
+  background: radial-gradient(
+    420px circle at
+      calc(var(--spotlight-x, 50) * 1%)
+      calc(var(--spotlight-y, 50) * 1%),
+    rgba(0, 174, 239, 0.16) 0%,
+    rgba(0, 174, 239, 0.06) 30%,
+    transparent 60%
+  );
+
+  opacity: 0;
+
+  pointer-events: none;
+
+  transition: opacity 280ms ease;
+
+  z-index: 1;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .vision-pricing-card:hover::after,
+  .vision-partner-card:hover::after,
+  .calendrier-card:hover::after,
+  .team-card:hover::after,
+  .visionos-card:hover::after {
+    opacity: 1;
+  }
+}
+
+/* Le contenu reste au-dessus du spotlight. */
+.vision-pricing-card > *,
+.vision-partner-card > *,
+.calendrier-card > *,
+.team-card > *,
+.visionos-card > * {
+  position: relative;
+  z-index: 2;
+}
+
+/* ---------------------------------------------------------
+   SHINE SUR LE WORDMARK
+   --------------------------------------------------------- */
+
+.vision-navbar-name {
+  position: relative;
+  overflow: hidden;
+}
+
+.vision-navbar-name::after {
+  content: "";
+
+  position: absolute;
+
+  top: 0;
+  left: -120%;
+
+  width: 80%;
+  height: 100%;
+
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.55) 45%,
+    rgba(255, 255, 255, 0.75) 50%,
+    rgba(255, 255, 255, 0.55) 55%,
+    transparent 100%
+  );
+
+  transform: skewX(-22deg);
+
+  mix-blend-mode: screen;
+
+  pointer-events: none;
+
+  animation: actt-wordmark-shine 9s ease-in-out infinite;
+}
+
+@keyframes actt-wordmark-shine {
+  0%,
+  88% {
+    left: -120%;
+  }
+  100% {
+    left: 220%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .vision-navbar-name::after {
+    animation: none;
+    display: none;
+  }
+}
+
+/* ---------------------------------------------------------
+   RESPECT DU REDUCED MOTION
+   --------------------------------------------------------- */
+
+@media (prefers-reduced-motion: reduce) {
+  .vision-pricing-card::after,
+  .vision-partner-card::after,
+  .calendrier-card::after,
+  .team-card::after,
+  .visionos-card::after {
+    display: none;
+  }
+}

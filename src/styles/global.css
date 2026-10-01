@@ -480,3 +480,45 @@ footer {
     );
   }
 }
+
+/* =========================================================
+   TARIFS
+   ========================================================= */
+
+#tarifs {
+  background: var(--actt-light) !important;
+  color: var(--vision-color-text);
+}
+
+#tarifs .vision-section-eyebrow {
+  color: var(--actt-cyan);
+}
+
+#tarifs .vision-section-title {
+  color: var(--actt-navy);
+}
+
+#tarifs .vision-section-description {
+  color: #45617f;
+}
+
+/* =========================================================
+   INSCRIPTION
+   ========================================================= */
+
+#inscription {
+  background: var(--actt-navy) !important;
+  color: var(--actt-light);
+}
+
+#inscription .vision-section-eyebrow {
+  color: var(--actt-cyan);
+}
+
+#inscription .vision-section-title {
+  color: var(--actt-light);
+}
+
+#inscription .vision-section-description {
+  color: rgba(248, 250, 252, 0.72);
+}
