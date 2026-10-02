@@ -4,24 +4,35 @@
  * ACTT — GALLERY
  * =========================================================
  *
- * Grille Bento (6 photos) + lightbox au clic.
- * Vanilla JS, aucune dépendance.
- * Accessible au clavier, respecte prefers-reduced-motion.
+ * Grille Bento (6 photos) + lightbox.
+ *
+ * RÈGLE AUTOMATIQUE :
+ *   - Les 6 PREMIÈRES photos du tableau → affichées dans la grille
+ *   - Toutes les SUIVANTES → uniquement dans la lightbox
+ *
+ * Pour ajouter une photo : ajouter l'entrée à la fin de `photos.ts`.
+ * Aucune autre modification n'est nécessaire.
  */
 
 import { photos } from "../data/photos";
+
+// Nombre de photos visibles dans la grille Bento.
+const VISIBLE_COUNT = 6;
+
+// Index de chaque photo visible dans le tableau COMPLET.
+const visiblePhotos = photos
+  .slice(0, VISIBLE_COUNT)
+  .map((photo, index) => ({ photo, index }));
 ---
 
 <div class="gallery-wrapper">
 
   <div class="gallery-grid" data-gallery>
-    {photos.map((photo, index) => (
+    {visiblePhotos.map(({ photo, index }) => (
       <button
         type="button"
         class="gallery-item"
         data-index={index}
-        data-src={photo.src}
-        data-caption={photo.caption ?? ""}
         aria-label={`Ouvrir la photo ${index + 1} sur ${photos.length}`}
       >
         <img
@@ -89,12 +100,37 @@ import { photos } from "../data/photos";
       <span class="gallery-lb-text"></span>
       <span class="gallery-lb-counter"></span>
     </figcaption>
+
+    <!-- Bande de vignettes -->
+    <nav
+      class="gallery-lb-thumbs"
+      data-lb-thumbs
+      aria-label="Choisir une photo"
+    ></nav>
   </figure>
 </div>
 
 
+<!-- Données pour le JS -->
+<script
+  type="application/json"
+  id="gallery-data"
+  set:html={JSON.stringify(photos)}
+></script>
+
+
 <script>
   (() => {
+    const dataEl = document.getElementById("gallery-data");
+    if (!dataEl) return;
+
+    let allPhotos: Array<{ src: string; alt: string; caption?: string }> = [];
+    try {
+      allPhotos = JSON.parse(dataEl.textContent || "[]");
+    } catch {
+      return;
+    }
+
     const lightbox = document.querySelector("[data-lightbox]") as HTMLElement | null;
     if (!lightbox) return;
 
@@ -110,29 +146,78 @@ import { photos } from "../data/photos";
     const closeBtn = lightbox.querySelector("[data-lb-close]") as HTMLButtonElement | null;
     const prevBtn = lightbox.querySelector("[data-lb-prev]") as HTMLButtonElement | null;
     const nextBtn = lightbox.querySelector("[data-lb-next]") as HTMLButtonElement | null;
+    const thumbsEl = lightbox.querySelector("[data-lb-thumbs]") as HTMLElement | null;
 
-    if (!imageEl || !textEl || !counterEl || !closeBtn || !prevBtn || !nextBtn) return;
+    if (!imageEl || !textEl || !counterEl || !closeBtn || !prevBtn || !nextBtn || !thumbsEl) return;
 
     let currentIndex = 0;
     let lastFocused: HTMLElement | null = null;
+    let thumbEls: HTMLButtonElement[] = [];
 
     const isOpen = () => lightbox.classList.contains("is-open");
 
-    const update = () => {
-      const item = items[currentIndex];
-      const src = item.dataset.src ?? "";
-      const caption = item.dataset.caption ?? "";
-      const innerImg = item.querySelector("img");
+    const buildThumbs = () => {
+      thumbsEl.innerHTML = "";
 
-      imageEl.src = src;
-      imageEl.alt = innerImg?.alt ?? "";
-      textEl.textContent = caption;
-      counterEl.textContent = `${currentIndex + 1} / ${items.length}`;
+      thumbEls = allPhotos.map((photo, i) => {
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.className = "gallery-lb-thumb";
+        btn.setAttribute("aria-label", `Photo ${i + 1} sur ${allPhotos.length}`);
+        btn.dataset.index = String(i);
+
+        const img = document.createElement("img");
+        img.src = photo.src;
+        img.alt = "";
+        img.loading = "lazy";
+        img.decoding = "async";
+
+        btn.appendChild(img);
+        thumbsEl.appendChild(btn);
+
+        btn.addEventListener("click", () => {
+          currentIndex = i;
+          update();
+        });
+
+        return btn;
+      });
+    };
+
+    const update = () => {
+      const photo = allPhotos[currentIndex];
+      if (!photo) return;
+
+      imageEl.src = photo.src;
+      imageEl.alt = photo.alt ?? "";
+      textEl.textContent = photo.caption ?? "";
+      counterEl.textContent = `${currentIndex + 1} / ${allPhotos.length}`;
+
+      thumbEls.forEach((thumb, i) => {
+        const active = i === currentIndex;
+        thumb.classList.toggle("is-active", active);
+        thumb.setAttribute("aria-current", active ? "true" : "false");
+
+        if (active) {
+          const thumbRect = thumb.getBoundingClientRect();
+          const thumbsRect = thumbsEl.getBoundingClientRect();
+          const offset = thumbRect.left - thumbsRect.left
+            - (thumbsRect.width / 2) + (thumbRect.width / 2);
+
+          thumbsEl.scrollBy({
+            left: offset,
+            behavior: "smooth",
+          });
+        }
+      });
     };
 
     const open = (index: number) => {
       currentIndex = index;
       lastFocused = document.activeElement as HTMLElement | null;
+
+      if (!thumbEls.length) buildThumbs();
+
       update();
       lightbox.classList.add("is-open");
       lightbox.setAttribute("aria-hidden", "false");
@@ -148,16 +233,17 @@ import { photos } from "../data/photos";
     };
 
     const next = () => {
-      currentIndex = (currentIndex + 1) % items.length;
+      currentIndex = (currentIndex + 1) % allPhotos.length;
       update();
     };
 
     const prev = () => {
-      currentIndex = (currentIndex - 1 + items.length) % items.length;
+      currentIndex = (currentIndex - 1 + allPhotos.length) % allPhotos.length;
       update();
     };
 
-    items.forEach((item, index) => {
+    items.forEach((item) => {
+      const index = parseInt(item.dataset.index ?? "0", 10);
       item.addEventListener("click", () => open(index));
     });
 
@@ -165,12 +251,10 @@ import { photos } from "../data/photos";
     prevBtn.addEventListener("click", prev);
     nextBtn.addEventListener("click", next);
 
-    // Clic sur le fond → fermer
     lightbox.addEventListener("click", (event) => {
       if (event.target === lightbox) close();
     });
 
-    // Navigation clavier
     document.addEventListener("keydown", (event) => {
       if (!isOpen()) return;
 
@@ -186,7 +270,6 @@ import { photos } from "../data/photos";
       }
     });
 
-    // Swipe tactile (mobile)
     let touchStartX = 0;
     let touchStartY = 0;
 
@@ -230,7 +313,6 @@ import { photos } from "../data/photos";
   margin-inline: auto;
 }
 
-
 .gallery-grid {
   display: grid;
 
@@ -244,123 +326,68 @@ import { photos } from "../data/photos";
   list-style: none;
 }
 
-
 .gallery-item {
   position: relative;
-
   display: block;
-
   width: 100%;
   height: 100%;
-
   padding: 0;
-
   overflow: hidden;
-
   border: none;
   border-radius: 14px;
-
   background: #e8eef4;
-
   cursor: pointer;
-
   -webkit-tap-highlight-color: transparent;
-
   transition:
     transform 250ms cubic-bezier(0.22, 1, 0.36, 1),
     box-shadow 250ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-
 .gallery-item img {
   display: block;
-
   width: 100%;
   height: 100%;
-
   object-fit: cover;
-
   transition: transform 400ms cubic-bezier(0.22, 1, 0.36, 1);
 }
-
 
 .gallery-item-overlay {
   position: absolute;
   inset: 0;
-
   background: linear-gradient(
     180deg,
     rgba(6, 26, 58, 0) 55%,
     rgba(6, 26, 58, 0.35) 100%
   );
-
   opacity: 0;
-
   transition: opacity 250ms ease;
-
   pointer-events: none;
 }
 
-
 @media (hover: hover) and (pointer: fine) {
-
   .gallery-item:hover {
     transform: translateY(-3px);
-
-    box-shadow:
-      0 14px 30px rgba(6, 26, 58, 0.16);
+    box-shadow: 0 14px 30px rgba(6, 26, 58, 0.16);
   }
-
   .gallery-item:hover img {
     transform: scale(1.05);
   }
-
   .gallery-item:hover .gallery-item-overlay {
     opacity: 1;
   }
-
 }
-
 
 .gallery-item:focus-visible {
   outline: 3px solid #00aeef;
   outline-offset: 3px;
 }
 
-
-/* ---------------------------------------------------------
-   POSITIONNEMENT BENTO
-   --------------------------------------------------------- */
-
-.gallery-item:nth-child(1) {
-  grid-column: 1 / span 2;
-  grid-row: 1 / span 2;
-}
-
-.gallery-item:nth-child(2) {
-  grid-column: 3;
-  grid-row: 1;
-}
-
-.gallery-item:nth-child(3) {
-  grid-column: 4;
-  grid-row: 1;
-}
-
-.gallery-item:nth-child(4) {
-  grid-column: 3;
-  grid-row: 2;
-}
-
-.gallery-item:nth-child(5) {
-  grid-column: 4;
-  grid-row: 2;
-}
-
-.gallery-item:nth-child(6) {
-  grid-column: 1 / span 4;
-  grid-row: 3;
-}
+.gallery-item:nth-child(1) { grid-column: 1 / span 2; grid-row: 1 / span 2; }
+.gallery-item:nth-child(2) { grid-column: 3; grid-row: 1; }
+.gallery-item:nth-child(3) { grid-column: 4; grid-row: 1; }
+.gallery-item:nth-child(4) { grid-column: 3; grid-row: 2; }
+.gallery-item:nth-child(5) { grid-column: 4; grid-row: 2; }
+.gallery-item:nth-child(6) { grid-column: 1 / span 4; grid-row: 3; }
 
 
 /* =========================================================
@@ -369,96 +396,151 @@ import { photos } from "../data/photos";
 
 .gallery-lightbox {
   position: fixed;
-
   inset: 0;
-
   z-index: 2000;
-
   display: flex;
   align-items: center;
   justify-content: center;
-
-  padding: 24px;
-
-  background: rgba(6, 26, 58, 0.92);
-
+  padding: 24px 24px 20px;
+  background: rgba(6, 26, 58, 0.94);
   -webkit-backdrop-filter: blur(10px);
   backdrop-filter: blur(10px);
-
   opacity: 0;
   visibility: hidden;
-
   transition:
     opacity 250ms ease,
     visibility 250ms ease;
 }
-
 
 .gallery-lightbox.is-open {
   opacity: 1;
   visibility: visible;
 }
 
-
 .gallery-lb-figure {
   position: relative;
-
   display: flex;
   flex-direction: column;
   align-items: center;
-
-  gap: 16px;
-
+  gap: 14px;
   max-width: 100%;
   max-height: 100%;
-
   margin: 0;
 }
 
-
 .gallery-lb-image {
   display: block;
-
   max-width: 100%;
-  max-height: 78vh;
-
+  max-height: 65vh;
   object-fit: contain;
-
   border-radius: 10px;
-
-  box-shadow:
-    0 30px 70px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 30px 70px rgba(0, 0, 0, 0.5);
 }
-
 
 .gallery-lb-caption {
   display: flex;
   flex-direction: column;
   align-items: center;
-
   gap: 4px;
-
   text-align: center;
 }
 
-
 .gallery-lb-text {
   color: #f8fafc;
-
   font-size: 0.95rem;
   font-weight: 600;
-
   line-height: 1.4;
 }
 
-
 .gallery-lb-counter {
   color: rgba(248, 250, 252, 0.6);
-
   font-size: 0.75rem;
   font-weight: 700;
-
   letter-spacing: 0.14em;
+}
+
+
+/* ---------------------------------------------------------
+   BANDE DE VIGNETTES
+   --------------------------------------------------------- */
+
+.gallery-lb-thumbs {
+  display: flex;
+  gap: 8px;
+
+  width: 100%;
+  max-width: min(880px, 92vw);
+
+  margin-top: 6px;
+  padding: 8px 4px;
+
+  overflow-x: auto;
+  overflow-y: hidden;
+
+  scrollbar-width: thin;
+  scrollbar-color: rgba(248, 250, 252, 0.30) transparent;
+
+  scroll-snap-type: x proximity;
+
+  -webkit-overflow-scrolling: touch;
+}
+
+.gallery-lb-thumbs::-webkit-scrollbar {
+  height: 6px;
+}
+
+.gallery-lb-thumbs::-webkit-scrollbar-thumb {
+  background: rgba(248, 250, 252, 0.25);
+  border-radius: 999px;
+}
+
+.gallery-lb-thumb {
+  flex: 0 0 auto;
+
+  width: 72px;
+  height: 54px;
+
+  padding: 0;
+
+  border: 2px solid transparent;
+  border-radius: 8px;
+
+  background: rgba(248, 250, 252, 0.06);
+
+  cursor: pointer;
+
+  overflow: hidden;
+
+  scroll-snap-align: center;
+
+  transition:
+    border-color 180ms ease,
+    transform 180ms ease,
+    box-shadow 180ms ease;
+}
+
+.gallery-lb-thumb img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.gallery-lb-thumb.is-active {
+  border-color: #00aeef;
+  box-shadow: 0 0 0 3px rgba(0, 174, 239, 0.25);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .gallery-lb-thumb:hover {
+    border-color: rgba(0, 174, 239, 0.55);
+    transform: translateY(-2px);
+  }
+}
+
+.gallery-lb-thumb:focus-visible {
+  outline: 3px solid #00aeef;
+  outline-offset: 3px;
 }
 
 
@@ -468,85 +550,62 @@ import { photos } from "../data/photos";
 
 .gallery-lb-btn {
   position: absolute;
-
   display: inline-flex;
   align-items: center;
   justify-content: center;
-
   width: 48px;
   height: 48px;
-
   padding: 0;
-
   border: none;
   border-radius: 50%;
-
   background: rgba(248, 250, 252, 0.10);
   color: #f8fafc;
-
   font-family: inherit;
   font-size: 1.6rem;
   font-weight: 400;
-
   line-height: 1;
-
   cursor: pointer;
-
   transition:
     background-color 180ms ease,
     transform 180ms ease;
-
   z-index: 3;
 }
 
-
 @media (hover: hover) and (pointer: fine) {
-
   .gallery-lb-btn:hover {
     background: rgba(248, 250, 252, 0.20);
     transform: scale(1.06);
   }
-
 }
-
 
 .gallery-lb-btn:focus-visible {
   outline: 3px solid #00aeef;
   outline-offset: 3px;
 }
 
-
 .gallery-lb-close {
   top: 20px;
   right: 20px;
-
   font-size: 1.8rem;
 }
-
 
 .gallery-lb-prev {
   top: 50%;
   left: 20px;
-
   transform: translateY(-50%);
 }
-
 
 .gallery-lb-next {
   top: 50%;
   right: 20px;
-
   transform: translateY(-50%);
 }
 
-
 @media (hover: hover) and (pointer: fine) {
-
   .gallery-lb-prev:hover,
   .gallery-lb-next:hover {
     transform: translateY(-50%) scale(1.06);
   }
-
 }
 
 
@@ -559,19 +618,15 @@ import { photos } from "../data/photos";
   .gallery-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
     grid-template-rows: auto;
-
     aspect-ratio: auto;
-
     gap: 10px;
   }
-
 
   .gallery-item:nth-child(1) {
     grid-column: 1 / span 2;
     grid-row: auto;
     aspect-ratio: 1 / 1;
   }
-
 
   .gallery-item:nth-child(2),
   .gallery-item:nth-child(3),
@@ -582,40 +637,49 @@ import { photos } from "../data/photos";
     aspect-ratio: 1 / 1;
   }
 
-
   .gallery-item:nth-child(6) {
     grid-column: 1 / span 2;
     grid-row: auto;
     aspect-ratio: 4 / 2;
   }
 
+  .gallery-lightbox {
+    padding: 16px 12px 12px;
+  }
 
   .gallery-lb-btn {
     width: 42px;
     height: 42px;
-
     font-size: 1.4rem;
   }
-
 
   .gallery-lb-close {
     top: 12px;
     right: 12px;
   }
 
-
   .gallery-lb-prev {
     left: 12px;
   }
-
 
   .gallery-lb-next {
     right: 12px;
   }
 
-
   .gallery-lb-image {
-    max-height: 70vh;
+    max-height: 50vh;
+  }
+
+  .gallery-lb-thumbs {
+    gap: 6px;
+    padding: 6px 2px;
+    max-width: 100%;
+  }
+
+  .gallery-lb-thumb {
+    width: 58px;
+    height: 44px;
+    border-radius: 6px;
   }
 
 }
@@ -626,20 +690,22 @@ import { photos } from "../data/photos";
    ========================================================= */
 
 @media (prefers-reduced-motion: reduce) {
-
   .gallery-item,
   .gallery-item img,
   .gallery-lightbox,
-  .gallery-lb-btn {
+  .gallery-lb-btn,
+  .gallery-lb-thumb {
     transition: none;
   }
-
 
   .gallery-item:hover,
   .gallery-item:hover img {
     transform: none;
   }
 
+  .gallery-lb-thumb:hover {
+    transform: none;
+  }
 }
 
 </style>
