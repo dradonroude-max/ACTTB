@@ -2,12 +2,9 @@
 // ACTT — TEAMS DATA
 // =========================================================
 //
-// DONNÉES DE TEST : prénoms inventés, photos de démonstration.
-// À remplacer par les vraies informations (et photos
-// autorisées) avant la mise en ligne.
-//
-// Champs facultatifs : subtitle, photo, photoAlt, role, photo (joueur).
-// Un champ absent n'est simplement pas affiché.
+// Données des équipes du club.
+// Photos : placer les fichiers dans public/images/teams/
+// Format photo d'équipe : 16:9, minimum 1600×900.
 
 export interface Player {
   name: string;
@@ -28,8 +25,8 @@ export const teams: Team[] = [
   {
     id: "equipe-1",
     label: "Équipe 1",
-    photo: "https://picsum.photos/seed/actt-equipe-1/1200/675",
-    photoAlt: "Photo de l’Équipe 1",
+    photo: "/images/teams/equipe-1.png",
+    photoAlt: "Photo de l'Équipe 1 de l'ACTT",
     players: [
       {
         name: "Bruno",
@@ -49,8 +46,8 @@ export const teams: Team[] = [
   {
     id: "equipe-2",
     label: "Équipe 2",
-    photo: "https://picsum.photos/seed/actt-equipe-2/1200/675",
-    photoAlt: "Photo de l’Équipe 2",
+    photo: "/images/teams/equipe-2.png",
+    photoAlt: "Photo de l'Équipe 2 de l'ACTT",
     players: [
       {
         name: "Sarah L.",

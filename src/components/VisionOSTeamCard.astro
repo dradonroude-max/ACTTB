@@ -45,7 +45,7 @@ const countLabel =
         src={team.photo}
         alt={team.photoAlt ?? `Photo de ${team.label}`}
         width="1200"
-        height="675"
+        height="800"
         loading="lazy"
         decoding="async"
       />
@@ -168,7 +168,7 @@ const countLabel =
 
     width: 100%;
 
-    aspect-ratio: 16 / 9;
+    aspect-ratio: 3 / 2;
 
     overflow: hidden;
 
@@ -208,9 +208,6 @@ const countLabel =
 
   /* =======================================================
      CONTENT
-     Base rythmique : gap 16px.
-     Les marges ciblées du titre et du trait créent
-     la hiérarchie entre les trois groupes.
      ======================================================= */
 
   .team-content {
