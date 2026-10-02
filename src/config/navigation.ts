@@ -56,8 +56,8 @@ export const navigation = {
   // -------------------------------------------------------
 
   cta: {
-    label: "S’inscrire",
-    href: "#inscription",
+    label: "Venir essayer",
+    href: "#essayer",
   },
 
   // -------------------------------------------------------

@@ -32,14 +32,18 @@ import { site } from "../config/site";
 
   <!-- HERO -->
   <VisionOSHero
-    eyebrow="CAMPHIN-EN-CAREMBAULT"
+    badge="Tennis de table · Camphin-en-Carembault"
     title="UN CLUB. UNE ÉQUIPE. UNE PASSION."
-    description={club.description}
-    primaryCtaLabel="Jouer à l’ACTT"
-    primaryCtaHref="#jouer"
-    secondaryCtaLabel="Première séance"
-    secondaryCtaHref="#essayer"
-    badge="Tennis de table"
+    description="Jeunes, loisir ou compétition. Mardi et jeudi, salle omnisports."
+    highlights={[
+      "1re séance gratuite",
+      "Raquettes prêtées",
+      "Dès 25 € la saison",
+    ]}
+    primaryCtaLabel="Venir essayer, c'est gratuit"
+    primaryCtaHref="#essayer"
+    secondaryCtaLabel="Horaires et tarifs"
+    secondaryCtaHref="#tarifs"
     image={site.assets.logo}
     imageAlt="ACTT — Camphin-en-Carembault Tennis de Table"
   />
@@ -142,54 +146,93 @@ import { site } from "../config/site";
   >
     <div class="calendrier-grid">
 
-      {recentResults.length > 0 && (
-        <article class="calendrier-card calendrier-card-results">
+      {upcomingMatches.length > 0 && (
+        <article class="calendrier-card calendrier-card-upcoming">
           <span class="calendrier-card-accent" aria-hidden="true"></span>
+
           <header class="calendrier-card-header">
-            <span class="calendrier-card-eyebrow">Résultats</span>
-            <h3 class="calendrier-card-title">Derniers matchs</h3>
+            <span class="calendrier-card-eyebrow">À venir</span>
+            <h3 class="calendrier-card-title">Prochains matchs</h3>
           </header>
+
           <ul class="calendar-list">
-            {recentResults.map((result) => (
+            {upcomingMatches.map((match) => (
               <li class="calendar-item">
-                <div class="calendar-item-main">
-                  <span class="calendar-item-team">{result.team}</span>
-                  <span class="calendar-item-vs">vs</span>
-                  <span class="calendar-item-opponent">{result.opponent}</span>
-                </div>
-                <div class="calendar-item-meta">
-                  <span class="calendar-item-date">{result.date}</span>
-                  <span class:list={["calendar-result-badge", `calendar-result-badge-${result.outcome}`]}>
-                    {result.score}
+                <div class="calendar-item-top">
+                  <span class="calendar-item-datetime">
+                    <time datetime={match.date} class="calendar-item-date">
+                      {match.dateLabel}
+                    </time>
+                    <span class="calendar-item-time">· {match.time}</span>
                   </span>
+
+                  {match.location === "domicile" ? (
+                    <a
+                      href="#essayer"
+                      class="calendar-item-location calendar-item-location-home"
+                      title="Voir l'adresse de la salle"
+                    >
+                      Domicile
+                    </a>
+                  ) : (
+                    <span class="calendar-item-location calendar-item-location-away">
+                      À {match.opponentCity ?? "l'extérieur"}
+                    </span>
+                  )}
                 </div>
+
+                <div class="calendar-item-match">
+                  <span class="calendar-item-team">{match.team}</span>
+                  <span class="calendar-item-vs">—</span>
+                  <span class="calendar-item-opponent">{match.opponent}</span>
+                </div>
+
+                <span class="calendar-item-division">{match.division}</span>
               </li>
             ))}
           </ul>
         </article>
       )}
 
-      {upcomingMatches.length > 0 && (
-        <article class="calendrier-card calendrier-card-upcoming">
+      {recentResults.length > 0 && (
+        <article class="calendrier-card calendrier-card-results">
           <span class="calendrier-card-accent" aria-hidden="true"></span>
+
           <header class="calendrier-card-header">
-            <span class="calendrier-card-eyebrow">À venir</span>
-            <h3 class="calendrier-card-title">Prochains matchs</h3>
+            <span class="calendrier-card-eyebrow">Résultats</span>
+            <h3 class="calendrier-card-title">Derniers matchs</h3>
           </header>
+
           <ul class="calendar-list">
-            {upcomingMatches.map((match) => (
-              <li class="calendar-item">
-                <div class="calendar-item-main">
-                  <span class="calendar-item-team">{match.team}</span>
-                  <span class="calendar-item-vs">vs</span>
-                  <span class="calendar-item-opponent">{match.opponent}</span>
-                </div>
-                <div class="calendar-item-meta">
-                  <span class="calendar-item-date">{match.date} · {match.time}</span>
-                  <span class:list={["calendar-item-location", match.location === "domicile" ? "calendar-item-location-home" : "calendar-item-location-away"]}>
-                    {match.location}
+            {recentResults.slice(0, 3).map((result) => (
+              <li class="calendar-item calendar-item-result">
+                <div class="calendar-item-top">
+                  <time datetime={result.date} class="calendar-item-date">
+                    {result.dateLabel}
+                  </time>
+
+                  <span
+                    class:list={[
+                      "calendar-result-badge",
+                      `calendar-result-badge-${result.outcome}`,
+                    ]}
+                  >
+                    {result.outcome === "victoire"
+                      ? "V"
+                      : result.outcome === "defaite"
+                      ? "D"
+                      : "N"}{" "}
+                    {result.score}
                   </span>
                 </div>
+
+                <div class="calendar-item-match">
+                  <span class="calendar-item-team">{result.team}</span>
+                  <span class="calendar-item-vs">—</span>
+                  <span class="calendar-item-opponent">{result.opponent}</span>
+                </div>
+
+                <span class="calendar-item-division">{result.division}</span>
               </li>
             ))}
           </ul>
@@ -283,57 +326,47 @@ import { site } from "../config/site";
     id="inscription"
     eyebrow="INSCRIPTION"
     title="S’inscrire à l’ACTT"
-    description="Téléchargez la fiche, remplissez-la et renvoyez-la au club."
+    description="Venez essayer, puis inscrivez-vous en trois étapes."
     align="center"
     spacing="sm"
   >
 
-    <!-- 3 ÉTAPES -->
     <div class="inscription-steps">
 
       <div class="inscription-step">
         <span class="inscription-step-number">1</span>
-        <h3 class="inscription-step-title">Télécharger la fiche</h3>
+        <h3 class="inscription-step-title">Venez essayer une séance</h3>
         <p class="inscription-step-text">
-          La fiche officielle contient toutes les informations
-          nécessaires : identité, contact, engagements et
-          autorisations.
+          Mardi ou jeudi, à la salle omnisports.
+          Séance d'essai gratuite.
         </p>
       </div>
 
       <div class="inscription-step">
         <span class="inscription-step-number">2</span>
-        <h3 class="inscription-step-title">Remplir et signer</h3>
+        <h3 class="inscription-step-title">Remplissez la fiche</h3>
         <p class="inscription-step-text">
-          Remplissez la fiche, imprimez-la et signez-la.
-          La signature manuscrite est obligatoire, y compris
-          pour les mineurs (représentant légal).
+          À télécharger ci-dessous, ou à demander
+          directement sur place.
         </p>
       </div>
 
       <div class="inscription-step">
         <span class="inscription-step-number">3</span>
-        <h3 class="inscription-step-title">Renvoyer au club</h3>
+        <h3 class="inscription-step-title">Remettez-la à la salle</h3>
         <p class="inscription-step-text">
-          Renvoyez la fiche signée accompagnée de votre
-          règlement. L’inscription est effective à réception
-          du paiement.
+          Avec votre règlement, lors d’un entraînement.
         </p>
       </div>
 
     </div>
 
-    <!-- PANNEAU FINAL : bouton + infos -->
-    <VisionOSPanel
-      depth="floating"
-      padding="lg"
-      class="inscription-panel"
-    >
+    <div class="inscription-panel">
+
       <div class="inscription-panel-content">
 
-        <!-- Bouton de téléchargement -->
         <a
-          class="vision-button vision-button-primary vision-button-lg inscription-download-button"
+          class="inscription-download-button"
           href="/documents/fiche_inscription_ACTT_2026-2027.pdf"
           target="_blank"
           rel="noopener noreferrer"
@@ -342,19 +375,18 @@ import { site } from "../config/site";
         </a>
 
         <p class="inscription-download-note">
-          Format PDF · à imprimer et signer
+          PDF à signer · aussi disponible à la salle
         </p>
 
-        <!-- Séparateur visuel -->
         <div class="inscription-separator" aria-hidden="true"></div>
 
-        <!-- Informations pratiques -->
         <div class="inscription-info-grid">
 
           <div class="inscription-info-item">
             <span class="inscription-info-label">Paiement</span>
             <span class="inscription-info-value">
-              Virement bancaire ou chèque à l'ordre de L'ACTT
+              Chèque à la salle<br />
+              ou virement (IBAN sur la fiche)
             </span>
           </div>
 
@@ -369,14 +401,14 @@ import { site } from "../config/site";
 
         </div>
 
-        <!-- Renvoi vers Première séance -->
         <p class="inscription-hint">
-          Nouveau au club ?
-          <a href="#essayer">Venez d'abord essayer une séance</a>
+          Vous ne pouvez pas venir un mardi ou un jeudi ?
+          <a href={`mailto:${site.contact.email}`}>Écrivez-nous</a>
         </p>
 
       </div>
-    </VisionOSPanel>
+
+    </div>
 
   </VisionOSSection>
 
@@ -449,10 +481,6 @@ import { site } from "../config/site";
 
 <style>
 
-  /* =======================================================
-     CENTRAGE DES TITRES DE SECTION
-     ======================================================= */
-
   :global(.vision-section-align-center) :global(.vision-section-title) {
     margin-inline: auto;
   }
@@ -492,11 +520,9 @@ import { site } from "../config/site";
 
   .calendrier-grid {
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    align-items: start;
-    gap: 28px;
-    max-width: 1100px;
-    margin-inline: auto;
+    grid-template-columns: 1.4fr 1fr;
+    align-items: stretch;
+    gap: 24px;
   }
 
   .calendrier-card {
@@ -554,14 +580,13 @@ import { site } from "../config/site";
     margin: 0;
     padding: 0;
     list-style: none;
+    flex: 1;
   }
 
   .calendar-item {
     display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: space-between;
-    gap: 10px;
+    flex-direction: column;
+    gap: 6px;
     padding: 16px 26px;
     border-bottom: 1px solid rgba(6, 26, 58, 0.06);
   }
@@ -570,41 +595,65 @@ import { site } from "../config/site";
     border-bottom: none;
   }
 
-  .calendar-item-main {
+  .calendar-item-top {
     display: flex;
     align-items: center;
-    gap: 8px;
-    min-width: 0;
-    flex: 1 1 auto;
+    justify-content: space-between;
+    gap: 12px;
+  }
+
+  .calendar-item-datetime {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    color: #45617f;
+    font-size: 0.82rem;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+  }
+
+  .calendar-item-date {
+    color: #45617f;
+    font-size: 0.82rem;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+  }
+
+  .calendar-item-time {
+    color: #45617f;
+    font-size: 0.82rem;
+    font-weight: 600;
+  }
+
+  .calendar-item-match {
+    display: flex;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: 6px;
+    color: #061a3a;
+    font-size: 1rem;
+    font-weight: 600;
+    line-height: 1.35;
   }
 
   .calendar-item-team,
   .calendar-item-opponent {
     color: #061a3a;
-    font-size: var(--vision-text-md);
     font-weight: 600;
-    line-height: 1.3;
   }
 
   .calendar-item-vs {
     color: #45617f;
-    font-size: 0.72rem;
-    font-weight: 800;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
+    font-weight: 500;
+    font-size: 0.9rem;
   }
 
-  .calendar-item-meta {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    flex-shrink: 0;
-  }
-
-  .calendar-item-date {
+  .calendar-item-division {
     color: #45617f;
-    font-size: var(--vision-text-sm);
-    white-space: nowrap;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
   }
 
   .calendar-item-location {
@@ -617,10 +666,17 @@ import { site } from "../config/site";
     letter-spacing: 0.05em;
     text-transform: uppercase;
     white-space: nowrap;
+    text-decoration: none;
+    transition: background-color 180ms ease, color 180ms ease;
   }
 
   .calendar-item-location-home {
     background: rgba(53, 168, 83, 0.14);
+    color: #1f6b35;
+  }
+
+  .calendar-item-location-home:hover {
+    background: rgba(53, 168, 83, 0.22);
     color: #1f6b35;
   }
 
@@ -632,39 +688,44 @@ import { site } from "../config/site";
   .calendar-result-badge {
     display: inline-flex;
     align-items: center;
-    padding: 5px 13px;
+    padding: 4px 12px;
     border-radius: 999px;
-    font-size: var(--vision-text-sm);
+    font-size: 0.82rem;
     font-weight: 800;
     letter-spacing: 0.02em;
     white-space: nowrap;
   }
 
   .calendar-result-badge-victoire {
-    background: rgba(53, 168, 83, 0.16);
+    background: rgba(53, 168, 83, 0.14);
     color: #1f6b35;
   }
 
-  .calendar-result-badge-defaite {
-    background: rgba(143, 21, 32, 0.12);
-    color: #8f1520;
+  .calendar-result-badge-defaite,
+  .calendar-result-badge-nul {
+    background: rgba(6, 26, 58, 0.07);
+    color: #45617f;
   }
 
-  .calendar-result-badge-nul {
-    background: rgba(6, 26, 58, 0.10);
-    color: #17345c;
+  .calendar-item-result {
+    gap: 4px;
+    padding: 14px 26px;
+  }
+
+  .calendar-item-result .calendar-item-match {
+    font-size: 0.92rem;
   }
 
 
   /* =======================================================
-     INSCRIPTION — ÉTAPES
+     INSCRIPTION
      ======================================================= */
 
   .inscription-steps {
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 20px;
-    max-width: 1000px;
+    max-width: 900px;
     margin-inline: auto;
     margin-bottom: 40px;
   }
@@ -711,14 +772,14 @@ import { site } from "../config/site";
     line-height: 1.55;
   }
 
-
-  /* =======================================================
-     INSCRIPTION — PANNEAU FINAL
-     ======================================================= */
-
   .inscription-panel {
-    max-width: 720px;
+    max-width: 900px;
     margin-inline: auto;
+    padding: 48px 44px;
+    background: #ffffff;
+    border: 1px solid rgba(6, 26, 58, 0.08);
+    border-radius: 16px;
+    box-shadow: 0 14px 34px rgba(6, 26, 58, 0.12);
   }
 
   .inscription-panel-content {
@@ -729,16 +790,51 @@ import { site } from "../config/site";
   }
 
   .inscription-download-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
     width: 100%;
-    max-width: 500px;
+    max-width: 520px;
+    min-height: 62px;
+    padding: 0 32px;
+    border-radius: 999px;
+    background: #35a853;
+    color: #061a3a;
+    font-size: 1rem;
+    font-weight: 800;
+    line-height: 1;
+    text-decoration: none;
+    text-align: center;
+    box-shadow:
+      0 10px 28px rgba(0, 0, 0, 0.20),
+      0 0 22px rgba(53, 168, 83, 0.18);
+    transition:
+      transform 180ms ease,
+      box-shadow 180ms ease,
+      background-color 180ms ease;
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .inscription-download-button:hover {
+      background: #43bb61;
+      transform: translateY(-2px);
+      box-shadow:
+        0 14px 34px rgba(0, 0, 0, 0.24),
+        0 0 30px rgba(53, 168, 83, 0.28);
+    }
+  }
+
+  .inscription-download-button:focus-visible {
+    outline: 3px solid #073b7a;
+    outline-offset: 4px;
   }
 
   .inscription-download-note {
     margin: 0;
-    color: var(--vision-color-text-muted);
-    font-size: 0.72rem;
+    color: #45617f;
+    font-size: 0.78rem;
     font-weight: 700;
-    letter-spacing: 0.12em;
+    letter-spacing: 0.10em;
     text-transform: uppercase;
   }
 
@@ -746,13 +842,13 @@ import { site } from "../config/site";
     width: 100%;
     height: 1px;
     background: rgba(6, 26, 58, 0.10);
-    margin-block: 4px;
+    margin-block: 6px;
   }
 
-   .inscription-info-grid {
+  .inscription-info-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 80px;
+    gap: 60px;
     width: 100%;
     max-width: 640px;
     margin-inline: auto;
@@ -767,24 +863,30 @@ import { site } from "../config/site";
   }
 
   .inscription-info-label {
-    color: var(--vision-color-secondary);
-    font-size: 0.68rem;
+    color: #073b7a;
+    font-size: 0.72rem;
     font-weight: 800;
     letter-spacing: 0.14em;
     text-transform: uppercase;
   }
 
   .inscription-info-value {
-    color: var(--vision-color-text);
-    font-size: 0.9rem;
-    line-height: 1.5;
+    color: #17345c;
+    font-size: 0.95rem;
+    line-height: 1.55;
   }
 
   .inscription-info-value a {
-    color: var(--vision-color-text);
+    color: #17345c;
     text-decoration: underline;
-    text-decoration-color: rgba(6, 26, 58, 0.25);
+    text-decoration-color: rgba(6, 26, 58, 0.30);
     text-underline-offset: 3px;
+    transition: color 180ms ease, text-decoration-color 180ms ease;
+  }
+
+  .inscription-info-value a:hover {
+    color: #073b7a;
+    text-decoration-color: #073b7a;
   }
 
   .inscription-info-sep {
@@ -794,13 +896,13 @@ import { site } from "../config/site";
 
   .inscription-hint {
     margin: 8px 0 0;
-    color: var(--vision-color-text-muted);
-    font-size: 0.9rem;
+    color: #45617f;
+    font-size: 0.95rem;
     text-align: center;
   }
 
   .inscription-hint a {
-    color: var(--vision-color-accent);
+    color: #1f6b35;
     font-weight: 700;
     text-decoration: none;
     margin-left: 4px;
@@ -876,15 +978,8 @@ import { site } from "../config/site";
     object-fit: contain;
   }
 
-  /* -------------------------------------------------------
-     LOGO PLUS GRAND (Mairie) — Solution 2 : zoom CSS
-     -------------------------------------------------------
-     Le JPG de la Mairie contient une marge blanche interne.
-     On zoome à 1.8× pour la compenser visuellement.
-     ------------------------------------------------------- */
-
-   .vision-partner-card-large .vision-partner-logo {
-    height: 130px;
+  .vision-partner-card-large .vision-partner-logo {
+    height: 160px;
     padding: 0;
     overflow: hidden;
   }
@@ -1077,10 +1172,15 @@ import { site } from "../config/site";
 
 
   /* =======================================================
-     TABLETTE / MOBILE
+     TABLETTE
      ======================================================= */
 
   @media (max-width: 899px) {
+
+    .calendrier-grid {
+      grid-template-columns: 1fr;
+      gap: 22px;
+    }
 
     .essayer-grid {
       grid-template-columns: 1fr;
@@ -1093,25 +1193,36 @@ import { site } from "../config/site";
 
   }
 
+
+  /* =======================================================
+     MOBILE
+     ======================================================= */
+
   @media (max-width: 767px) {
 
-    .calendrier-grid { grid-template-columns: 1fr; gap: 22px; }
     .calendrier-card-header { padding: 18px 20px 14px; }
     .calendrier-card-title { font-size: 1.15rem; }
 
-    .calendar-item {
-      flex-direction: column;
-      align-items: flex-start;
-      gap: 8px;
-      padding: 14px 20px;
+    .calendar-item { padding: 14px 20px; }
+    .calendar-item-result { padding: 12px 20px; }
+    .calendar-item-match { font-size: 0.95rem; }
+
+    .inscription-steps {
+      grid-template-columns: 1fr;
+      gap: 14px;
+      margin-bottom: 28px;
     }
 
-    .calendar-item-main { width: 100%; }
-    .calendar-item-meta { width: 100%; justify-content: space-between; }
-
-    .inscription-steps { grid-template-columns: 1fr; gap: 14px; margin-bottom: 28px; }
     .inscription-step { padding: 26px 20px; }
-    .inscription-info-grid { grid-template-columns: 1fr; gap: 18px; }
+    .inscription-panel { padding: 32px 22px; }
+
+    .inscription-download-button {
+      font-size: 0.9rem;
+      padding: 0 22px;
+      min-height: 58px;
+    }
+
+    .inscription-info-grid { grid-template-columns: 1fr; gap: 22px; }
 
     .vision-pricing-item { width: 100%; max-width: 320px; }
     .vision-pricing-card { padding: 32px 22px; }
@@ -1123,7 +1234,7 @@ import { site } from "../config/site";
     .vision-partner-logo { height: 64px; }
     .vision-partner-logo img { max-width: 130px; max-height: 52px; }
 
-    .vision-partner-card-large .vision-partner-logo { height: 110px; }
+    .vision-partner-card-large .vision-partner-logo { height: 130px; }
     .vision-partner-card-large .vision-partner-logo img { transform: scale(1.15); }
 
     .vision-contact-actions { flex-direction: column; align-items: stretch; }
@@ -1139,6 +1250,11 @@ import { site } from "../config/site";
   @media (prefers-reduced-motion: reduce) {
     .vision-partner-card { transition: none; }
     .vision-partner-card-link:hover { transform: none; }
+
+    .inscription-download-button { transition: none; }
+    .inscription-download-button:hover { transform: none; }
+
+    .calendar-item-location { transition: none; }
   }
 
 </style>
