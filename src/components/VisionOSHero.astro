@@ -152,16 +152,18 @@ const titleLines = (title.match(/[^.!?]+[.!?]?/g) ?? [title])
         )}
 
 
-        <!-- HIGHLIGHTS (pastilles) -->
+        <!-- HIGHLIGHTS (ligne avec coches) -->
 
         {highlights && highlights.length > 0 && (
           <ul class="visionos-hero-highlights">
             {highlights.map((highlight) => (
               <li class="visionos-hero-highlight">
                 <span
-                  class="visionos-hero-highlight-dot"
+                  class="visionos-hero-highlight-check"
                   aria-hidden="true"
-                ></span>
+                >
+                  ✓
+                </span>
                 <span>{highlight}</span>
               </li>
             ))}
@@ -558,7 +560,7 @@ const titleLines = (title.match(/[^.!?]+[.!?]?/g) ?? [title])
 
   font-weight: 900;
 
-  line-height: 0.92;
+  line-height: 1.0;
 
   letter-spacing: -0.055em;
 
@@ -603,7 +605,7 @@ const titleLines = (title.match(/[^.!?]+[.!?]?/g) ?? [title])
 
 
 /* =========================================================
-   HIGHLIGHTS (pastilles)
+   HIGHLIGHTS — ligne avec coches (sans fond, sans bordure)
    ========================================================= */
 
 .visionos-hero-highlights {
@@ -611,7 +613,7 @@ const titleLines = (title.match(/[^.!?]+[.!?]?/g) ?? [title])
   flex-wrap: wrap;
   align-items: center;
 
-  gap: 12px;
+  gap: 28px;
 
   margin: 0;
   padding: 0;
@@ -623,19 +625,13 @@ const titleLines = (title.match(/[^.!?]+[.!?]?/g) ?? [title])
 .visionos-hero-highlight {
   display: inline-flex;
   align-items: center;
-  gap: 9px;
 
-  padding: 10px 18px;
+  gap: 8px;
 
-  border-radius: 999px;
+  color: rgba(248, 250, 252, 0.92);
 
-  background: rgba(53, 168, 83, 0.18);
-  border: 1px solid rgba(53, 168, 83, 0.45);
-
-  color: #d5f7dc;
-
-  font-size: 0.88rem;
-  font-weight: 700;
+  font-size: 0.98rem;
+  font-weight: 600;
 
   letter-spacing: 0.01em;
 
@@ -643,19 +639,20 @@ const titleLines = (title.match(/[^.!?]+[.!?]?/g) ?? [title])
 }
 
 
-.visionos-hero-highlight-dot {
-  display: inline-block;
+.visionos-hero-highlight-check {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 
-  width: 7px;
-  height: 7px;
+  color: #35a853;
 
-  flex-shrink: 0;
+  font-size: 1.05rem;
+  font-weight: 900;
 
-  border-radius: 50%;
+  line-height: 1;
 
-  background: #35a853;
-
-  box-shadow: 0 0 0 3px rgba(53, 168, 83, 0.22);
+  /* Très léger glow pour faire ressortir la coche sur navy */
+  filter: drop-shadow(0 0 6px rgba(53, 168, 83, 0.35));
 }
 
 
@@ -1062,7 +1059,7 @@ const titleLines = (title.match(/[^.!?]+[.!?]?/g) ?? [title])
 
   .visionos-hero-title {
     font-size: clamp(2.8rem, 11vw, 4.1rem);
-    line-height: 0.94;
+    line-height: 0.98;
   }
 
 
@@ -1073,13 +1070,12 @@ const titleLines = (title.match(/[^.!?]+[.!?]?/g) ?? [title])
 
 
   .visionos-hero-highlights {
-    gap: 10px;
+    gap: 20px;
   }
 
 
   .visionos-hero-highlight {
-    padding: 9px 15px;
-    font-size: 0.84rem;
+    font-size: 0.92rem;
   }
 
 
@@ -1132,7 +1128,7 @@ const titleLines = (title.match(/[^.!?]+[.!?]?/g) ?? [title])
 
   .visionos-hero-title {
     font-size: 2.55rem;
-    line-height: 0.95;
+    line-height: 0.98;
   }
 
 
@@ -1148,9 +1144,18 @@ const titleLines = (title.match(/[^.!?]+[.!?]?/g) ?? [title])
   }
 
 
+  .visionos-hero-highlights {
+    gap: 16px;
+  }
+
+
   .visionos-hero-highlight {
-    font-size: 0.78rem;
-    padding: 8px 13px;
+    font-size: 0.86rem;
+  }
+
+
+  .visionos-hero-highlight-check {
+    font-size: 0.95rem;
   }
 
 

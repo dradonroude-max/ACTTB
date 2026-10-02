@@ -36,7 +36,7 @@ import { site } from "../config/site";
     title="UN CLUB. UNE ÉQUIPE. UNE PASSION."
     description="Jeunes, loisir ou compétition. Mardi et jeudi, salle omnisports."
     highlights={[
-      "1ère séance gratuite",
+      "Sans réservation",
       "Raquettes prêtées",
       "Dès 25 € la saison",
     ]}
@@ -325,7 +325,7 @@ import { site } from "../config/site";
   <VisionOSSection
     id="essayer"
     eyebrow="PREMIÈRE SÉANCE"
-    title="Venez sans réserver"
+    title="Venez directement, sans réserver"
     align="center"
     spacing="sm"
   >
@@ -356,7 +356,7 @@ import { site } from "../config/site";
           </div>
 
           <div class="essayer-info-item">
-            <dt class="essayer-info-label">1ère séance</dt>
+            <dt class="essayer-info-label">1re séance</dt>
             <dd class="essayer-info-value">
               <strong>Gratuite, sans engagement</strong>
               <span>Raquettes prêtées</span>
@@ -527,8 +527,6 @@ import { site } from "../config/site";
     margin-inline: auto;
   }
 
-  /* Titre de la section Première séance : équilibre des lignes
-     pour éviter le mot orphelin ("réserver" seul). */
   :global(.vision-section[id="essayer"]) :global(.vision-section-title) {
     text-wrap: balance;
   }
@@ -764,8 +762,6 @@ import { site } from "../config/site";
      PREMIÈRE SÉANCE
      ======================================================= */
 
-  /* Le bloc entier est centré dans la page (max-width + auto),
-     mais le texte interne reste aligné à gauche. */
   .essayer-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -1041,7 +1037,6 @@ import { site } from "../config/site";
     gap: 18px;
   }
 
-  /* Bouton vert ACTT — action principale */
   .inscription-download-button {
     display: inline-flex;
     align-items: center;
