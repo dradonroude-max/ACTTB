@@ -14,6 +14,7 @@ export const partners: Partner[] = [
   {
     name: "TUI",
     logo: "/images/partners/TUI.svg",
+    href: "https://www.tui.fr",
   },
   {
     name: "Département du Nord",
@@ -23,7 +24,7 @@ export const partners: Partner[] = [
   {
     name: "Mairie de Camphin-en-Carembault",
     logo: "/images/partners/camphin-en-carembault.jpg",
-    href: "https://www.camphin-en-carembault.fr",
+    href: "https://camphincarembault.fr",
     size: "large",
   },
 ];
