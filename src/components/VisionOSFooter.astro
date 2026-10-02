@@ -3,16 +3,6 @@
  * =========================================================
  * VISIONOS — FOOTER
  * =========================================================
- *
- * Global footer:
- * - brand
- * - secondary navigation
- * - contact
- * - legal links
- * - social links
- * - credit
- *
- * =========================================================
  */
 
 import { site } from "../config/site";
@@ -20,7 +10,22 @@ import { navigation } from "../config/navigation";
 ---
 
 <footer class="vision-footer">
-  <div class="vision-container">
+
+  <!-- Barre d'accent colorée (rappel navbar) -->
+  <div class="vision-footer-accent" aria-hidden="true">
+    <span class="vision-footer-accent-blue"></span>
+    <span class="vision-footer-accent-green"></span>
+    <span class="vision-footer-accent-red"></span>
+  </div>
+
+  <!-- Halos décoratifs -->
+  <div class="vision-footer-decor" aria-hidden="true">
+    <span class="vision-footer-halo vision-footer-halo-1"></span>
+    <span class="vision-footer-halo vision-footer-halo-2"></span>
+  </div>
+
+
+  <div class="vision-container vision-footer-container">
 
     <div class="vision-footer-main">
 
@@ -31,27 +36,54 @@ import { navigation } from "../config/navigation";
       <div class="vision-footer-brand">
 
         <a
-          class="vision-footer-logo-link"
+          class="vision-footer-wordmark-link"
           href="/"
           aria-label={`${site.name} — Accueil`}
         >
-          <img
-            class="vision-footer-logo"
-            src={site.assets.logo}
-            alt=""
-            width="40"
-            height="40"
-          />
-
-          <span class="vision-footer-name">
-            {site.name}
+          <span class="vision-footer-wordmark" aria-hidden="true">
+            <span class="vision-footer-wordmark-text">ACTT</span>
+            <span class="vision-footer-wordmark-underline"></span>
           </span>
         </a>
 
-        {site.description && (
-          <p class="vision-footer-description">
-            {site.description}
-          </p>
+        <p class="vision-footer-tagline">
+          Club de tennis de table de Camphin-en-Carembault.
+        </p>
+
+        <p class="vision-footer-signature">
+          Un club. Une équipe. Une passion.
+        </p>
+
+        <!-- Réseaux sociaux -->
+        {site.social.facebook && (
+          <div class="vision-footer-social">
+
+            <span class="vision-footer-social-heading">
+              Nous suivre
+            </span>
+
+            <ul class="vision-social-list">
+              <li>
+                <a
+                  class="vision-social-btn vision-social-btn-facebook"
+                  href={site.social.facebook}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="Facebook"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 24 24"
+                    fill="currentColor"
+                    aria-hidden="true"
+                  >
+                    <path d="M22 12.06C22 6.5 17.52 2 12 2S2 6.5 2 12.06c0 5.02 3.66 9.18 8.44 9.94v-7.03H7.9v-2.91h2.54V9.85c0-2.52 1.49-3.91 3.78-3.91 1.09 0 2.24.2 2.24.2v2.47h-1.26c-1.24 0-1.63.78-1.63 1.57v1.88h2.78l-.45 2.91h-2.33V22c4.78-.76 8.43-4.92 8.43-9.94z" />
+                  </svg>
+                </a>
+              </li>
+            </ul>
+
+          </div>
         )}
 
       </div>
@@ -61,7 +93,7 @@ import { navigation } from "../config/navigation";
            ================================================= -->
 
       <nav
-        class="vision-footer-navigation"
+        class="vision-footer-nav"
         aria-label="Navigation secondaire"
       >
         <h2 class="vision-footer-heading">
@@ -73,19 +105,12 @@ import { navigation } from "../config/navigation";
             navigation.main.map((item) => (
               <li>
                 <a
+                  class="vision-footer-link"
                   href={item.href}
-                  target={
-                    item.external
-                      ? "_blank"
-                      : undefined
-                  }
-                  rel={
-                    item.external
-                      ? "noopener noreferrer"
-                      : undefined
-                  }
+                  target={item.external ? "_blank" : undefined}
+                  rel={item.external ? "noopener noreferrer" : undefined}
                 >
-                  {item.label}
+                  <span>{item.label}</span>
                 </a>
               </li>
             ))
@@ -97,85 +122,73 @@ import { navigation } from "../config/navigation";
            CONTACT
            ================================================= -->
 
-      {
-        (
-          site.contact.email ||
-          site.contact.phone ||
-          site.contact.address ||
-          site.contact.city
-        ) && (
-          <div class="vision-footer-contact">
+      <div class="vision-footer-contact">
 
-            <h2 class="vision-footer-heading">
-              Contact
-            </h2>
+        <h2 class="vision-footer-heading">
+          Contact
+        </h2>
 
-            <address class="vision-footer-address">
+        <address class="vision-footer-address">
 
-              {site.contact.email && (
-                <a
-                  href={`mailto:${site.contact.email}`}
-                >
-                  {site.contact.email}
-                </a>
-              )}
+          {site.contact.email && (
+            <a
+              class="vision-footer-contact-link"
+              href={`mailto:${site.contact.email}`}
+            >
+              <span class="vision-footer-contact-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="3" y="5" width="18" height="14" rx="2" />
+                  <path d="m3 7 9 6 9-6" />
+                </svg>
+              </span>
+              <span>{site.contact.email}</span>
+            </a>
+          )}
 
-              {site.contact.phone && (
-                <a
-                  href={`tel:${site.contact.phone.replace(/\s+/g, "")}`}
-                >
-                  {site.contact.phone}
-                </a>
-              )}
+          {site.contact.phone && (
+            <a
+              class="vision-footer-contact-link"
+              href={`tel:${site.contact.phone.replace(/\s+/g, "")}`}
+            >
+              <span class="vision-footer-contact-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
+                </svg>
+              </span>
+              <span>{site.contact.phone}</span>
+            </a>
+          )}
 
-              {
-                (
-                  site.contact.address ||
-                  site.contact.city ||
-                  site.contact.postalCode ||
-                  site.contact.country
-                ) && (
-                  <>
-                    <span>Salle omnisports</span>
+          {(site.contact.address || site.contact.city) && (
+            <span class="vision-footer-contact-address">
+              <span class="vision-footer-contact-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z" />
+                  <circle cx="12" cy="10" r="3" />
+                </svg>
+              </span>
+              <span>
+                Salle omnisports<br />
+                {site.contact.address}<br />
+                {site.contact.postalCode} {site.contact.city}
+              </span>
+            </span>
+          )}
 
-                    {site.contact.address && (
-                      <span>{site.contact.address}</span>
-                    )}
+        </address>
 
-                    {(site.contact.postalCode ||
-                      site.contact.city) && (
-                      <span>
-                        {site.contact.postalCode}{" "}
-                        {site.contact.city}
-                      </span>
-                    )}
-
-                    {site.contact.country && (
-                      <span>{site.contact.country}</span>
-                    )}
-                  </>
-                )
-              }
-
-            </address>
-
-          </div>
-        )
-      }
+      </div>
 
     </div>
 
     <!-- =================================================
-         BOTTOM
+         BOTTOM BAR
          ================================================= -->
 
     <div class="vision-footer-bottom">
 
       <p class="vision-footer-copyright">
-        © {new Date().getFullYear()} {site.name}
-        <span class="vision-footer-credit">
-          · Site réalisé par Rodolphe Dinde
-        </span>
+        © {new Date().getFullYear()} {site.name} — Tous droits réservés
       </p>
 
       <nav
@@ -186,102 +199,16 @@ import { navigation } from "../config/navigation";
           {
             navigation.footer.map((item) => (
               <li>
-                <a href={item.href}>
-                  {item.label}
-                </a>
+                <a href={item.href}>{item.label}</a>
               </li>
             ))
           }
         </ul>
       </nav>
 
-      <!-- =================================================
-           SOCIAL
-           ================================================= -->
-
-      {
-        (
-          site.social.instagram ||
-          site.social.facebook ||
-          site.social.linkedin ||
-          site.social.x ||
-          site.social.youtube
-        ) && (
-          <nav
-            class="vision-footer-social"
-            aria-label="Réseaux sociaux"
-          >
-            <ul>
-
-              {site.social.instagram && (
-                <li>
-                  <a
-                    href={site.social.instagram}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    aria-label="Instagram"
-                  >
-                    Instagram
-                  </a>
-                </li>
-              )}
-
-              {site.social.facebook && (
-                <li>
-                  <a
-                    href={site.social.facebook}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    aria-label="Facebook"
-                  >
-                    Facebook
-                  </a>
-                </li>
-              )}
-
-              {site.social.linkedin && (
-                <li>
-                  <a
-                    href={site.social.linkedin}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    aria-label="LinkedIn"
-                  >
-                    LinkedIn
-                  </a>
-                </li>
-              )}
-
-              {site.social.x && (
-                <li>
-                  <a
-                    href={site.social.x}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    aria-label="X"
-                  >
-                    X
-                  </a>
-                </li>
-              )}
-
-              {site.social.youtube && (
-                <li>
-                  <a
-                    href={site.social.youtube}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    aria-label="YouTube"
-                  >
-                    YouTube
-                  </a>
-                </li>
-              )}
-
-            </ul>
-          </nav>
-        )
-      }
+      <p class="vision-footer-credit">
+        Site réalisé par <strong>Rodolphe Dinde</strong>
+      </p>
 
     </div>
 
@@ -289,90 +216,316 @@ import { navigation } from "../config/navigation";
 </footer>
 
 <style>
+
+  /* =========================================================
+     FOOTER — BASE
+     ========================================================= */
+
   .vision-footer {
     position: relative;
 
-    padding-block:
-      var(--vision-space-11)
-      var(--vision-space-6);
+    overflow: hidden;
 
-    border-top: 1px solid var(--vision-border);
+    background:
+      radial-gradient(
+        ellipse 900px 500px at 15% 0%,
+        rgba(0, 174, 239, 0.10),
+        transparent 60%
+      ),
+      radial-gradient(
+        ellipse 800px 400px at 90% 100%,
+        rgba(53, 168, 83, 0.08),
+        transparent 60%
+      ),
+      #04152f;
 
-    background: var(--vision-background-secondary);
+    color: #f8fafc;
   }
+
+
+  /* ---------------------------------------------------------
+     BARRE D'ACCENT
+     --------------------------------------------------------- */
+
+  .vision-footer-accent {
+    display: flex;
+
+    width: 100%;
+    height: 3px;
+
+    overflow: hidden;
+  }
+
+
+  .vision-footer-accent span {
+    display: block;
+    height: 100%;
+  }
+
+
+  .vision-footer-accent-blue {
+    flex: 5;
+    background: #073b7a;
+  }
+
+
+  .vision-footer-accent-green {
+    flex: 3;
+    background: #35a853;
+  }
+
+
+  .vision-footer-accent-red {
+    flex: 2;
+    background: #8f1520;
+  }
+
+
+  /* ---------------------------------------------------------
+     HALOS
+     --------------------------------------------------------- */
+
+  .vision-footer-decor {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    pointer-events: none;
+  }
+
+
+  .vision-footer-halo {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(110px);
+  }
+
+
+  .vision-footer-halo-1 {
+    top: -80px;
+    left: -80px;
+    width: 360px;
+    height: 360px;
+    background: rgba(0, 174, 239, 0.14);
+  }
+
+
+  .vision-footer-halo-2 {
+    right: -100px;
+    bottom: -100px;
+    width: 400px;
+    height: 400px;
+    background: rgba(53, 168, 83, 0.10);
+  }
+
+
+  /* =========================================================
+     CONTAINER
+     ========================================================= */
+
+  .vision-footer-container {
+    position: relative;
+    z-index: 2;
+
+    padding-block:
+      var(--vision-space-12)
+      var(--vision-space-7);
+  }
+
+
+  /* =========================================================
+     MAIN GRID
+     ========================================================= */
 
   .vision-footer-main {
     display: grid;
 
     grid-template-columns:
-      minmax(0, 1.5fr)
-      minmax(0, 1fr)
-      minmax(0, 1fr);
+      minmax(0, 1.4fr)
+      minmax(0, 0.9fr)
+      minmax(0, 1.1fr);
 
     gap: var(--vision-space-10);
 
     padding-bottom: var(--vision-space-10);
+
+    border-bottom: 1px solid rgba(248, 250, 252, 0.08);
   }
+
+
+  /* =========================================================
+     BRAND — WORDMARK ACTT
+     ========================================================= */
 
   .vision-footer-brand {
     max-width: 420px;
   }
 
-  .vision-footer-logo-link {
+
+  .vision-footer-wordmark-link {
+    display: inline-block;
+
+    margin-bottom: var(--vision-space-6);
+
+    text-decoration: none;
+  }
+
+
+  .vision-footer-wordmark {
+    position: relative;
+
     display: inline-flex;
-
-    align-items: center;
-
-    gap: var(--vision-space-3);
-
-    margin-bottom: var(--vision-space-4);
-
-    color: var(--vision-color-text);
-
-    font-weight: var(--vision-weight-semibold);
-  }
-
-  .vision-footer-logo {
-    display: block;
-
-    width: 40px;
-    height: 40px;
-
-    object-fit: contain;
-  }
-
-  .vision-footer-name {
-    font-size: var(--vision-text-lg);
-  }
-
-  .vision-footer-description {
-    max-width: 42ch;
-
-    margin: 0;
-
-    color: var(--vision-color-text-muted);
-
-    font-size: var(--vision-text-sm);
-    line-height: var(--vision-line-relaxed);
-  }
-
-  .vision-footer-heading {
-    margin: 0 0 var(--vision-space-4);
-
-    color: var(--vision-color-text);
-
-    font-size: var(--vision-text-sm);
-    font-weight: var(--vision-weight-semibold);
-  }
-
-  .vision-footer-links,
-  .vision-footer-legal ul,
-  .vision-footer-social ul {
-    display: flex;
-
     flex-direction: column;
 
-    gap: var(--vision-space-2);
+    gap: 7px;
+
+    padding-inline: 4px 8px;
+
+    transform: skewX(-8deg);
+
+    transition:
+      transform 250ms cubic-bezier(0.22, 1, 0.36, 1),
+      filter 250ms cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+
+  .vision-footer-wordmark-text {
+    display: block;
+
+    color: #f8fafc;
+
+    font-size: 2.4rem;
+    font-weight: 900;
+
+    line-height: 0.85;
+
+    letter-spacing: 0.06em;
+
+    background:
+      linear-gradient(
+        180deg,
+        #ffffff 0%,
+        #f4fbff 35%,
+        #b8e2fa 70%,
+        #a9d9f7 100%
+      );
+
+    -webkit-background-clip: text;
+    background-clip: text;
+
+    -webkit-text-fill-color: transparent;
+
+    text-rendering: geometricPrecision;
+    -webkit-font-smoothing: antialiased;
+
+    filter:
+      drop-shadow(0 1px 0 rgba(0, 174, 239, 0.35))
+      drop-shadow(0 3px 8px rgba(0, 0, 0, 0.25));
+  }
+
+
+  .vision-footer-wordmark-underline {
+    display: block;
+
+    width: 100%;
+    height: 4px;
+
+    border-radius: 999px;
+
+    background:
+      linear-gradient(
+        90deg,
+        var(--vision-color-secondary) 0%,
+        var(--vision-color-secondary) 50%,
+        var(--vision-color-accent) 50%,
+        var(--vision-color-accent) 80%,
+        #c23a45 80%,
+        #c23a45 100%
+      );
+
+    box-shadow:
+      0 0 14px rgba(0, 174, 239, 0.45);
+  }
+
+
+  @media (hover: hover) and (pointer: fine) {
+
+    .vision-footer-wordmark-link:hover .vision-footer-wordmark {
+      transform: skewX(-8deg) translateY(-1px);
+
+      filter:
+        drop-shadow(0 0 12px rgba(0, 174, 239, 0.45));
+    }
+
+  }
+
+
+  .vision-footer-wordmark-link:focus-visible {
+    outline: 3px solid var(--vision-color-secondary);
+    outline-offset: 6px;
+    border-radius: 10px;
+  }
+
+
+  /* =========================================================
+     TAGLINE / SIGNATURE
+     ========================================================= */
+
+  .vision-footer-tagline {
+    margin: 0 0 var(--vision-space-3);
+
+    color: rgba(248, 250, 252, 0.70);
+
+    font-size: 0.95rem;
+    line-height: 1.6;
+  }
+
+
+  .vision-footer-signature {
+    margin: 0 0 var(--vision-space-8);
+
+    color: rgba(248, 250, 252, 0.45);
+
+    font-size: 0.82rem;
+    font-weight: 600;
+
+    letter-spacing: 0.08em;
+
+    text-transform: uppercase;
+  }
+
+
+  /* =========================================================
+     HEADINGS
+     ========================================================= */
+
+  .vision-footer-heading {
+    margin: 0 0 var(--vision-space-6);
+
+    color: #00aeef;
+
+    font-size: 0.72rem;
+    font-weight: 800;
+
+    letter-spacing: 0.20em;
+
+    text-transform: uppercase;
+  }
+
+
+  /* =========================================================
+     NAVIGATION
+     ========================================================= */
+
+  .vision-footer-nav {
+    padding-top: 6px;
+  }
+
+
+  .vision-footer-links {
+    display: flex;
+    flex-direction: column;
+
+    gap: var(--vision-space-3);
 
     margin: 0;
     padding: 0;
@@ -380,44 +533,224 @@ import { navigation } from "../config/navigation";
     list-style: none;
   }
 
-  .vision-footer-links a,
-  .vision-footer-address a,
-  .vision-footer-legal a,
-  .vision-footer-social a {
-    color: var(--vision-color-text-muted);
 
-    font-size: var(--vision-text-sm);
+  .vision-footer-link {
+    display: inline-block;
 
-    transition:
-      color var(--vision-duration-normal)
-      var(--vision-ease-standard);
+    position: relative;
+
+    color: rgba(248, 250, 252, 0.72);
+
+    font-size: 0.95rem;
+    font-weight: 500;
+
+    text-decoration: none;
+
+    transition: color 200ms ease;
   }
 
-  .vision-footer-links a:hover,
-  .vision-footer-address a:hover,
-  .vision-footer-legal a:hover,
-  .vision-footer-social a:hover {
-    color: var(--vision-color-primary);
+
+  .vision-footer-link span {
+    position: relative;
+    display: inline-block;
   }
+
+
+  .vision-footer-link span::after {
+    content: "";
+
+    position: absolute;
+
+    left: 0;
+    bottom: -2px;
+
+    width: 0;
+    height: 1px;
+
+    background: #00aeef;
+
+    transition: width 250ms cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+
+  .vision-footer-link:hover {
+    color: #ffffff;
+  }
+
+
+  .vision-footer-link:hover span::after {
+    width: 100%;
+  }
+
+
+  /* =========================================================
+     CONTACT
+     ========================================================= */
+
+  .vision-footer-contact {
+    padding-top: 6px;
+  }
+
 
   .vision-footer-address {
     display: flex;
-
     flex-direction: column;
 
-    gap: var(--vision-space-2);
+    gap: var(--vision-space-4);
 
     margin: 0;
 
     font-style: normal;
   }
 
-  .vision-footer-address span {
-    color: var(--vision-color-text-muted);
 
-    font-size: var(--vision-text-sm);
-    line-height: var(--vision-line-normal);
+  .vision-footer-contact-link,
+  .vision-footer-contact-address {
+    display: flex;
+    align-items: flex-start;
+
+    gap: 12px;
+
+    color: rgba(248, 250, 252, 0.72);
+
+    font-size: 0.95rem;
+    line-height: 1.5;
+
+    text-decoration: none;
+
+    transition: color 200ms ease;
   }
+
+
+  .vision-footer-contact-link:hover {
+    color: #ffffff;
+  }
+
+
+  .vision-footer-contact-icon {
+    flex-shrink: 0;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 20px;
+    height: 20px;
+
+    margin-top: 2px;
+
+    color: #00aeef;
+  }
+
+
+  .vision-footer-contact-icon svg {
+    width: 100%;
+    height: 100%;
+  }
+
+
+  /* =========================================================
+     SOCIAL
+     ========================================================= */
+
+  .vision-footer-social {
+    display: flex;
+    flex-direction: column;
+
+    gap: var(--vision-space-3);
+  }
+
+
+  .vision-footer-social-heading {
+    display: block;
+
+    color: #00aeef;
+
+    font-size: 0.72rem;
+    font-weight: 800;
+
+    letter-spacing: 0.20em;
+
+    text-transform: uppercase;
+  }
+
+
+  .vision-social-list {
+    display: flex;
+    flex-direction: row;
+
+    gap: 10px;
+
+    margin: 0;
+    padding: 0;
+
+    list-style: none;
+  }
+
+
+  .vision-social-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 42px;
+    height: 42px;
+
+    border-radius: 10px;
+
+    color: #ffffff;
+
+    text-decoration: none;
+
+    transition:
+      transform 220ms ease,
+      box-shadow 220ms ease,
+      background-color 220ms ease;
+  }
+
+
+  .vision-social-btn svg {
+    width: 20px;
+    height: 20px;
+
+    fill: currentColor;
+  }
+
+
+  /* Facebook — BLEU PAR DÉFAUT */
+  .vision-social-btn-facebook {
+    background: #1877f2;
+
+    box-shadow:
+      0 4px 14px rgba(24, 119, 242, 0.35);
+  }
+
+
+  @media (hover: hover) and (pointer: fine) {
+
+    .vision-social-btn:hover {
+      transform: translateY(-2px);
+    }
+
+    .vision-social-btn-facebook:hover {
+      background: #0f66d9;
+
+      box-shadow:
+        0 8px 22px rgba(24, 119, 242, 0.5);
+    }
+
+  }
+
+
+  .vision-social-btn:focus-visible {
+    outline: 3px solid #00aeef;
+    outline-offset: 3px;
+  }
+
+
+  /* =========================================================
+     BOTTOM BAR
+     ========================================================= */
 
   .vision-footer-bottom {
     display: grid;
@@ -425,87 +758,179 @@ import { navigation } from "../config/navigation";
     grid-template-columns:
       minmax(0, 1fr)
       auto
-      auto;
+      minmax(0, 1fr);
 
     align-items: center;
 
     gap: var(--vision-space-6);
 
-    padding-top: var(--vision-space-5);
-
-    border-top: 1px solid var(--vision-border);
+    padding-top: var(--vision-space-7);
   }
+
 
   .vision-footer-copyright {
     margin: 0;
 
-    color: var(--vision-color-text-muted);
+    color: rgba(248, 250, 252, 0.45);
 
-    font-size: var(--vision-text-xs);
+    font-size: 0.78rem;
+
+    letter-spacing: 0.02em;
   }
 
-  .vision-footer-credit {
-    display: inline-block;
 
-    margin-left: 4px;
-
-    opacity: 0.78;
-  }
-
-  .vision-footer-legal ul,
-  .vision-footer-social ul {
+  .vision-footer-legal ul {
+    display: flex;
     flex-direction: row;
-
     flex-wrap: wrap;
 
-    align-items: center;
+    gap: var(--vision-space-5);
+
+    margin: 0;
+    padding: 0;
+
+    list-style: none;
   }
 
-  @media (max-width: 767px) {
 
-    .vision-footer {
-      padding-top: var(--vision-space-9);
-    }
+  .vision-footer-legal a {
+    color: rgba(248, 250, 252, 0.55);
+
+    font-size: 0.78rem;
+    font-weight: 500;
+
+    letter-spacing: 0.02em;
+
+    text-decoration: none;
+
+    transition: color 200ms ease;
+  }
+
+
+  .vision-footer-legal a:hover {
+    color: #ffffff;
+  }
+
+
+  .vision-footer-credit {
+    margin: 0;
+
+    color: rgba(248, 250, 252, 0.45);
+
+    font-size: 0.78rem;
+
+    letter-spacing: 0.02em;
+
+    text-align: right;
+  }
+
+
+  .vision-footer-credit strong {
+    color: rgba(248, 250, 252, 0.85);
+
+    font-weight: 700;
+  }
+
+
+  /* =========================================================
+     TABLETTE
+     ========================================================= */
+
+  @media (max-width: 899px) {
 
     .vision-footer-main {
-      grid-template-columns: 1fr;
-
-      gap: var(--vision-space-7);
-
-      padding-bottom: var(--vision-space-8);
+      grid-template-columns: 1fr 1fr;
+      gap: var(--vision-space-9);
     }
+
 
     .vision-footer-brand {
-      max-width: none;
+      grid-column: 1 / -1;
+      max-width: 100%;
     }
 
-    .vision-footer-description {
-      max-width: none;
-    }
 
     .vision-footer-bottom {
       grid-template-columns: 1fr;
+      gap: var(--vision-space-4);
+      text-align: left;
+    }
 
-      justify-items: start;
 
+    .vision-footer-credit {
+      text-align: left;
+    }
+
+  }
+
+
+  /* =========================================================
+     MOBILE
+     ========================================================= */
+
+  @media (max-width: 767px) {
+
+    .vision-footer-container {
+      padding-block:
+        var(--vision-space-10)
+        var(--vision-space-6);
+    }
+
+
+    .vision-footer-main {
+      grid-template-columns: 1fr;
+      gap: var(--vision-space-8);
+      padding-bottom: var(--vision-space-8);
+    }
+
+
+    .vision-footer-wordmark-text {
+      font-size: 1.9rem;
+    }
+
+
+    .vision-footer-wordmark-underline {
+      height: 3px;
+    }
+
+
+    .vision-footer-bottom {
+      padding-top: var(--vision-space-6);
+    }
+
+
+    .vision-footer-legal ul {
       gap: var(--vision-space-4);
     }
 
-    .vision-footer-legal ul,
-    .vision-footer-social ul {
-      justify-content: flex-start;
-    }
-
   }
+
+
+  /* =========================================================
+     REDUCED MOTION
+     ========================================================= */
 
   @media (prefers-reduced-motion: reduce) {
 
-    .vision-footer-links a,
-    .vision-footer-address a,
-    .vision-footer-legal a,
-    .vision-footer-social a {
+    .vision-footer-wordmark,
+    .vision-footer-link,
+    .vision-footer-link span::after,
+    .vision-footer-contact-link,
+    .vision-social-btn,
+    .vision-footer-legal a {
       transition: none;
     }
 
+
+    .vision-social-btn:hover {
+      transform: none;
+    }
+
+
+    .vision-footer-wordmark-link:hover .vision-footer-wordmark {
+      transform: skewX(-8deg);
+    }
+
   }
+
 </style>

@@ -1,0 +1,550 @@
+---
+/**
+ * =========================================================
+ * ACTT — MENTIONS LÉGALES
+ * =========================================================
+ */
+
+import PageLayout from "../layouts/PageLayout.astro";
+import { site } from "../config/site";
+---
+
+<PageLayout
+  title="Mentions légales"
+  description="Mentions légales du site de l'ACTT — Camphin-en-Carembault Tennis de Table."
+>
+
+  <section class="legal-page">
+
+    <div class="legal-container">
+
+      <header class="legal-header">
+
+        <span class="legal-eyebrow">
+          Informations légales
+        </span>
+
+        <h1 class="legal-title">
+          Mentions légales
+        </h1>
+
+        <p class="legal-description">
+          Conformément à la loi n° 2004-575 du 21 juin 2004 pour la confiance
+          dans l'économie numérique (LCEN), les informations suivantes sont
+          portées à la connaissance des utilisateurs du site.
+        </p>
+
+      </header>
+
+
+      <!-- =============================================
+           1. ÉDITEUR DU SITE
+           ============================================= -->
+
+      <article class="legal-block">
+
+        <h2>1. Éditeur du site</h2>
+
+        <p>
+          <strong>Dénomination :</strong>
+          Association Camphinoise de Tennis de Table (ACTT)
+        </p>
+
+        <p>
+          <strong>Forme juridique :</strong>
+          Association déclarée, régie par la loi du 1<sup>er</sup> juillet 1901
+        </p>
+
+        <p>
+          <strong>Siège social :</strong>
+          {site.contact.address},
+          {site.contact.postalCode} {site.contact.city},
+          {site.contact.country}
+        </p>
+
+        <p>
+          <strong>Adresse électronique :</strong>
+          <a href={`mailto:${site.contact.email}`}>
+            {site.contact.email}
+          </a>
+        </p>
+
+        <p>
+          <strong>Téléphone :</strong>
+          {site.contact.phone}
+        </p>
+
+        <p>
+          <strong>Numéro RNA :</strong>
+          <em>[À COMPLÉTER — numéro d'enregistrement en préfecture]</em>
+        </p>
+
+      </article>
+
+
+      <!-- =============================================
+           2. DIRECTEUR DE LA PUBLICATION
+           ============================================= -->
+
+      <article class="legal-block">
+
+        <h2>2. Directeur de la publication</h2>
+
+        <p>
+          <strong>Nom :</strong>
+          <em>[À COMPLÉTER — nom et prénom du président de l'association]</em>
+        </p>
+
+        <p>
+          <strong>Qualité :</strong>
+          Président de l'Association Camphinoise de Tennis de Table
+        </p>
+
+        <p>
+          <strong>Contact :</strong>
+          <a href={`mailto:${site.contact.email}`}>
+            {site.contact.email}
+          </a>
+        </p>
+
+      </article>
+
+
+      <!-- =============================================
+           3. HÉBERGEUR
+           ============================================= -->
+
+      <article class="legal-block">
+
+        <h2>3. Hébergement</h2>
+
+        <p>
+          Le site est hébergé par :
+        </p>
+
+        <p>
+          <strong>Cloudflare, Inc.</strong><br />
+          101 Townsend Street<br />
+          San Francisco, CA 94107<br />
+          États-Unis
+        </p>
+
+        <p>
+          <strong>Site internet :</strong>
+          <a
+            href="https://www.cloudflare.com"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            www.cloudflare.com
+          </a>
+        </p>
+
+      </article>
+
+
+      <!-- =============================================
+           4. PROPRIÉTÉ INTELLECTUELLE
+           ============================================= -->
+
+      <article class="legal-block">
+
+        <h2>4. Propriété intellectuelle</h2>
+
+        <p>
+          L'ensemble des contenus présents sur ce site (textes, images, logos,
+          photographies, illustrations, structure, code source) est la propriété
+          exclusive de l'Association Camphinoise de Tennis de Table, sauf mention
+          contraire.
+        </p>
+
+        <p>
+          Toute reproduction, représentation, modification, publication,
+          adaptation ou exploitation de tout ou partie du site, par quelque
+          procédé que ce soit, est interdite sans l'autorisation écrite
+          préalable de l'association.
+        </p>
+
+        <p>
+          Les logos des partenaires (TUI, Département du Nord, Mairie de
+          Camphin-en-Carembault) sont la propriété de leurs détenteurs
+          respectifs et sont utilisés avec leur accord dans le cadre du
+          partenariat.
+        </p>
+
+      </article>
+
+
+      <!-- =============================================
+           5. RESPONSABILITÉ
+           ============================================= -->
+
+      <article class="legal-block">
+
+        <h2>5. Responsabilité</h2>
+
+        <p>
+          L'association s'efforce d'assurer l'exactitude et la mise à jour des
+          informations diffusées sur ce site. Toutefois, elle ne peut garantir
+          l'exactitude, la précision ni l'exhaustivité des informations mises à
+          disposition.
+        </p>
+
+        <p>
+          L'association décline toute responsabilité :
+        </p>
+
+        <ul>
+          <li>
+            pour toute imprécision, inexactitude ou omission portant sur des
+            informations disponibles sur le site ;
+          </li>
+          <li>
+            pour les dommages résultant d'une intrusion frauduleuse d'un tiers
+            ayant entraîné une modification des informations mises à disposition
+            sur le site ;
+          </li>
+          <li>
+            et plus généralement, pour tous dommages, directs ou indirects,
+            quels qu'en soient les causes, origines, nature ou conséquences,
+            provoqués à raison de l'accès de quiconque au site ou de
+            l'impossibilité d'y accéder.
+          </li>
+        </ul>
+
+      </article>
+
+
+      <!-- =============================================
+           6. LIENS HYPERTEXTES
+           ============================================= -->
+
+      <article class="legal-block">
+
+        <h2>6. Liens hypertextes</h2>
+
+        <p>
+          Le site peut contenir des liens vers d'autres sites internet. Ces
+          liens sont fournis à titre informatif. L'association n'exerce aucun
+          contrôle sur le contenu de ces sites et décline toute responsabilité
+          quant à leur contenu ou à leurs pratiques, notamment en matière de
+          protection des données personnelles.
+        </p>
+
+      </article>
+
+
+      <!-- =============================================
+           7. DONNÉES PERSONNELLES
+           ============================================= -->
+
+      <article class="legal-block">
+
+        <h2>7. Données personnelles</h2>
+
+        <p>
+          Le traitement des données personnelles est détaillé dans notre{" "}
+          <a href="/politique-confidentialite">
+            Politique de confidentialité
+          </a>.
+        </p>
+
+      </article>
+
+
+      <!-- =============================================
+           8. DROIT APPLICABLE
+           ============================================= -->
+
+      <article class="legal-block">
+
+        <h2>8. Droit applicable</h2>
+
+        <p>
+          Les présentes mentions légales sont soumises au droit français.
+          En cas de litige, et à défaut de résolution amiable, les tribunaux
+          français seront seuls compétents.
+        </p>
+
+        <p>
+          <strong>Dernière mise à jour :</strong>
+          <em>[À COMPLÉTER — date de mise en ligne]</em>
+        </p>
+
+      </article>
+
+
+      <footer class="legal-footer">
+
+        <a href="/" class="legal-back">
+          ← Retour à l'accueil
+        </a>
+
+      </footer>
+
+    </div>
+
+  </section>
+
+</PageLayout>
+
+
+<style>
+
+  /* =======================================================
+     PAGE LÉGALE
+     ======================================================= */
+
+  .legal-page {
+    background: var(--actt-light);
+
+    padding-block: 80px 100px;
+
+    color: var(--vision-color-text);
+  }
+
+
+  .legal-container {
+    width: min(calc(100% - 48px), 800px);
+    margin-inline: auto;
+  }
+
+
+  /* =======================================================
+     EN-TÊTE
+     ======================================================= */
+
+  .legal-header {
+    margin-bottom: 56px;
+
+    padding-bottom: 36px;
+
+    border-bottom: 1px solid var(--vision-border);
+  }
+
+
+  .legal-eyebrow {
+    display: inline-block;
+
+    margin-bottom: 14px;
+
+    color: var(--actt-cyan);
+
+    font-size: 0.78rem;
+    font-weight: 800;
+
+    letter-spacing: 0.16em;
+
+    text-transform: uppercase;
+  }
+
+
+  .legal-title {
+    margin: 0 0 20px;
+
+    color: var(--actt-navy);
+
+    font-size: clamp(2.2rem, 4.5vw, 3rem);
+    font-weight: 900;
+
+    line-height: 1.05;
+
+    letter-spacing: -0.03em;
+  }
+
+
+  .legal-description {
+    margin: 0;
+
+    color: var(--vision-color-text-muted);
+
+    font-size: 1.05rem;
+    line-height: 1.65;
+  }
+
+
+  /* =======================================================
+     BLOCS
+     ======================================================= */
+
+  .legal-block {
+    margin-bottom: 44px;
+  }
+
+
+  .legal-block h2 {
+    margin: 0 0 20px;
+
+    padding-bottom: 10px;
+
+    color: var(--actt-navy);
+
+    font-size: 1.35rem;
+    font-weight: 800;
+
+    line-height: 1.25;
+
+    border-bottom: 1px solid var(--vision-border);
+  }
+
+
+  .legal-block p {
+    margin: 0 0 14px;
+
+    color: var(--vision-color-text);
+
+    font-size: 1rem;
+    line-height: 1.7;
+  }
+
+
+  .legal-block p:last-child {
+    margin-bottom: 0;
+  }
+
+
+  .legal-block strong {
+    color: var(--actt-navy);
+
+    font-weight: 700;
+  }
+
+
+  .legal-block em {
+    color: var(--vision-color-text-muted);
+
+    font-style: italic;
+  }
+
+
+  .legal-block ul {
+    margin: 12px 0 16px;
+    padding-left: 22px;
+  }
+
+
+  .legal-block li {
+    margin-bottom: 8px;
+
+    color: var(--vision-color-text);
+
+    font-size: 1rem;
+    line-height: 1.65;
+  }
+
+
+  .legal-block a {
+    color: var(--actt-cyan);
+
+    font-weight: 600;
+
+    text-decoration: underline;
+    text-decoration-color: rgba(0, 174, 239, 0.35);
+    text-underline-offset: 3px;
+
+    transition: color 180ms ease, text-decoration-color 180ms ease;
+  }
+
+
+  .legal-block a:hover {
+    color: var(--actt-navy);
+    text-decoration-color: var(--actt-navy);
+  }
+
+
+  /* =======================================================
+     PIED DE PAGE
+     ======================================================= */
+
+  .legal-footer {
+    margin-top: 56px;
+
+    padding-top: 32px;
+
+    border-top: 1px solid var(--vision-border);
+
+    text-align: center;
+  }
+
+
+  .legal-back {
+    display: inline-flex;
+    align-items: center;
+
+    gap: 6px;
+
+    color: var(--actt-navy);
+
+    font-size: 0.95rem;
+    font-weight: 700;
+
+    text-decoration: none;
+
+    transition: color 180ms ease, transform 180ms ease;
+  }
+
+
+  .legal-back:hover {
+    color: var(--actt-cyan);
+    transform: translateX(-3px);
+  }
+
+
+  /* =======================================================
+     MOBILE
+     ======================================================= */
+
+  @media (max-width: 767px) {
+
+    .legal-page {
+      padding-block: 56px 72px;
+    }
+
+
+    .legal-container {
+      width: min(calc(100% - 32px), 800px);
+    }
+
+
+    .legal-header {
+      margin-bottom: 40px;
+      padding-bottom: 28px;
+    }
+
+
+    .legal-block {
+      margin-bottom: 36px;
+    }
+
+
+    .legal-block h2 {
+      font-size: 1.15rem;
+    }
+
+
+    .legal-block p,
+    .legal-block li {
+      font-size: 0.95rem;
+    }
+
+  }
+
+
+  /* =======================================================
+     REDUCED MOTION
+     ======================================================= */
+
+  @media (prefers-reduced-motion: reduce) {
+
+    .legal-block a,
+    .legal-back {
+      transition: none;
+    }
+
+    .legal-back:hover {
+      transform: none;
+    }
+
+  }
+
+</style>
