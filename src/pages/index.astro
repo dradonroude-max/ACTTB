@@ -321,140 +321,182 @@ import { site } from "../config/site";
   </VisionOSSection>
 
 
-  <!-- INSCRIPTION -->
-  <VisionOSSection
-    id="inscription"
-    eyebrow="INSCRIPTION"
-    title="S’inscrire à l’ACTT"
-    description="Venez essayer, puis inscrivez-vous en trois étapes."
-    align="center"
-    spacing="sm"
-  >
-
-    <div class="inscription-steps">
-
-      <div class="inscription-step">
-        <span class="inscription-step-number">1</span>
-        <h3 class="inscription-step-title">Venez essayer une séance</h3>
-        <p class="inscription-step-text">
-          Mardi ou jeudi, à la salle omnisports.
-          Séance d'essai gratuite.
-        </p>
-      </div>
-
-      <div class="inscription-step">
-        <span class="inscription-step-number">2</span>
-        <h3 class="inscription-step-title">Remplissez la fiche</h3>
-        <p class="inscription-step-text">
-          À télécharger ci-dessous, ou à demander
-          directement sur place.
-        </p>
-      </div>
-
-      <div class="inscription-step">
-        <span class="inscription-step-number">3</span>
-        <h3 class="inscription-step-title">Remettez-la à la salle</h3>
-        <p class="inscription-step-text">
-          Avec votre règlement, lors d’un entraînement.
-        </p>
-      </div>
-
-    </div>
-
-    <div class="inscription-panel">
-
-      <div class="inscription-panel-content">
-
-        <a
-          class="inscription-download-button"
-          href="/documents/fiche_inscription_ACTT_2026-2027.pdf"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <span>↓&nbsp;&nbsp;Télécharger la fiche d'inscription 2026-2027</span>
-        </a>
-
-        <p class="inscription-download-note">
-          PDF à signer · aussi disponible à la salle
-        </p>
-
-        <div class="inscription-separator" aria-hidden="true"></div>
-
-        <div class="inscription-info-grid">
-
-          <div class="inscription-info-item">
-            <span class="inscription-info-label">Paiement</span>
-            <span class="inscription-info-value">
-              Chèque à la salle<br />
-              ou virement (IBAN sur la fiche)
-            </span>
-          </div>
-
-          <div class="inscription-info-item">
-            <span class="inscription-info-label">Contact</span>
-            <span class="inscription-info-value">
-              <a href={`mailto:${site.contact.email}`}>{site.contact.email}</a>
-              <span class="inscription-info-sep"> · </span>
-              <a href={`tel:${site.contact.phone.replace(/\s+/g, "")}`}>{site.contact.phone}</a>
-            </span>
-          </div>
-
-        </div>
-
-        <p class="inscription-hint">
-          Vous ne pouvez pas venir un mardi ou un jeudi ?
-          <a href={`mailto:${site.contact.email}`}>Écrivez-nous</a>
-        </p>
-
-      </div>
-
-    </div>
-
-  </VisionOSSection>
-
-
   <!-- PREMIÈRE SÉANCE -->
   <VisionOSSection
     id="essayer"
     eyebrow="PREMIÈRE SÉANCE"
-    title="Envie d’essayer ?"
-    description="Pour découvrir l’ACTT et obtenir les informations nécessaires pour une première séance, contactez-nous."
+    title="Venez sans réserver"
     align="center"
     spacing="sm"
   >
 
     <div class="essayer-grid">
 
-      <VisionOSPanel depth="floating" padding="lg" class="essayer-panel">
-        <div class="vision-contact-content">
-          <VisionOSBadge label="ACTT" variant="primary" />
-          <h3>Votre première séance commence ici.</h3>
-          <p>
-            Pour connaître les modalités et préparer votre venue,
-            contactez directement le club.
-          </p>
-          <div class="vision-contact-actions">
-            <VisionOSButton
-              label="Nous contacter par mail"
-              href={`mailto:${site.contact.email}`}
-              variant="primary"
-              size="lg"
-            />
-            <VisionOSButton
-              label="Appeler"
-              href={`tel:${site.contact.phone.replace(/\s+/g, "")}`}
-              variant="outline"
-              size="lg"
-            />
-          </div>
-        </div>
-      </VisionOSPanel>
+      <!-- COLONNE GAUCHE — INFORMATIONS -->
+      <div class="essayer-info">
 
-      <VisionOSMap
-        label="Salle omnisports"
-        address="7 Rue du Joncquoy, 59133 Camphin-en-Carembault"
-        class="essayer-map"
-      />
+        <dl class="essayer-info-list">
+
+          <div class="essayer-info-item">
+            <dt class="essayer-info-label">Quand</dt>
+            <dd class="essayer-info-value">
+              <strong>Mardi et jeudi</strong>
+              <span>Enfants 18h–19h</span>
+              <span>Adultes 19h–21h</span>
+            </dd>
+          </div>
+
+          <div class="essayer-info-item">
+            <dt class="essayer-info-label">Où</dt>
+            <dd class="essayer-info-value">
+              <strong>Salle omnisports</strong>
+              <span>7 Rue du Joncquoy</span>
+              <span>59133 Camphin-en-Carembault</span>
+            </dd>
+          </div>
+
+          <div class="essayer-info-item">
+            <dt class="essayer-info-label">1re séance</dt>
+            <dd class="essayer-info-value">
+              <strong>Gratuite, sans engagement</strong>
+              <span>Raquettes prêtées</span>
+            </dd>
+          </div>
+
+          <div class="essayer-info-item">
+            <dt class="essayer-info-label">À apporter</dt>
+            <dd class="essayer-info-value">
+              <span>Une tenue de sport</span>
+            </dd>
+          </div>
+
+        </dl>
+
+      </div>
+
+
+      <!-- COLONNE DROITE — VISUEL + ACTIONS -->
+      <div class="essayer-visual">
+
+        <VisionOSMap
+          label="Salle omnisports"
+          address="7 Rue du Joncquoy, 59133 Camphin-en-Carembault"
+          subtleTrigger={true}
+          class="essayer-map"
+        />
+
+        <div class="essayer-actions">
+
+          <a
+            class="essayer-itinerary"
+            href="https://www.google.com/maps/dir/?api=1&destination=7%20Rue%20du%20Joncquoy%2C%2059133%20Camphin-en-Carembault"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Itinéraire
+          </a>
+
+          <div class="essayer-contact-block">
+            <span class="essayer-contact-label">Une question ?</span>
+
+            <a
+              class="essayer-contact"
+              href={`mailto:${site.contact.email}`}
+            >
+              {site.contact.email}
+            </a>
+
+            <a
+              class="essayer-contact"
+              href={`tel:${site.contact.phone.replace(/\s+/g, "")}`}
+            >
+              {site.contact.phone}
+            </a>
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <!-- ÉTAPES SUIVANTES -->
+    <div class="essayer-followup">
+
+      <h3 class="essayer-followup-title">
+        Et après la première séance ?
+      </h3>
+
+      <div class="inscription-steps">
+
+        <div class="inscription-step">
+          <span class="inscription-step-number">1</span>
+          <h4 class="inscription-step-title">Remplissez la fiche</h4>
+          <p class="inscription-step-text">
+            À télécharger ci-dessous, ou à demander
+            directement sur place.
+          </p>
+        </div>
+
+        <div class="inscription-step">
+          <span class="inscription-step-number">2</span>
+          <h4 class="inscription-step-title">Remettez-la à la salle</h4>
+          <p class="inscription-step-text">
+            Avec votre règlement, lors d’un entraînement.
+          </p>
+        </div>
+
+      </div>
+
+      <div class="inscription-panel">
+
+        <div class="inscription-panel-content">
+
+          <a
+            class="inscription-download-button"
+            href="/documents/fiche_inscription_ACTT_2026-2027.pdf"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <span>↓&nbsp;&nbsp;Télécharger la fiche d'inscription 2026-2027</span>
+          </a>
+
+          <p class="inscription-download-note">
+            PDF à signer · aussi disponible à la salle
+          </p>
+
+          <div class="inscription-separator" aria-hidden="true"></div>
+
+          <div class="inscription-info-grid">
+
+            <div class="inscription-info-item">
+              <span class="inscription-info-label">Paiement</span>
+              <span class="inscription-info-value">
+                Chèque à la salle<br />
+                ou virement (IBAN sur la fiche)
+              </span>
+            </div>
+
+            <div class="inscription-info-item">
+              <span class="inscription-info-label">Contact</span>
+              <span class="inscription-info-value">
+                <a href={`mailto:${site.contact.email}`}>{site.contact.email}</a>
+                <span class="inscription-info-sep"> · </span>
+                <a href={`tel:${site.contact.phone.replace(/\s+/g, "")}`}>{site.contact.phone}</a>
+              </span>
+            </div>
+
+          </div>
+
+          <p class="inscription-hint">
+            Vous ne pouvez pas venir un mardi ou un jeudi ?
+            <a href={`mailto:${site.contact.email}`}>Écrivez-nous</a>
+          </p>
+
+        </div>
+
+      </div>
 
     </div>
 
@@ -485,6 +527,11 @@ import { site } from "../config/site";
     margin-inline: auto;
   }
 
+  /* Titre de la section Première séance : équilibre des lignes
+     pour éviter le mot orphelin ("réserver" seul). */
+  :global(.vision-section[id="essayer"]) :global(.vision-section-title) {
+    text-wrap: balance;
+  }
 
   /* =======================================================
      LE CLUB
@@ -591,9 +638,7 @@ import { site } from "../config/site";
     border-bottom: 1px solid rgba(6, 26, 58, 0.06);
   }
 
-  .calendar-item:last-child {
-    border-bottom: none;
-  }
+  .calendar-item:last-child { border-bottom: none; }
 
   .calendar-item-top {
     display: flex;
@@ -712,20 +757,227 @@ import { site } from "../config/site";
     padding: 14px 26px;
   }
 
-  .calendar-item-result .calendar-item-match {
-    font-size: 0.92rem;
+  .calendar-item-result .calendar-item-match { font-size: 0.92rem; }
+
+
+  /* =======================================================
+     PREMIÈRE SÉANCE
+     ======================================================= */
+
+  /* Le bloc entier est centré dans la page (max-width + auto),
+     mais le texte interne reste aligné à gauche. */
+  .essayer-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 48px;
+    align-items: start;
+
+    max-width: 900px;
+    margin-inline: auto;
+
+    text-align: left;
+  }
+
+  .essayer-info {
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+
+    text-align: left;
+  }
+
+  .essayer-info-list {
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+    margin: 0;
+    padding: 0;
+
+    text-align: left;
+  }
+
+  .essayer-info-item {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+
+    text-align: left;
+  }
+
+  .essayer-info-label {
+    color: #00aeef;
+    font-size: 0.78rem;
+    font-weight: 800;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+
+    text-align: left;
+  }
+
+  .essayer-info-value {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    margin: 0;
+    color: #f8fafc;
+    font-size: 1rem;
+    line-height: 1.6;
+
+    text-align: left;
+  }
+
+  .essayer-info-value strong {
+    display: block;
+    color: #f8fafc;
+    font-size: 1.125rem;
+    font-weight: 700;
+    line-height: 1.3;
+    margin-bottom: 4px;
+
+    text-align: left;
+  }
+
+  .essayer-info-value span {
+    display: block;
+    color: rgba(248, 250, 252, 0.82);
+    font-size: 1rem;
+    line-height: 1.55;
+
+    text-align: left;
+  }
+
+  .essayer-visual {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  :global(.essayer-map) {
+    min-height: 320px;
+  }
+
+  .essayer-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .essayer-itinerary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    min-height: 56px;
+    padding: 0 28px;
+    border-radius: 999px;
+    background: #35a853;
+    color: #061a3a;
+    font-size: 0.98rem;
+    font-weight: 800;
+    line-height: 1;
+    text-decoration: none;
+    text-align: center;
+    box-shadow:
+      0 10px 28px rgba(0, 0, 0, 0.24),
+      0 0 22px rgba(53, 168, 83, 0.14);
+    transition:
+      transform 180ms ease,
+      box-shadow 180ms ease,
+      background-color 180ms ease;
+  }
+
+  .essayer-itinerary:hover {
+    background: #43bb61;
+    transform: translateY(-2px);
+    box-shadow:
+      0 14px 34px rgba(0, 0, 0, 0.28),
+      0 0 30px rgba(53, 168, 83, 0.24);
+  }
+
+  .essayer-itinerary:focus-visible {
+    outline: 3px solid #00aeef;
+    outline-offset: 3px;
+  }
+
+  .essayer-contact-block {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+
+    padding-top: 20px;
+
+    border-top: 1px solid rgba(248, 250, 252, 0.10);
+
+    text-align: left;
+  }
+
+  .essayer-contact-label {
+    color: #00aeef;
+    font-size: 0.78rem;
+    font-weight: 800;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+
+    margin-bottom: 4px;
+  }
+
+  .essayer-contact {
+    display: block;
+
+    color: #f8fafc;
+    font-size: 1.05rem;
+    font-weight: 600;
+    line-height: 1.5;
+
+    text-decoration: none;
+
+    transition: color 180ms ease;
+  }
+
+  .essayer-contact:hover {
+    color: #00aeef;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  .essayer-contact:focus-visible {
+    outline: 2px solid #00aeef;
+    outline-offset: 3px;
+    border-radius: 4px;
   }
 
 
   /* =======================================================
-     INSCRIPTION
+     SUITE INSCRIPTION
+     ======================================================= */
+
+  .essayer-followup {
+    margin-top: 72px;
+    padding-top: 56px;
+    border-top: 1px solid rgba(248, 250, 252, 0.10);
+
+    text-align: center;
+  }
+
+  .essayer-followup-title {
+    margin: 0 0 32px;
+    color: #f8fafc;
+    font-size: 1.35rem;
+    font-weight: 800;
+    text-align: center;
+    letter-spacing: -0.01em;
+  }
+
+
+  /* =======================================================
+     INSCRIPTION — ÉTAPES
      ======================================================= */
 
   .inscription-steps {
     display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 20px;
-    max-width: 900px;
+    max-width: 700px;
     margin-inline: auto;
     margin-bottom: 40px;
   }
@@ -735,7 +987,7 @@ import { site } from "../config/site";
     flex-direction: column;
     align-items: center;
     gap: 14px;
-    padding: 32px 22px;
+    padding: 28px 22px;
     background: rgba(248, 250, 252, 0.05);
     border: 1px solid rgba(248, 250, 252, 0.10);
     border-radius: 16px;
@@ -746,12 +998,12 @@ import { site } from "../config/site";
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 48px;
-    height: 48px;
+    width: 44px;
+    height: 44px;
     border-radius: 50%;
     background: linear-gradient(135deg, #00aeef 0%, #35a853 100%);
     color: #061a3a;
-    font-size: 1.4rem;
+    font-size: 1.3rem;
     font-weight: 900;
     line-height: 1;
     box-shadow: 0 6px 18px rgba(0, 174, 239, 0.28);
@@ -789,6 +1041,7 @@ import { site } from "../config/site";
     gap: 18px;
   }
 
+  /* Bouton vert ACTT — action principale */
   .inscription-download-button {
     display: inline-flex;
     align-items: center;
@@ -800,6 +1053,7 @@ import { site } from "../config/site";
     border-radius: 999px;
     background: #35a853;
     color: #061a3a;
+    border: none;
     font-size: 1rem;
     font-weight: 800;
     line-height: 1;
@@ -825,7 +1079,7 @@ import { site } from "../config/site";
   }
 
   .inscription-download-button:focus-visible {
-    outline: 3px solid #073b7a;
+    outline: 3px solid #00aeef;
     outline-offset: 4px;
   }
 
@@ -881,7 +1135,6 @@ import { site } from "../config/site";
     text-decoration: underline;
     text-decoration-color: rgba(6, 26, 58, 0.30);
     text-underline-offset: 3px;
-    transition: color 180ms ease, text-decoration-color 180ms ease;
   }
 
   .inscription-info-value a:hover {
@@ -1118,60 +1371,6 @@ import { site } from "../config/site";
 
 
   /* =======================================================
-     PREMIÈRE SÉANCE
-     ======================================================= */
-
-  .essayer-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 48px;
-    max-width: 1100px;
-    margin-inline: auto;
-    align-items: stretch;
-  }
-
-  .essayer-panel {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-  }
-
-  .vision-contact-content {
-    margin-inline: auto;
-    text-align: center;
-  }
-
-  .vision-contact-content h3 {
-    margin-top: var(--vision-space-5);
-    margin-bottom: var(--vision-space-4);
-    color: var(--vision-color-text);
-    font-size: clamp(var(--vision-text-2xl), 5vw, var(--vision-text-3xl));
-    line-height: var(--vision-line-tight);
-  }
-
-  .vision-contact-content p {
-    max-width: 600px;
-    margin-inline: auto;
-    margin-bottom: var(--vision-space-7);
-    color: var(--vision-color-text-muted);
-    font-size: var(--vision-text-lg);
-    line-height: var(--vision-line-relaxed);
-  }
-
-  .vision-contact-actions {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: var(--vision-space-3);
-  }
-
-  :global(.essayer-map) {
-    height: 100%;
-    min-height: 340px;
-  }
-
-
-  /* =======================================================
      TABLETTE
      ======================================================= */
 
@@ -1184,7 +1383,7 @@ import { site } from "../config/site";
 
     .essayer-grid {
       grid-template-columns: 1fr;
-      gap: 36px;
+      gap: 40px;
     }
 
     :global(.essayer-map) {
@@ -1207,13 +1406,26 @@ import { site } from "../config/site";
     .calendar-item-result { padding: 12px 20px; }
     .calendar-item-match { font-size: 0.95rem; }
 
+    .essayer-info-value strong { font-size: 1.05rem; }
+    .essayer-info-value span { font-size: 0.95rem; }
+
+    .essayer-followup {
+      margin-top: 56px;
+      padding-top: 40px;
+    }
+
+    .essayer-followup-title {
+      font-size: 1.15rem;
+      margin-bottom: 24px;
+    }
+
     .inscription-steps {
       grid-template-columns: 1fr;
       gap: 14px;
       margin-bottom: 28px;
     }
 
-    .inscription-step { padding: 26px 20px; }
+    .inscription-step { padding: 24px 20px; }
     .inscription-panel { padding: 32px 22px; }
 
     .inscription-download-button {
@@ -1237,9 +1449,6 @@ import { site } from "../config/site";
     .vision-partner-card-large .vision-partner-logo { height: 130px; }
     .vision-partner-card-large .vision-partner-logo img { transform: scale(1.15); }
 
-    .vision-contact-actions { flex-direction: column; align-items: stretch; }
-    .vision-contact-actions :global(.vision-button) { width: 100%; }
-
   }
 
 
@@ -1251,8 +1460,12 @@ import { site } from "../config/site";
     .vision-partner-card { transition: none; }
     .vision-partner-card-link:hover { transform: none; }
 
-    .inscription-download-button { transition: none; }
-    .inscription-download-button:hover { transform: none; }
+    .inscription-download-button,
+    .essayer-itinerary,
+    .essayer-contact { transition: none; }
+
+    .inscription-download-button:hover,
+    .essayer-itinerary:hover { transform: none; }
 
     .calendar-item-location { transition: none; }
   }

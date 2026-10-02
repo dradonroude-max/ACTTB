@@ -413,22 +413,25 @@ p {
 
 
 /* =========================================================
-   07 — PREMIÈRE SÉANCE
+   PREMIÈRE SÉANCE
    ========================================================= */
 
 #essayer {
-  background: var(--actt-green) !important;
-
-  color: var(--actt-navy);
+  background: var(--actt-navy) !important;
+  color: var(--actt-light);
 }
 
+#essayer .vision-section-eyebrow {
+  color: var(--actt-cyan);
+}
 
-#essayer .vision-section-eyebrow,
-#essayer .vision-section-title,
+#essayer .vision-section-title {
+  color: var(--actt-light);
+}
+
 #essayer .vision-section-description {
-  color: var(--actt-navy);
+  color: rgba(248, 250, 252, 0.72);
 }
-
 
 /* =========================================================
    FOOTER

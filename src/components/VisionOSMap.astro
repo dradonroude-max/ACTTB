@@ -9,6 +9,7 @@ interface Props {
   address: string;
   label?: string;
   buttonLabel?: string;
+  subtleTrigger?: boolean;
   class?: string;
 }
 
@@ -16,6 +17,7 @@ const {
   address,
   label = "Salle omnisports",
   buttonLabel = "Voir la carte",
+  subtleTrigger = false,
   class: className = "",
 } = Astro.props;
 
@@ -24,7 +26,11 @@ const iframeSrc = `https://www.google.com/maps?q=${encodedAddress}&output=embed`
 ---
 
 <div
-  class:list={["vision-map", className]}
+  class:list={[
+    "vision-map",
+    subtleTrigger && "vision-map-subtle",
+    className,
+  ]}
   data-map
   data-map-src={iframeSrc}
 >
@@ -86,10 +92,7 @@ const iframeSrc = `https://www.google.com/maps?q=${encodedAddress}&output=embed`
           "referrerpolicy",
           "no-referrer-when-downgrade"
         );
-        iframe.setAttribute(
-          "title",
-          "Carte de la salle omnisports"
-        );
+        iframe.setAttribute("title", "Carte de la salle omnisports");
 
         map.replaceChild(iframe, trigger);
         map.classList.add("is-loaded");
@@ -102,66 +105,41 @@ const iframeSrc = `https://www.google.com/maps?q=${encodedAddress}&output=embed`
 <style>
   .vision-map {
     position: relative;
-
     width: 100%;
-
     min-height: 340px;
-
     overflow: hidden;
-
     border: 1px solid rgba(6, 26, 58, 0.10);
     border-radius: 16px;
-
     background: #ffffff;
-
-    box-shadow:
-      0 14px 34px rgba(6, 26, 58, 0.10);
+    box-shadow: 0 14px 34px rgba(6, 26, 58, 0.10);
   }
 
 
-  /* -------------------------------------------------------
-     PLACEHOLDER
-     ------------------------------------------------------- */
-
   .vision-map-trigger {
     position: relative;
-
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-
     gap: 12px;
-
     width: 100%;
     height: 100%;
     min-height: 340px;
-
     padding: 36px 28px;
-
     border: none;
-
     background: transparent;
-
     font-family: inherit;
-
     cursor: pointer;
-
     text-align: center;
-
     transition: background-color 200ms ease;
-
     -webkit-tap-highlight-color: transparent;
   }
 
 
-  /* Fond décoratif évoquant une carte */
   .vision-map-pattern {
     position: absolute;
     inset: 0;
-
     pointer-events: none;
-
     background-image:
       linear-gradient(
         rgba(6, 26, 58, 0.035) 1px,
@@ -172,24 +150,15 @@ const iframeSrc = `https://www.google.com/maps?q=${encodedAddress}&output=embed`
         rgba(6, 26, 58, 0.035) 1px,
         transparent 1px
       );
-
     background-size: 42px 42px;
-
     opacity: 0.9;
   }
 
 
   @media (hover: hover) and (pointer: fine) {
-
     .vision-map-trigger:hover {
       background: rgba(0, 174, 239, 0.04);
     }
-
-    .vision-map-trigger:hover .vision-map-cta {
-      background: #43bb61;
-      transform: translateY(-1px);
-    }
-
   }
 
 
@@ -202,92 +171,107 @@ const iframeSrc = `https://www.google.com/maps?q=${encodedAddress}&output=embed`
 
   .vision-map-icon {
     position: relative;
-
     display: inline-flex;
     align-items: center;
     justify-content: center;
-
-    width: 56px;
-    height: 56px;
-
+    width: 52px;
+    height: 52px;
     border-radius: 50%;
-
     background: linear-gradient(
       135deg,
       rgba(0, 174, 239, 0.15) 0%,
       rgba(53, 168, 83, 0.15) 100%
     );
-
     color: #073b7a;
   }
 
 
   .vision-map-icon svg {
-    width: 28px;
-    height: 28px;
+    width: 26px;
+    height: 26px;
   }
 
 
   .vision-map-label {
     position: relative;
-
-    margin-top: 6px;
-
+    margin-top: 4px;
     color: #061a3a;
-
-    font-size: 0.72rem;
+    font-size: 0.75rem;
     font-weight: 800;
-
     letter-spacing: 0.14em;
-
     text-transform: uppercase;
   }
 
 
   .vision-map-address {
     position: relative;
-
     max-width: 340px;
-
-    color: var(--vision-color-text-muted);
-
-    font-size: 0.95rem;
+    color: #45617f;
+    font-size: 0.92rem;
     line-height: 1.5;
   }
 
 
   .vision-map-cta {
     position: relative;
-
     display: inline-flex;
     align-items: center;
-
-    margin-top: 8px;
-
-    padding: 11px 24px;
-
+    margin-top: 4px;
+    padding: 8px 20px;
     border-radius: 999px;
-
     background: #35a853;
     color: #061a3a;
-
     font-size: 0.85rem;
     font-weight: 800;
-
     letter-spacing: 0.02em;
-
-    box-shadow:
-      0 6px 18px rgba(0, 0, 0, 0.15);
-
-    transition:
-      background-color 180ms ease,
-      transform 180ms ease;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
+    transition: background-color 180ms ease;
   }
 
 
   /* -------------------------------------------------------
-     IFRAME APRÈS CLIC
+     VERSION DISCRÈTE (sous la carte principale)
      ------------------------------------------------------- */
+
+  .vision-map-subtle .vision-map-trigger {
+    min-height: 280px;
+    padding: 28px 24px;
+    gap: 10px;
+  }
+
+  .vision-map-subtle .vision-map-icon {
+    width: 44px;
+    height: 44px;
+  }
+
+  .vision-map-subtle .vision-map-icon svg {
+    width: 22px;
+    height: 22px;
+  }
+
+  .vision-map-subtle .vision-map-address {
+    font-size: 0.85rem;
+  }
+
+  /* En version subtile, le CTA devient un petit lien texte */
+  .vision-map-subtle .vision-map-cta {
+    background: transparent;
+    color: #00aeef;
+    box-shadow: none;
+    padding: 0;
+    margin-top: 8px;
+    font-size: 0.82rem;
+    font-weight: 700;
+    text-decoration: underline;
+    text-decoration-color: rgba(0, 174, 239, 0.35);
+    text-underline-offset: 3px;
+  }
+
+  .vision-map-subtle .vision-map-cta:hover {
+    color: #073b7a;
+    text-decoration-color: #073b7a;
+  }
+
 
   .vision-map.is-loaded {
     background: transparent;
@@ -297,61 +281,31 @@ const iframeSrc = `https://www.google.com/maps?q=${encodedAddress}&output=embed`
 
   .vision-map iframe {
     display: block;
-
     width: 100%;
     height: 100%;
-
     border: 0;
-
     min-height: 340px;
   }
 
 
-  /* -------------------------------------------------------
-     MOBILE
-     ------------------------------------------------------- */
-
   @media (max-width: 767px) {
+    .vision-map { border-radius: 12px; }
+    .vision-map-trigger { padding: 28px 20px; }
+    .vision-map-icon { width: 48px; height: 48px; }
+    .vision-map-icon svg { width: 24px; height: 24px; }
+    .vision-map-address { font-size: 0.88rem; }
 
-    .vision-map {
-      border-radius: 12px;
+    .vision-map-subtle .vision-map-trigger {
+      min-height: 220px;
+      padding: 24px 20px;
     }
-
-    .vision-map-trigger {
-      padding: 28px 20px;
-    }
-
-    .vision-map-icon {
-      width: 48px;
-      height: 48px;
-    }
-
-    .vision-map-icon svg {
-      width: 24px;
-      height: 24px;
-    }
-
-    .vision-map-address {
-      font-size: 0.88rem;
-    }
-
   }
 
 
-  /* -------------------------------------------------------
-     REDUCED MOTION
-     ------------------------------------------------------- */
-
   @media (prefers-reduced-motion: reduce) {
-
     .vision-map-trigger,
     .vision-map-cta {
       transition: none;
     }
-
-    .vision-map-trigger:hover .vision-map-cta {
-      transform: none;
-    }
-
   }
 </style>
