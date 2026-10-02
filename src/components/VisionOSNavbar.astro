@@ -131,10 +131,22 @@ const getTarget = (href: string) =>
 
     const visible = new Set<string>();
 
-    // Ordre d'apparition dans la page, pour trancher si deux sections se chevauchent.
+    // Ordre d'apparition dans la page.
+    // Inclut TOUTES les sections (même celles qui n'ont pas d'entrée de menu),
+    // pour que le suivi reste correct tout au long du scroll.
     const order = [
-      "top", "club", "jouer", "equipes", "actualites",
-      "calendrier", "partenaires", "essayer", "contact",
+      "top",
+      "club",
+      "jouer",
+      "equipes",
+      "actualites",
+      "calendrier",
+      "partenaires",
+      "tarifs",
+      "inscription",
+      "essayer",
+      "galerie",
+      "contact",
     ];
 
     const observer = new IntersectionObserver(
@@ -152,10 +164,15 @@ const getTarget = (href: string) =>
         // Le lien « Contact » mène à #essayer : il reste aussi actif sur le footer.
         const key = current === "contact" ? "essayer" : current;
 
-        // Si la cible n'est pas une entrée de menu connue, on conserve
-        // l'état actif courant plutôt que de tout effacer.
+        // Si la section visible n'a pas d'entrée de menu correspondante,
+        // on n'active aucune entrée (au lieu de garder la précédente).
         if (linkByTarget.has(key)) {
           setActive(key);
+        } else {
+          linkByTarget.forEach((link) => {
+            link.classList.remove("is-active");
+            link.removeAttribute("aria-current");
+          });
         }
       },
       // Bande de détection élargie pour un suivi plus stable au défilement.
@@ -282,12 +299,6 @@ const getTarget = (href: string) =>
     text-decoration: none;
   }
 
-  /*
-   * Wordmark ACTT : grosses lettres sportives, inclinées,
-   * dégradé blanc → bleu glacé, ombre adoucie,
-   * barre tricolore dessous (cyan / vert / rouge éclairci).
-   */
-
   .vision-navbar-wordmark {
     position: relative;
 
@@ -313,7 +324,6 @@ const getTarget = (href: string) =>
   .vision-navbar-name {
     display: block;
 
-    /* Couleur de secours si le dégradé n'est pas supporté. */
     color: #f8fafc;
 
     font-size: 2.35rem;
@@ -497,7 +507,7 @@ const getTarget = (href: string) =>
   }
 
   /* =======================================================
-     CTA — « Venir essayer »
+     CTA
      ======================================================= */
 
   .vision-navbar-cta {
@@ -605,7 +615,6 @@ const getTarget = (href: string) =>
 
       scrollbar-width: none;
 
-      /* Sécurise les bords du scroll horizontal. */
       padding-inline: 4px;
     }
 
