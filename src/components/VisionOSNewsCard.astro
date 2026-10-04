@@ -1,0 +1,176 @@
+---
+/**
+ * =========================================================
+ * ACTT — NEWS CARD
+ * =========================================================
+ *
+ * Carte d'actualité : date, badge, titre, paragraphes, signature.
+ */
+
+import VisionOSBadge from "./VisionOSBadge.astro";
+
+import type { NewsItem } from "../data/news";
+
+interface Props {
+  item: NewsItem;
+}
+
+const { item } = Astro.props;
+---
+
+<article class="news-card">
+  <span class="news-card-accent" aria-hidden="true"></span>
+
+  <div class="news-card-content">
+
+    <header class="news-card-header">
+      <time datetime={item.date} class="news-card-date">
+        {item.dateLabel}
+      </time>
+
+      {item.category && (
+        <VisionOSBadge label={item.category} variant="primary" />
+      )}
+    </header>
+
+    <h3 class="news-card-title">
+      {item.title}
+    </h3>
+
+    <div class="news-card-body">
+      {item.body.map((paragraph) => <p>{paragraph}</p>)}
+    </div>
+
+    {item.author && (
+      <p class="news-card-author">
+        — {item.author}
+      </p>
+    )}
+
+  </div>
+</article>
+
+<style>
+
+  .news-card {
+    position: relative;
+
+    display: flex;
+    flex-direction: column;
+
+    overflow: hidden;
+
+    background: #ffffff;
+
+    border: 1px solid rgba(6, 26, 58, 0.10);
+    border-radius: 16px;
+
+    box-shadow: 0 14px 34px rgba(6, 26, 58, 0.10);
+
+    transition:
+      transform var(--vision-duration-normal) var(--vision-ease-smooth),
+      box-shadow var(--vision-duration-normal) var(--vision-ease-smooth);
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .news-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 20px 40px rgba(6, 26, 58, 0.14);
+    }
+  }
+
+  .news-card-accent {
+    display: block;
+    width: 100%;
+    height: 4px;
+    flex: 0 0 4px;
+
+    background: linear-gradient(90deg, #00aeef 0%, #35a853 100%);
+  }
+
+  .news-card-content {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+
+    padding: 28px 32px 30px;
+  }
+
+  .news-card-header {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+
+    gap: 12px;
+  }
+
+  .news-card-date {
+    color: #45617f;
+    font-size: 0.75rem;
+    font-weight: 800;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+
+  .news-card-title {
+    margin: 0;
+
+    color: #061a3a;
+
+    font-size: clamp(1.3rem, 2.4vw, 1.65rem);
+    font-weight: 900;
+
+    line-height: 1.2;
+    letter-spacing: -0.02em;
+  }
+
+  .news-card-body {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .news-card-body p {
+    margin: 0;
+
+    color: #17345c;
+
+    font-size: 1rem;
+    line-height: 1.65;
+  }
+
+  .news-card-author {
+    margin: 4px 0 0;
+
+    color: #45617f;
+
+    font-size: 0.9rem;
+    font-style: italic;
+    font-weight: 600;
+    text-align: right;
+  }
+
+  @media (max-width: 767px) {
+    .news-card-content {
+      padding: 22px 22px 24px;
+    }
+
+    .news-card-title {
+      font-size: 1.2rem;
+    }
+
+    .news-card-body p {
+      font-size: 0.95rem;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .news-card {
+      transition: none;
+    }
+    .news-card:hover {
+      transform: none;
+    }
+  }
+
+</style>

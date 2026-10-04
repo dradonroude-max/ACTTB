@@ -1,20 +1,17 @@
 // =========================================================
 // ACTT — TEAMS DATA
 // =========================================================
-//
-// Données des équipes du club.
-// Photos : placer les fichiers dans public/images/teams/
-// Format photo d'équipe : 16:9, minimum 1600×900.
 
 export interface Player {
   name: string;
-  role?: string;
+  role?: "Capitaine" | "Remplaçant";
   photo?: string;
 }
 
 export interface Team {
   id: string;
   label: string;
+  division: string;
   subtitle?: string;
   photo?: string;
   photoAlt?: string;
@@ -25,41 +22,65 @@ export const teams: Team[] = [
   {
     id: "equipe-1",
     label: "Équipe 1",
-    photo: "/images/teams/equipe-1.png",
-    photoAlt: "Photo de l'Équipe 1 de l'ACTT",
+    division: "D1",
     players: [
       {
-        name: "Bruno",
+        name: "M'Hand",
         role: "Capitaine",
+        photo: "/images/teams/joueurs/mhand.jpg",
+      },
+      {
+        name: "Nicolas",
+        photo: "/images/teams/joueurs/nicolas.jpg",
+      },
+      {
+        name: "Bruno",
         photo: "/images/teams/joueurs/bruno.png",
       },
       {
-        name: "Léa D.",
-        photo: "https://randomuser.me/api/portraits/women/44.jpg",
+        name: "Geoffrey",
+        photo: "/images/teams/joueurs/geoffrey.jpg",
       },
       {
-        name: "Hugo R.",
-        photo: "https://randomuser.me/api/portraits/men/45.jpg",
+        name: "Michel",
+        photo: "/images/teams/joueurs/michel.jpg",
+      },
+      {
+        name: "Aymeric",
+        role: "Remplaçant",
+        // Photo à venir
       },
     ],
   },
   {
     id: "equipe-2",
     label: "Équipe 2",
-    photo: "/images/teams/equipe-2.png",
-    photoAlt: "Photo de l'Équipe 2 de l'ACTT",
+    division: "D3",
     players: [
       {
-        name: "Sarah L.",
+        name: "Hervé",
         role: "Capitaine",
-        photo: "https://randomuser.me/api/portraits/women/21.jpg",
+        photo: "/images/teams/joueurs/herve.jpg",
       },
       {
-        name: "Julien F.",
-        photo: "https://randomuser.me/api/portraits/men/12.jpg",
+        name: "Marc Alexandre",
+        // Photo à venir
       },
       {
-        name: "Antoine V.",
+        name: "Stéphane",
+        // Photo à venir
+      },
+      {
+        name: "Richard",
+        // Photo à venir
+      },
+      {
+        name: "Pierre",
+        photo: "/images/teams/joueurs/pierre.jpg",
+      },
+      {
+        name: "Éric",
+        photo: "/images/teams/joueurs/eric.jpg",
       },
     ],
   },

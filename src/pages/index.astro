@@ -16,13 +16,32 @@ import VisionOSBadge from "../components/VisionOSBadge.astro";
 import VisionOSTeamCard from "../components/VisionOSTeamCard.astro";
 import VisionOSGallery from "../components/VisionOSGallery.astro";
 import VisionOSMap from "../components/VisionOSMap.astro";
+import VisionOSNewsCard from "../components/VisionOSNewsCard.astro";
 
 import { club } from "../data/club";
 import { teams } from "../data/teams";
 import { partners } from "../data/partners";
 import { pricing } from "../data/pricing";
-import { upcomingMatches, recentResults } from "../data/calendar";
+import { calendar, recentResults } from "../data/calendar";
+import { news } from "../data/news";
 import { site } from "../config/site";
+
+// Génère un label de date : "Dim. 20 sept."
+const formatDateLabel = (iso: string) => {
+  const d = new Date(iso + "T12:00:00");
+  const days = ["Dim.", "Lun.", "Mar.", "Mer.", "Jeu.", "Ven.", "Sam."];
+  const months = ["janv.", "févr.", "mars", "avr.", "mai", "juin", "juil.", "août", "sept.", "oct.", "nov.", "déc."];
+  return `${days[d.getDay()]} ${d.getDate()} ${months[d.getMonth()]}`;
+};
+
+// Tri par date, puis par équipe
+const sortedCalendar = [...calendar].sort((a, b) => {
+  if (a.date !== b.date) return a.date.localeCompare(b.date);
+  return a.team.localeCompare(b.team);
+});
+
+// Actualités triées par date décroissante (plus récentes en premier)
+const sortedNews = [...news].sort((a, b) => b.date.localeCompare(a.date));
 ---
 
 <PageLayout
@@ -62,16 +81,33 @@ import { site } from "../config/site";
       <VisionOSPanel depth="raised" padding="lg" class="club-panel club-panel-primary">
         <VisionOSBadge label="Notre histoire" variant="primary" />
         <h3>{club.tagline}</h3>
-        <p>{club.description}</p>
+        <div class="club-story">
+          {club.story.map((paragraph) => <p>{paragraph}</p>)}
+        </div>
+
+        <div class="club-bureau">
+          <span class="club-bureau-title">Le bureau</span>
+          <ul class="club-bureau-list">
+            {club.bureau.map((member) => (
+              <li class="club-bureau-item">
+                <span class="club-bureau-role">{member.role}</span>
+                <span class="club-bureau-name">{member.name}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
       </VisionOSPanel>
 
       <VisionOSPanel depth="floating" padding="lg" class="club-panel club-panel-secondary">
         <VisionOSBadge label="Le club" variant="success" />
-        <h3>Tennis de table à {club.city}</h3>
-        <p>
-          Retrouvez ici les informations essentielles pour découvrir
-          le club, comprendre son fonctionnement et nous contacter.
-        </p>
+        <figure class="club-photo">
+          <img
+            src="/images/club/salle-omnisports.jpg"
+            alt="La salle omnisports de Camphin-en-Carembault, où s'entraîne l'ACTT"
+            loading="lazy"
+            decoding="async"
+          />
+        </figure>
         <VisionOSButton label="Découvrir le club" href="#essayer" variant="outline" />
       </VisionOSPanel>
 
@@ -127,12 +163,18 @@ import { site } from "../config/site";
     id="actualites"
     eyebrow="ACTUALITÉS"
     title="Les actualités du club"
-    description="Les dernières informations concernant la vie de l’ACTT seront publiées ici."
+    description="Les dernières informations concernant la vie de l’ACTT."
     spacing="sm"
   >
-    <div class="vision-grid-3">
-      <VisionOSCard title="Actualités" description="Les actualités du club seront publiées dans cette rubrique." badge="À venir" variant="glass" />
-    </div>
+    {sortedNews.length > 0 ? (
+      <div class="news-grid">
+        {sortedNews.map((item) => (<VisionOSNewsCard item={item} />))}
+      </div>
+    ) : (
+      <div class="vision-grid-3">
+        <VisionOSCard title="Actualités" description="Les actualités du club seront publiées dans cette rubrique." badge="À venir" variant="glass" />
+      </div>
+    )}
   </VisionOSSection>
 
 
@@ -146,53 +188,58 @@ import { site } from "../config/site";
   >
     <div class="calendrier-grid">
 
-      {upcomingMatches.length > 0 && (
-        <article class="calendrier-card calendrier-card-upcoming">
-          <span class="calendrier-card-accent" aria-hidden="true"></span>
+      <article class="calendrier-card calendrier-card-upcoming">
+        <span class="calendrier-card-accent" aria-hidden="true"></span>
 
-          <header class="calendrier-card-header">
-            <span class="calendrier-card-eyebrow">À venir</span>
-            <h3 class="calendrier-card-title">Prochains matchs</h3>
-          </header>
+        <header class="calendrier-card-header">
+          <span class="calendrier-card-eyebrow">À venir</span>
+          <h3 class="calendrier-card-title">Prochains matchs</h3>
+        </header>
 
-          <ul class="calendar-list">
-            {upcomingMatches.map((match) => (
-              <li class="calendar-item">
-                <div class="calendar-item-top">
-                  <span class="calendar-item-datetime">
-                    <time datetime={match.date} class="calendar-item-date">
-                      {match.dateLabel}
-                    </time>
-                    <span class="calendar-item-time">· {match.time}</span>
+        <ul class="calendar-list" data-calendar-list>
+          {sortedCalendar.map((match) => (
+            <li
+              class="calendar-item"
+              data-date={match.date}
+              data-team={match.team}
+            >
+              <div class="calendar-item-top">
+                <span class="calendar-item-datetime">
+                  <time datetime={match.date} class="calendar-item-date">
+                    {formatDateLabel(match.date)}
+                  </time>
+                </span>
+
+                {match.location === "domicile" ? (
+                  <a
+                    href="#essayer"
+                    class="calendar-item-location calendar-item-location-home"
+                    title="Voir l'adresse de la salle"
+                  >
+                    Domicile
+                  </a>
+                ) : (
+                  <span class="calendar-item-location calendar-item-location-away">
+                    À {match.opponentCity ?? "l'extérieur"}
                   </span>
+                )}
+              </div>
 
-                  {match.location === "domicile" ? (
-                    <a
-                      href="#essayer"
-                      class="calendar-item-location calendar-item-location-home"
-                      title="Voir l'adresse de la salle"
-                    >
-                      Domicile
-                    </a>
-                  ) : (
-                    <span class="calendar-item-location calendar-item-location-away">
-                      À {match.opponentCity ?? "l'extérieur"}
-                    </span>
-                  )}
-                </div>
+              <div class="calendar-item-match">
+                <span class="calendar-item-team">{match.team}</span>
+                <span class="calendar-item-vs">—</span>
+                <span class="calendar-item-opponent">{match.opponent}</span>
+              </div>
 
-                <div class="calendar-item-match">
-                  <span class="calendar-item-team">{match.team}</span>
-                  <span class="calendar-item-vs">—</span>
-                  <span class="calendar-item-opponent">{match.opponent}</span>
-                </div>
+              <span class="calendar-item-division">{match.division}</span>
+            </li>
+          ))}
+        </ul>
 
-                <span class="calendar-item-division">{match.division}</span>
-              </li>
-            ))}
-          </ul>
-        </article>
-      )}
+        <p class="calendar-empty" data-calendar-empty hidden>
+          La phase 1 est terminée. Rendez-vous en janvier pour la suite de la saison.
+        </p>
+      </article>
 
       {recentResults.length > 0 && (
         <article class="calendrier-card calendrier-card-results">
@@ -262,6 +309,8 @@ import { site } from "../config/site";
                   "vision-partner-card",
                   "vision-partner-card-link",
                   partner.size === "large" && "vision-partner-card-large",
+                  partner.size === "xl" && "vision-partner-card-xl",
+                  partner.size === "xxl" && "vision-partner-card-xxl",
                 ]}
                 href={partner.href}
                 target="_blank"
@@ -277,6 +326,8 @@ import { site } from "../config/site";
                 class:list={[
                   "vision-partner-card",
                   partner.size === "large" && "vision-partner-card-large",
+                  partner.size === "xl" && "vision-partner-card-xl",
+                  partner.size === "xxl" && "vision-partner-card-xxl",
                 ]}
               >
                 <span class="vision-partner-logo">
@@ -325,14 +376,13 @@ import { site } from "../config/site";
   <VisionOSSection
     id="essayer"
     eyebrow="PREMIÈRE SÉANCE"
-    title="Venez sans réserver"
+    title="Venez directement, sans réserver"
     align="center"
     spacing="sm"
   >
 
     <div class="essayer-grid">
 
-      <!-- COLONNE GAUCHE — INFORMATIONS -->
       <div class="essayer-info">
 
         <dl class="essayer-info-list">
@@ -375,7 +425,6 @@ import { site } from "../config/site";
       </div>
 
 
-      <!-- COLONNE DROITE — VISUEL + ACTIONS -->
       <div class="essayer-visual">
 
         <VisionOSMap
@@ -421,7 +470,6 @@ import { site } from "../config/site";
     </div>
 
 
-    <!-- ÉTAPES SUIVANTES -->
     <div class="essayer-followup">
 
       <h3 class="essayer-followup-title">
@@ -521,6 +569,56 @@ import { site } from "../config/site";
 </PageLayout>
 
 
+<script>
+  // Filtre le calendrier : n'affiche que les 4 prochains matchs.
+  const list = document.querySelector<HTMLElement>("[data-calendar-list]");
+
+  if (list) {
+    const today = (() => {
+      const now = new Date();
+      const y = now.getFullYear();
+      const m = String(now.getMonth() + 1).padStart(2, "0");
+      const d = String(now.getDate()).padStart(2, "0");
+      return `${y}-${m}-${d}`;
+    })();
+
+    const items = Array.from(
+      list.querySelectorAll<HTMLElement>(".calendar-item[data-date]")
+    );
+
+    items.sort((a, b) => {
+      const dateA = a.dataset.date ?? "";
+      const dateB = b.dataset.date ?? "";
+      if (dateA !== dateB) return dateA.localeCompare(dateB);
+      return (a.dataset.team ?? "").localeCompare(b.dataset.team ?? "");
+    });
+
+    items.forEach((item) => list.appendChild(item));
+
+    const upcoming = items.filter(
+      (item) => (item.dataset.date ?? "") >= today
+    );
+    const next4 = upcoming.slice(0, 4);
+    const visibleSet = new Set(next4);
+
+    items.forEach((item) => {
+      if (visibleSet.has(item)) {
+        item.hidden = false;
+      } else {
+        item.hidden = true;
+      }
+    });
+
+    if (upcoming.length === 0) {
+      const emptyMsg = document.querySelector<HTMLElement>(
+        "[data-calendar-empty]"
+      );
+      if (emptyMsg) emptyMsg.hidden = false;
+    }
+  }
+</script>
+
+
 <style>
 
   :global(.vision-section-align-center) :global(.vision-section-title) {
@@ -549,6 +647,78 @@ import { site } from "../config/site";
     border-top: 1px solid var(--vision-border) !important;
   }
 
+  .club-story {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .club-story p {
+    margin: 0;
+  }
+
+  .club-bureau {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 24px;
+    padding-top: 20px;
+    border-top: 1px solid rgba(6, 26, 58, 0.10);
+  }
+
+  .club-bureau-title {
+    color: #45617f;
+    font-size: 0.72rem;
+    font-weight: 800;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+
+  .club-bureau-list {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .club-bureau-item {
+    display: grid;
+    grid-template-columns: 110px 1fr;
+    align-items: baseline;
+    gap: 12px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .club-bureau-role {
+    color: #45617f;
+    font-size: 0.9rem;
+    font-weight: 500;
+  }
+
+  .club-bureau-name {
+    color: #061a3a;
+    font-size: 0.95rem;
+    font-weight: 700;
+  }
+
+  .club-photo {
+    display: block;
+    margin: 8px 0 36px;
+    padding: 0;
+  }
+
+  .club-photo img {
+    display: block;
+    width: 100%;
+    height: auto;
+    border-radius: 12px;
+    box-shadow: 0 10px 26px rgba(6, 26, 58, 0.12);
+  }
+
 
   /* =======================================================
      ÉQUIPES
@@ -556,6 +726,19 @@ import { site } from "../config/site";
 
   .equipes-grid {
     align-items: stretch;
+  }
+
+
+  /* =======================================================
+     ACTUALITÉS
+     ======================================================= */
+
+  .news-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 20px;
+    max-width: 820px;
+    margin-inline: auto;
   }
 
 
@@ -636,6 +819,10 @@ import { site } from "../config/site";
     border-bottom: 1px solid rgba(6, 26, 58, 0.06);
   }
 
+  .calendar-item[hidden] {
+    display: none !important;
+  }
+
   .calendar-item:last-child { border-bottom: none; }
 
   .calendar-item-top {
@@ -660,12 +847,6 @@ import { site } from "../config/site";
     font-size: 0.82rem;
     font-weight: 600;
     letter-spacing: 0.02em;
-  }
-
-  .calendar-item-time {
-    color: #45617f;
-    font-size: 0.82rem;
-    font-weight: 600;
   }
 
   .calendar-item-match {
@@ -697,6 +878,19 @@ import { site } from "../config/site";
     font-weight: 600;
     letter-spacing: 0.04em;
     text-transform: uppercase;
+  }
+
+  .calendar-empty {
+    margin: 0;
+    padding: 28px 26px;
+    color: #45617f;
+    font-size: 0.95rem;
+    text-align: center;
+    border-top: 1px solid rgba(6, 26, 58, 0.06);
+  }
+
+  .calendar-empty[hidden] {
+    display: none !important;
   }
 
   .calendar-item-location {
@@ -767,10 +961,8 @@ import { site } from "../config/site";
     grid-template-columns: 1fr 1fr;
     gap: 48px;
     align-items: start;
-
     max-width: 900px;
     margin-inline: auto;
-
     text-align: left;
   }
 
@@ -778,7 +970,6 @@ import { site } from "../config/site";
     display: flex;
     flex-direction: column;
     gap: 32px;
-
     text-align: left;
   }
 
@@ -788,7 +979,6 @@ import { site } from "../config/site";
     gap: 32px;
     margin: 0;
     padding: 0;
-
     text-align: left;
   }
 
@@ -796,7 +986,6 @@ import { site } from "../config/site";
     display: flex;
     flex-direction: column;
     gap: 10px;
-
     text-align: left;
   }
 
@@ -806,7 +995,6 @@ import { site } from "../config/site";
     font-weight: 800;
     letter-spacing: 0.18em;
     text-transform: uppercase;
-
     text-align: left;
   }
 
@@ -818,7 +1006,6 @@ import { site } from "../config/site";
     color: #f8fafc;
     font-size: 1rem;
     line-height: 1.6;
-
     text-align: left;
   }
 
@@ -829,7 +1016,6 @@ import { site } from "../config/site";
     font-weight: 700;
     line-height: 1.3;
     margin-bottom: 4px;
-
     text-align: left;
   }
 
@@ -838,7 +1024,6 @@ import { site } from "../config/site";
     color: rgba(248, 250, 252, 0.82);
     font-size: 1rem;
     line-height: 1.55;
-
     text-align: left;
   }
 
@@ -899,11 +1084,8 @@ import { site } from "../config/site";
     display: flex;
     flex-direction: column;
     gap: 8px;
-
     padding-top: 20px;
-
     border-top: 1px solid rgba(248, 250, 252, 0.10);
-
     text-align: left;
   }
 
@@ -913,20 +1095,16 @@ import { site } from "../config/site";
     font-weight: 800;
     letter-spacing: 0.18em;
     text-transform: uppercase;
-
     margin-bottom: 4px;
   }
 
   .essayer-contact {
     display: block;
-
     color: #f8fafc;
     font-size: 1.05rem;
     font-weight: 600;
     line-height: 1.5;
-
     text-decoration: none;
-
     transition: color 180ms ease;
   }
 
@@ -951,7 +1129,6 @@ import { site } from "../config/site";
     margin-top: 72px;
     padding-top: 56px;
     border-top: 1px solid rgba(248, 250, 252, 0.10);
-
     text-align: center;
   }
 
@@ -963,11 +1140,6 @@ import { site } from "../config/site";
     text-align: center;
     letter-spacing: -0.01em;
   }
-
-
-  /* =======================================================
-     INSCRIPTION — ÉTAPES
-     ======================================================= */
 
   .inscription-steps {
     display: grid;
@@ -1239,6 +1411,32 @@ import { site } from "../config/site";
     transform-origin: center center;
   }
 
+  .vision-partner-card-xl .vision-partner-logo {
+    height: 160px;
+    padding: 0;
+    overflow: hidden;
+  }
+
+  .vision-partner-card-xl .vision-partner-logo img {
+    max-width: 100%;
+    max-height: 100%;
+    transform: scale(3.5);
+    transform-origin: center center;
+  }
+
+  .vision-partner-card-xxl .vision-partner-logo {
+    height: 160px;
+    padding: 0;
+    overflow: hidden;
+  }
+
+  .vision-partner-card-xxl .vision-partner-logo img {
+    max-width: 100%;
+    max-height: 100%;
+    transform: scale(1.1);
+    transform-origin: center center;
+  }
+
   .vision-partner-name {
     color: #061a3a;
     font-size: var(--vision-text-md);
@@ -1370,7 +1568,6 @@ import { site } from "../config/site";
      ======================================================= */
 
   @media (max-width: 899px) {
-
     .calendrier-grid {
       grid-template-columns: 1fr;
       gap: 22px;
@@ -1384,7 +1581,6 @@ import { site } from "../config/site";
     :global(.essayer-map) {
       min-height: 300px;
     }
-
   }
 
 
@@ -1393,7 +1589,6 @@ import { site } from "../config/site";
      ======================================================= */
 
   @media (max-width: 767px) {
-
     .calendrier-card-header { padding: 18px 20px 14px; }
     .calendrier-card-title { font-size: 1.15rem; }
 
@@ -1444,6 +1639,11 @@ import { site } from "../config/site";
     .vision-partner-card-large .vision-partner-logo { height: 130px; }
     .vision-partner-card-large .vision-partner-logo img { transform: scale(1.15); }
 
+    .vision-partner-card-xl .vision-partner-logo { height: 130px; }
+    .vision-partner-card-xl .vision-partner-logo img { transform: scale(3); }
+
+    .vision-partner-card-xxl .vision-partner-logo { height: 130px; }
+    .vision-partner-card-xxl .vision-partner-logo img { transform: scale(1.05); }
   }
 
 

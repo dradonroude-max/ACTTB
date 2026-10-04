@@ -3,14 +3,6 @@
  * =========================================================
  * ACTT — TEAM CARD
  * =========================================================
- *
- * Cadre d'une équipe : photo, titre, liste de joueurs.
- * Chaque joueur a un avatar rond (photo ou initiales).
- *
- * Hiérarchie d'espacement :
- * - badge / titre / sous-titre → serrés (bloc d'en-tête)
- * - trait → aéré sur les deux côtés (séparateur)
- * - joueurs → liste respirante
  */
 
 import VisionOSBadge from "./VisionOSBadge.astro";
@@ -54,7 +46,10 @@ const countLabel =
 
   <div class="team-content">
 
-    <VisionOSBadge label={countLabel} variant="primary" />
+    <div class="team-badges">
+      <VisionOSBadge label={team.division} variant="success" />
+      <VisionOSBadge label={countLabel} variant="primary" />
+    </div>
 
     <h3 class="team-title">
       {team.label}
@@ -218,6 +213,14 @@ const countLabel =
     gap: 16px;
 
     padding: 32px;
+  }
+
+  .team-badges {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+
+    gap: 8px;
   }
 
   .team-title {

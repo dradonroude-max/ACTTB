@@ -4,22 +4,22 @@
  * ACTT — GALLERY
  * =========================================================
  *
- * Grille Bento (6 photos) + lightbox.
+ * Grille Bento (6 photos) + lightbox avec zoom.
  *
  * RÈGLE AUTOMATIQUE :
  *   - Les 6 PREMIÈRES photos du tableau → affichées dans la grille
  *   - Toutes les SUIVANTES → uniquement dans la lightbox
  *
- * Pour ajouter une photo : ajouter l'entrée à la fin de `photos.ts`.
- * Aucune autre modification n'est nécessaire.
+ * INTERACTIONS LIGHTBOX :
+ *   - Clic sur la grande photo → agrandit (mode zoom)
+ *   - Re-clic → retour à la taille normale
+ *   - Échap → quitte le zoom, puis ferme la lightbox
  */
 
 import { photos } from "../data/photos";
 
-// Nombre de photos visibles dans la grille Bento.
 const VISIBLE_COUNT = 6;
 
-// Index de chaque photo visible dans le tableau COMPLET.
 const visiblePhotos = photos
   .slice(0, VISIBLE_COUNT)
   .map((photo, index) => ({ photo, index }));
@@ -94,6 +94,7 @@ const visiblePhotos = photos
       src=""
       alt=""
       decoding="async"
+      title="Cliquer pour agrandir"
     />
 
     <figcaption class="gallery-lb-caption">
@@ -101,17 +102,37 @@ const visiblePhotos = photos
       <span class="gallery-lb-counter"></span>
     </figcaption>
 
-    <!-- Bande de vignettes -->
-    <nav
-      class="gallery-lb-thumbs"
-      data-lb-thumbs
-      aria-label="Choisir une photo"
-    ></nav>
+    <div class="gallery-lb-thumbs-wrap">
+
+      <button
+        type="button"
+        class="gallery-lb-thumbnav gallery-lb-thumbnav-prev"
+        data-lb-thumbnav-prev
+        aria-label="Défiler les vignettes vers la gauche"
+      >
+        ‹
+      </button>
+
+      <nav
+        class="gallery-lb-thumbs"
+        data-lb-thumbs
+        aria-label="Choisir une photo"
+      ></nav>
+
+      <button
+        type="button"
+        class="gallery-lb-thumbnav gallery-lb-thumbnav-next"
+        data-lb-thumbnav-next
+        aria-label="Défiler les vignettes vers la droite"
+      >
+        ›
+      </button>
+
+    </div>
   </figure>
 </div>
 
 
-<!-- Données pour le JS -->
 <script
   type="application/json"
   id="gallery-data"
@@ -147,14 +168,30 @@ const visiblePhotos = photos
     const prevBtn = lightbox.querySelector("[data-lb-prev]") as HTMLButtonElement | null;
     const nextBtn = lightbox.querySelector("[data-lb-next]") as HTMLButtonElement | null;
     const thumbsEl = lightbox.querySelector("[data-lb-thumbs]") as HTMLElement | null;
+    const thumbnavPrev = lightbox.querySelector("[data-lb-thumbnav-prev]") as HTMLButtonElement | null;
+    const thumbnavNext = lightbox.querySelector("[data-lb-thumbnav-next]") as HTMLButtonElement | null;
 
-    if (!imageEl || !textEl || !counterEl || !closeBtn || !prevBtn || !nextBtn || !thumbsEl) return;
+    if (
+      !imageEl || !textEl || !counterEl || !closeBtn ||
+      !prevBtn || !nextBtn || !thumbsEl ||
+      !thumbnavPrev || !thumbnavNext
+    ) return;
 
     let currentIndex = 0;
     let lastFocused: HTMLElement | null = null;
     let thumbEls: HTMLButtonElement[] = [];
 
     const isOpen = () => lightbox.classList.contains("is-open");
+    const isZoomed = () => lightbox.classList.contains("is-zoomed");
+
+    const updateThumbnavState = () => {
+      const maxScroll = thumbsEl.scrollWidth - thumbsEl.clientWidth;
+      const atStart = thumbsEl.scrollLeft <= 2;
+      const atEnd = thumbsEl.scrollLeft >= maxScroll - 2;
+
+      thumbnavPrev.disabled = atStart;
+      thumbnavNext.disabled = atEnd;
+    };
 
     const buildThumbs = () => {
       thumbsEl.innerHTML = "";
@@ -182,6 +219,8 @@ const visiblePhotos = photos
 
         return btn;
       });
+
+      requestAnimationFrame(updateThumbnavState);
     };
 
     const update = () => {
@@ -208,6 +247,8 @@ const visiblePhotos = photos
             left: offset,
             behavior: "smooth",
           });
+
+          setTimeout(updateThumbnavState, 350);
         }
       });
     };
@@ -219,6 +260,7 @@ const visiblePhotos = photos
       if (!thumbEls.length) buildThumbs();
 
       update();
+      lightbox.classList.remove("is-zoomed");
       lightbox.classList.add("is-open");
       lightbox.setAttribute("aria-hidden", "false");
       document.body.style.overflow = "hidden";
@@ -227,6 +269,7 @@ const visiblePhotos = photos
 
     const close = () => {
       lightbox.classList.remove("is-open");
+      lightbox.classList.remove("is-zoomed");
       lightbox.setAttribute("aria-hidden", "true");
       document.body.style.overflow = "";
       if (lastFocused) lastFocused.focus();
@@ -242,17 +285,55 @@ const visiblePhotos = photos
       update();
     };
 
+    const toggleZoom = () => {
+      lightbox.classList.toggle("is-zoomed");
+    };
+
     items.forEach((item) => {
       const index = parseInt(item.dataset.index ?? "0", 10);
       item.addEventListener("click", () => open(index));
+    });
+
+    // Clic sur la grande image → zoom / dézoom
+    imageEl.addEventListener("click", (event) => {
+      event.stopPropagation();
+      toggleZoom();
     });
 
     closeBtn.addEventListener("click", close);
     prevBtn.addEventListener("click", prev);
     nextBtn.addEventListener("click", next);
 
+    const scrollStep = () => {
+      const first = thumbEls[0];
+      if (!first) return 300;
+      const rect = first.getBoundingClientRect();
+      const gap = 10;
+      return (rect.width + gap) * 3;
+    };
+
+    thumbnavPrev.addEventListener("click", () => {
+      thumbsEl.scrollBy({ left: -scrollStep(), behavior: "smooth" });
+      setTimeout(updateThumbnavState, 350);
+    });
+
+    thumbnavNext.addEventListener("click", () => {
+      thumbsEl.scrollBy({ left: scrollStep(), behavior: "smooth" });
+      setTimeout(updateThumbnavState, 350);
+    });
+
+    thumbsEl.addEventListener("scroll", updateThumbnavState, { passive: true });
+    window.addEventListener("resize", updateThumbnavState);
+
     lightbox.addEventListener("click", (event) => {
-      if (event.target === lightbox) close();
+      if (event.target === lightbox) {
+        // Clic sur le fond : si zoomé, on dézoome ; sinon on ferme
+        if (isZoomed()) {
+          lightbox.classList.remove("is-zoomed");
+        } else {
+          close();
+        }
+      }
     });
 
     document.addEventListener("keydown", (event) => {
@@ -260,7 +341,11 @@ const visiblePhotos = photos
 
       if (event.key === "Escape") {
         event.preventDefault();
-        close();
+        if (isZoomed()) {
+          lightbox.classList.remove("is-zoomed");
+        } else {
+          close();
+        }
       } else if (event.key === "ArrowRight") {
         event.preventDefault();
         next();
@@ -272,6 +357,7 @@ const visiblePhotos = photos
 
     let touchStartX = 0;
     let touchStartY = 0;
+    let touchMoved = false;
 
     lightbox.addEventListener(
       "touchstart",
@@ -279,6 +365,18 @@ const visiblePhotos = photos
         const t = event.touches[0];
         touchStartX = t.clientX;
         touchStartY = t.clientY;
+        touchMoved = false;
+      },
+      { passive: true }
+    );
+
+    lightbox.addEventListener(
+      "touchmove",
+      (event) => {
+        const t = event.touches[0];
+        const dx = Math.abs(t.clientX - touchStartX);
+        const dy = Math.abs(t.clientY - touchStartY);
+        if (dx > 10 || dy > 10) touchMoved = true;
       },
       { passive: true }
     );
@@ -290,11 +388,21 @@ const visiblePhotos = photos
         const dx = t.clientX - touchStartX;
         const dy = t.clientY - touchStartY;
 
-        if (Math.abs(dx) < 40) return;
-        if (Math.abs(dy) > Math.abs(dx)) return;
+        if (Math.abs(dx) < 40 || Math.abs(dy) > Math.abs(dx)) return;
 
         if (dx < 0) next();
         else prev();
+      },
+      { passive: true }
+    );
+
+    // Tap (sans mouvement) sur la grande image → zoom
+    imageEl.addEventListener(
+      "touchend",
+      () => {
+        if (!touchMoved) {
+          toggleZoom();
+        }
       },
       { passive: true }
     );
@@ -302,7 +410,7 @@ const visiblePhotos = photos
 </script>
 
 
-<style>
+<style is:global>
 
 /* =========================================================
    GALERIE — GRILLE BENTO
@@ -315,14 +423,10 @@ const visiblePhotos = photos
 
 .gallery-grid {
   display: grid;
-
   grid-template-columns: repeat(4, minmax(0, 1fr));
   grid-template-rows: repeat(2, minmax(0, 1fr)) minmax(0, 0.65fr);
-
   gap: 14px;
-
   aspect-ratio: 16 / 11;
-
   list-style: none;
 }
 
@@ -431,10 +535,37 @@ const visiblePhotos = photos
 .gallery-lb-image {
   display: block;
   max-width: 100%;
-  max-height: 65vh;
+  max-height: 52vh;
   object-fit: contain;
   border-radius: 10px;
   box-shadow: 0 30px 70px rgba(0, 0, 0, 0.5);
+  cursor: zoom-in;
+  transition:
+    max-height 250ms cubic-bezier(0.22, 1, 0.36, 1),
+    transform 250ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* --- MODE ZOOM --- */
+
+.gallery-lightbox.is-zoomed .gallery-lb-image {
+  max-height: 92vh;
+  max-width: 96vw;
+  cursor: zoom-out;
+}
+
+.gallery-lightbox.is-zoomed .gallery-lb-caption,
+.gallery-lightbox.is-zoomed .gallery-lb-thumbs-wrap {
+  display: none;
+}
+
+.gallery-lightbox.is-zoomed .gallery-lb-btn {
+  opacity: 0.75;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .gallery-lightbox.is-zoomed .gallery-lb-btn:hover {
+    opacity: 1;
+  }
 }
 
 .gallery-lb-caption {
@@ -461,18 +592,76 @@ const visiblePhotos = photos
 
 
 /* ---------------------------------------------------------
-   BANDE DE VIGNETTES
+   BANDE DE VIGNETTES — WRAPPER + FLÈCHES
    --------------------------------------------------------- */
 
-.gallery-lb-thumbs {
+.gallery-lb-thumbs-wrap {
   display: flex;
-  gap: 8px;
+  align-items: center;
+  gap: 12px;
 
   width: 100%;
-  max-width: min(880px, 92vw);
+  max-width: 1200px;
 
   margin-top: 6px;
-  padding: 8px 4px;
+}
+
+.gallery-lb-thumbnav {
+  flex: 0 0 auto;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 44px;
+  height: 44px;
+
+  padding: 0;
+
+  border: none;
+  border-radius: 50%;
+
+  background: rgba(248, 250, 252, 0.10);
+  color: #f8fafc;
+
+  font-family: inherit;
+  font-size: 1.4rem;
+  font-weight: 400;
+  line-height: 1;
+
+  cursor: pointer;
+
+  transition:
+    background-color 180ms ease,
+    opacity 180ms ease,
+    transform 180ms ease;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .gallery-lb-thumbnav:not(:disabled):hover {
+    background: rgba(248, 250, 252, 0.22);
+    transform: scale(1.08);
+  }
+}
+
+.gallery-lb-thumbnav:focus-visible {
+  outline: 3px solid #00aeef;
+  outline-offset: 3px;
+}
+
+.gallery-lb-thumbnav:disabled {
+  opacity: 0.25;
+  cursor: default;
+}
+
+.gallery-lb-thumbs {
+  flex: 1 1 auto;
+  min-width: 0;
+
+  display: flex;
+  gap: 10px;
+
+  padding: 8px 2px;
 
   overflow-x: auto;
   overflow-y: hidden;
@@ -494,16 +683,21 @@ const visiblePhotos = photos
   border-radius: 999px;
 }
 
+
+/* ---------------------------------------------------------
+   VIGNETTES — 100 × 75 px
+   --------------------------------------------------------- */
+
 .gallery-lb-thumb {
   flex: 0 0 auto;
 
-  width: 72px;
-  height: 54px;
+  width: 100px;
+  height: 75px;
 
   padding: 0;
 
   border: 2px solid transparent;
-  border-radius: 8px;
+  border-radius: 10px;
 
   background: rgba(248, 250, 252, 0.06);
 
@@ -528,7 +722,7 @@ const visiblePhotos = photos
 
 .gallery-lb-thumb.is-active {
   border-color: #00aeef;
-  box-shadow: 0 0 0 3px rgba(0, 174, 239, 0.25);
+  box-shadow: 0 0 0 3px rgba(0, 174, 239, 0.28);
 }
 
 @media (hover: hover) and (pointer: fine) {
@@ -567,7 +761,8 @@ const visiblePhotos = photos
   cursor: pointer;
   transition:
     background-color 180ms ease,
-    transform 180ms ease;
+    transform 180ms ease,
+    opacity 180ms ease;
   z-index: 3;
 }
 
@@ -667,19 +862,31 @@ const visiblePhotos = photos
   }
 
   .gallery-lb-image {
-    max-height: 50vh;
+    max-height: 40vh;
   }
 
-  .gallery-lb-thumbs {
-    gap: 6px;
-    padding: 6px 2px;
+  .gallery-lightbox.is-zoomed .gallery-lb-image {
+    max-height: 82vh;
+  }
+
+  .gallery-lb-thumbs-wrap {
+    gap: 0;
     max-width: 100%;
   }
 
+  .gallery-lb-thumbnav {
+    display: none;
+  }
+
+  .gallery-lb-thumbs {
+    gap: 8px;
+    padding: 8px 2px;
+  }
+
   .gallery-lb-thumb {
-    width: 58px;
-    height: 44px;
-    border-radius: 6px;
+    width: 72px;
+    height: 54px;
+    border-radius: 8px;
   }
 
 }
@@ -694,7 +901,9 @@ const visiblePhotos = photos
   .gallery-item img,
   .gallery-lightbox,
   .gallery-lb-btn,
-  .gallery-lb-thumb {
+  .gallery-lb-thumb,
+  .gallery-lb-thumbnav,
+  .gallery-lb-image {
     transition: none;
   }
 
@@ -704,6 +913,10 @@ const visiblePhotos = photos
   }
 
   .gallery-lb-thumb:hover {
+    transform: none;
+  }
+
+  .gallery-lb-thumbnav:not(:disabled):hover {
     transform: none;
   }
 }
