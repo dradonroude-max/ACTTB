@@ -207,7 +207,7 @@ import { navigation } from "../config/navigation";
       </nav>
 
       <p class="vision-footer-credit">
-        Site réalisé par <strong>Rodolphe Dinde</strong>
+        Site réalisé par <a href="mailto:rodolphe.dinde@protonmail.com">Rodolphe</a>
       </p>
 
     </div>
@@ -812,6 +812,10 @@ import { navigation } from "../config/navigation";
   }
 
 
+  /* ---------------------------------------------------------
+     CRÉDIT WEBMASTER
+     --------------------------------------------------------- */
+
   .vision-footer-credit {
     margin: 0;
 
@@ -825,10 +829,32 @@ import { navigation } from "../config/navigation";
   }
 
 
-  .vision-footer-credit strong {
+  .vision-footer-credit a {
     color: rgba(248, 250, 252, 0.85);
 
     font-weight: 700;
+
+    text-decoration: none;
+
+    border-bottom: 1px solid transparent;
+
+    transition:
+      color 200ms ease,
+      border-color 200ms ease;
+  }
+
+
+  .vision-footer-credit a:hover {
+    color: #00aeef;
+
+    border-bottom-color: #00aeef;
+  }
+
+
+  .vision-footer-credit a:focus-visible {
+    outline: 2px solid #00aeef;
+    outline-offset: 3px;
+    border-radius: 3px;
   }
 
 
@@ -917,7 +943,8 @@ import { navigation } from "../config/navigation";
     .vision-footer-link span::after,
     .vision-footer-contact-link,
     .vision-social-btn,
-    .vision-footer-legal a {
+    .vision-footer-legal a,
+    .vision-footer-credit a {
       transition: none;
     }
 
