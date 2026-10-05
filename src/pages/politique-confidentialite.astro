@@ -3,15 +3,21 @@
  * =========================================================
  * ACTT — POLITIQUE DE CONFIDENTIALITÉ
  * =========================================================
+ *
+ * Conforme au RGPD et à la loi Informatique et Libertés.
+ * Informations issues de l'attestation SIRENE du 26/01/2025.
  */
 
 import PageLayout from "../layouts/PageLayout.astro";
 import { site } from "../config/site";
+
+// Date de dernière mise à jour — à modifier manuellement.
+const LAST_UPDATE = "5 octobre 2026";
 ---
 
 <PageLayout
   title="Politique de confidentialité"
-  description="Politique de confidentialité du site de l'ACTT — Camphin-en-Carembault Tennis de Table."
+  description="Politique de confidentialité du site de l'ACTT — Association Camphinoise de Tennis de Table."
 >
 
   <section class="legal-page">
@@ -53,13 +59,30 @@ import { site } from "../config/site";
 
         <p>
           <strong>Association Camphinoise de Tennis de Table (ACTT)</strong><br />
-          {site.contact.address},<br />
-          {site.contact.postalCode} {site.contact.city},<br />
-          {site.contact.country}
+          Association déclarée (loi 1901)<br />
+          Mairie de Camphin-en-Carembault<br />
+          11 Rue du Général de Gaulle<br />
+          59133 Camphin-en-Carembault<br />
+          France
         </p>
 
         <p>
-          <strong>Contact :</strong>
+          <strong>SIREN&nbsp;: </strong>
+          893 944 298
+        </p>
+
+        <p>
+          <strong>SIRET (siège)&nbsp;: </strong>
+          893 944 298 00015
+        </p>
+
+        <p>
+          <strong>Numéro RNA&nbsp;: </strong>
+          W595036986
+        </p>
+
+        <p>
+          <strong>Contact&nbsp;: </strong>
           <a href={`mailto:${site.contact.email}`}>
             {site.contact.email}
           </a>
@@ -87,6 +110,12 @@ import { site } from "../config/site";
           fonctionnement du site et à sa sécurité (adresse IP des visiteurs
           traitée par notre hébergeur pour la protection contre les attaques),
           pendant une durée limitée.
+        </p>
+
+        <p>
+          <strong>Hébergeur&nbsp;: </strong>
+          Cloudflare, Inc., 101 Townsend Street, San Francisco, CA 94107,
+          États-Unis.
         </p>
 
       </article>
@@ -189,17 +218,18 @@ import { site } from "../config/site";
         </ul>
 
         <p>
-          <strong>Base légale :</strong> exécution du contrat d'adhésion,
-          respect des obligations légales et, pour les photos et la
-          communication, consentement explicite des personnes concernées
-          (ou de leur représentant légal pour les mineurs).
+          <strong>Base légale&nbsp;: </strong>
+          exécution du contrat d'adhésion, respect des obligations légales
+          et, pour les photos et la communication, consentement explicite
+          des personnes concernées (ou de leur représentant légal pour les
+          mineurs).
         </p>
 
         <p>
-          <strong>Durée de conservation :</strong> les données sont conservées
-          pendant la durée de l'adhésion, puis archivées conformément aux
-          obligations légales (notamment comptables), avant suppression
-          définitive.
+          <strong>Durée de conservation&nbsp;: </strong>
+          les données sont conservées pendant la durée de l'adhésion, puis
+          archivées conformément aux obligations légales (notamment
+          comptables), avant suppression définitive.
         </p>
 
       </article>
@@ -239,7 +269,7 @@ import { site } from "../config/site";
         <h2>7. Destinataires des données</h2>
 
         <p>
-          Les données des adhérents sont destinées exclusivement :
+          Les données des adhérents sont destinées exclusivement&nbsp;:
         </p>
 
         <ul>
@@ -272,20 +302,20 @@ import { site } from "../config/site";
 
         <p>
           Conformément au RGPD, vous disposez des droits suivants sur vos
-          données personnelles :
+          données personnelles&nbsp;:
         </p>
 
         <ul>
-          <li><strong>Droit d'accès</strong> : obtenir une copie de vos données ;</li>
-          <li><strong>Droit de rectification</strong> : corriger des données inexactes ;</li>
-          <li><strong>Droit à l'effacement</strong> : demander la suppression de vos données ;</li>
-          <li><strong>Droit à la limitation</strong> : restreindre l'usage de vos données ;</li>
-          <li><strong>Droit d'opposition</strong> : vous opposer à un traitement ;</li>
-          <li><strong>Droit à la portabilité</strong> : recevoir vos données dans un format réutilisable.</li>
+          <li><strong>Droit d'accès&nbsp;: </strong>obtenir une copie de vos données ;</li>
+          <li><strong>Droit de rectification&nbsp;: </strong>corriger des données inexactes ;</li>
+          <li><strong>Droit à l'effacement&nbsp;: </strong>demander la suppression de vos données ;</li>
+          <li><strong>Droit à la limitation&nbsp;: </strong>restreindre l'usage de vos données ;</li>
+          <li><strong>Droit d'opposition&nbsp;: </strong>vous opposer à un traitement ;</li>
+          <li><strong>Droit à la portabilité&nbsp;: </strong>recevoir vos données dans un format réutilisable.</li>
         </ul>
 
         <p>
-          Pour exercer ces droits, contactez l'association à l'adresse :
+          Pour exercer ces droits, contactez l'association à l'adresse&nbsp;:
           <a href={`mailto:${site.contact.email}`}>
             {site.contact.email}
           </a>
@@ -309,7 +339,7 @@ import { site } from "../config/site";
         <p>
           Si vous estimez que le traitement de vos données ne respecte pas la
           réglementation, vous pouvez introduire une réclamation auprès de la
-          Commission Nationale de l'Informatique et des Libertés (CNIL) :
+          Commission Nationale de l'Informatique et des Libertés (CNIL)&nbsp;:
         </p>
 
         <p>
@@ -348,8 +378,8 @@ import { site } from "../config/site";
         </p>
 
         <p>
-          <strong>Dernière mise à jour :</strong>
-          <em>[À COMPLÉTER — date de mise en ligne]</em>
+          <strong>Dernière mise à jour&nbsp;: </strong>
+          {LAST_UPDATE}
         </p>
 
       </article>

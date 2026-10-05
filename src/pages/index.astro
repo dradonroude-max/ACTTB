@@ -17,6 +17,7 @@ import VisionOSTeamCard from "../components/VisionOSTeamCard.astro";
 import VisionOSGallery from "../components/VisionOSGallery.astro";
 import VisionOSMap from "../components/VisionOSMap.astro";
 import VisionOSNewsCard from "../components/VisionOSNewsCard.astro";
+import VisionOSHommage from "../components/VisionOSHommage.astro";
 
 import { club } from "../data/club";
 import { teams } from "../data/teams";
@@ -42,6 +43,29 @@ const sortedCalendar = [...calendar].sort((a, b) => {
 
 // Actualités triées par date décroissante (plus récentes en premier)
 const sortedNews = [...news].sort((a, b) => b.date.localeCompare(a.date));
+
+// Traite un résultat : quand le match était à l'extérieur,
+// on affiche l'adversaire en premier (convention sportive
+// "recevant — visiteur") et on inverse le score.
+const processResult = (result: any) => {
+  const isAway = result.location === "extérieur";
+
+  let leftTeam = result.team;
+  let rightTeam = result.opponent;
+  let displayScore = result.score;
+
+  if (isAway) {
+    leftTeam = result.opponent;
+    rightTeam = result.team;
+
+    const parts = String(result.score).split("-").map((s: string) => s.trim());
+    if (parts.length === 2) {
+      displayScore = `${parts[1]} - ${parts[0]}`;
+    }
+  }
+
+  return { ...result, leftTeam, rightTeam, displayScore };
+};
 ---
 
 <PageLayout
@@ -83,6 +107,7 @@ const sortedNews = [...news].sort((a, b) => b.date.localeCompare(a.date));
         <h3>{club.tagline}</h3>
         <div class="club-story">
           {club.story.map((paragraph) => <p>{paragraph}</p>)}
+          <p class="club-story-signature">{club.storySignature}</p>
         </div>
 
         <div class="club-bureau">
@@ -155,6 +180,14 @@ const sortedNews = [...news].sort((a, b) => b.date.localeCompare(a.date));
     <div class="vision-grid-2 equipes-grid">
       {teams.map((team) => (<VisionOSTeamCard team={team} />))}
     </div>
+
+    <VisionOSHommage
+      name="BRIAN dit BRYAK"
+      message="Il nous a quitté le 31/10/2025, le PING ne t’oublie pas Bryak."
+      photo="/images/club/bryak.png"
+      photoAlt="Brian, dit Bryak"
+      signature="L’ACTT"
+    />
   </VisionOSSection>
 
 
@@ -251,37 +284,40 @@ const sortedNews = [...news].sort((a, b) => b.date.localeCompare(a.date));
           </header>
 
           <ul class="calendar-list">
-            {recentResults.slice(0, 3).map((result) => (
-              <li class="calendar-item calendar-item-result">
-                <div class="calendar-item-top">
-                  <time datetime={result.date} class="calendar-item-date">
-                    {result.dateLabel}
-                  </time>
+            {recentResults.slice(0, 3).map((rawResult) => {
+              const result = processResult(rawResult);
+              return (
+                <li class="calendar-item calendar-item-result">
+                  <div class="calendar-item-top">
+                    <time datetime={result.date} class="calendar-item-date">
+                      {result.dateLabel}
+                    </time>
 
-                  <span
-                    class:list={[
-                      "calendar-result-badge",
-                      `calendar-result-badge-${result.outcome}`,
-                    ]}
-                  >
-                    {result.outcome === "victoire"
-                      ? "V"
-                      : result.outcome === "defaite"
-                      ? "D"
-                      : "N"}{" "}
-                    {result.score}
-                  </span>
-                </div>
+                    <span
+                      class:list={[
+                        "calendar-result-badge",
+                        `calendar-result-badge-${result.outcome}`,
+                      ]}
+                    >
+                      {result.outcome === "victoire"
+                        ? "V"
+                        : result.outcome === "defaite"
+                        ? "D"
+                        : "N"}{" "}
+                      {result.displayScore}
+                    </span>
+                  </div>
 
-                <div class="calendar-item-match">
-                  <span class="calendar-item-team">{result.team}</span>
-                  <span class="calendar-item-vs">—</span>
-                  <span class="calendar-item-opponent">{result.opponent}</span>
-                </div>
+                  <div class="calendar-item-match">
+                    <span class="calendar-item-team">{result.leftTeam}</span>
+                    <span class="calendar-item-vs">—</span>
+                    <span class="calendar-item-opponent">{result.rightTeam}</span>
+                  </div>
 
-                <span class="calendar-item-division">{result.division}</span>
-              </li>
-            ))}
+                  <span class="calendar-item-division">{result.division}</span>
+                </li>
+              );
+            })}
           </ul>
         </article>
       )}
@@ -522,7 +558,7 @@ const sortedNews = [...news].sort((a, b) => b.date.localeCompare(a.date));
               <span class="inscription-info-label">Paiement</span>
               <span class="inscription-info-value">
                 Chèque à la salle<br />
-                ou virement (IBAN sur la fiche)
+                ou virement
               </span>
             </div>
 
@@ -655,6 +691,16 @@ const sortedNews = [...news].sort((a, b) => b.date.localeCompare(a.date));
 
   .club-story p {
     margin: 0;
+  }
+
+  /* Signature de l'histoire */
+  .club-story-signature {
+    margin-top: 6px !important;
+    color: #45617f;
+    font-size: 0.95rem;
+    font-style: italic;
+    font-weight: 600;
+    text-align: right;
   }
 
   .club-bureau {

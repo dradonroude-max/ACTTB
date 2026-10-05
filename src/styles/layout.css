@@ -23,10 +23,12 @@
   /*
    * Keeps anchored sections visible below the sticky navbar.
    * This applies automatically to every VisionOS section.
+   *
+   * Valeur volontairement < hauteur du header pour compenser
+   * le padding-block-start de la section : le titre arrive
+   * ainsi juste sous le header au lieu de ~100 px plus bas.
    */
-  scroll-margin-top: calc(
-    var(--vision-header-height) + var(--vision-space-6)
-  );
+  scroll-margin-top: 55px;
 }
 
 .vision-section-inner {
@@ -100,12 +102,8 @@
   .vision-section {
     padding-block: var(--vision-space-13);
 
-    /*
-     * Desktop navbar is a single row.
-     */
-    scroll-margin-top: calc(
-      var(--vision-header-height) + var(--vision-space-6)
-    );
+    /* Desktop navbar is a single row (~88px). */
+    scroll-margin-top: 45px;
   }
 
 }
@@ -117,11 +115,8 @@
 @media (max-width: 767px) {
 
   .vision-section {
-    /*
-     * Mobile navbar uses two rows, so it is taller
-     * than the desktop header.
-     */
-    scroll-margin-top: 176px;
+    /* Mobile navbar is taller (two rows, ~176px). */
+    scroll-margin-top: 90px;
   }
 
 }

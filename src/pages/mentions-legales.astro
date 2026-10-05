@@ -3,15 +3,23 @@
  * =========================================================
  * ACTT — MENTIONS LÉGALES
  * =========================================================
+ *
+ * Conformes à la loi n° 2004-575 du 21 juin 2004 (LCEN),
+ * article 6-III.
+ *
+ * Informations issues de l'attestation SIRENE du 26/01/2025.
  */
 
 import PageLayout from "../layouts/PageLayout.astro";
 import { site } from "../config/site";
+
+// Date de dernière mise à jour — à modifier manuellement.
+const LAST_UPDATE = "5 octobre 2026";
 ---
 
 <PageLayout
   title="Mentions légales"
-  description="Mentions légales du site de l'ACTT — Camphin-en-Carembault Tennis de Table."
+  description="Mentions légales du site de l'ACTT — Association Camphinoise de Tennis de Table."
 >
 
   <section class="legal-page">
@@ -46,37 +54,65 @@ import { site } from "../config/site";
         <h2>1. Éditeur du site</h2>
 
         <p>
-          <strong>Dénomination :</strong>
+          <strong>Dénomination&nbsp;: </strong>
           Association Camphinoise de Tennis de Table (ACTT)
         </p>
 
         <p>
-          <strong>Forme juridique :</strong>
+          <strong>Forme juridique&nbsp;: </strong>
           Association déclarée, régie par la loi du 1<sup>er</sup> juillet 1901
         </p>
 
         <p>
-          <strong>Siège social :</strong>
-          {site.contact.address},
-          {site.contact.postalCode} {site.contact.city},
-          {site.contact.country}
+          <strong>Siège social&nbsp;: </strong><br />
+          Mairie de Camphin-en-Carembault<br />
+          11 Rue du Général de Gaulle<br />
+          59133 Camphin-en-Carembault<br />
+          France
         </p>
 
         <p>
-          <strong>Adresse électronique :</strong>
+          <strong>SIREN&nbsp;: </strong>
+          893 944 298
+        </p>
+
+        <p>
+          <strong>SIRET (siège)&nbsp;: </strong>
+          893 944 298 00015
+        </p>
+
+        <p>
+          <strong>Numéro RNA&nbsp;: </strong>
+          W595036986
+        </p>
+
+        <p>
+          <strong>Code APE&nbsp;: </strong>
+          93.12Z — Activités de clubs de sports
+        </p>
+
+        <p>
+          <strong>Date de création&nbsp;: </strong>
+          10 juin 2020
+        </p>
+
+        <p>
+          <strong>Adresse électronique&nbsp;: </strong>
           <a href={`mailto:${site.contact.email}`}>
             {site.contact.email}
           </a>
         </p>
 
         <p>
-          <strong>Téléphone :</strong>
+          <strong>Téléphone&nbsp;: </strong>
           {site.contact.phone}
         </p>
 
         <p>
-          <strong>Numéro RNA :</strong>
-          <em>[À COMPLÉTER — numéro d'enregistrement en préfecture]</em>
+          <strong>Lieu d'activité&nbsp;: </strong><br />
+          Salle omnisports<br />
+          7 Rue du Joncquoy<br />
+          59133 Camphin-en-Carembault
         </p>
 
       </article>
@@ -91,17 +127,17 @@ import { site } from "../config/site";
         <h2>2. Directeur de la publication</h2>
 
         <p>
-          <strong>Nom :</strong>
-          <em>[À COMPLÉTER — nom et prénom du président de l'association]</em>
+          <strong>Nom&nbsp;: </strong>
+          Éric Rambure
         </p>
 
         <p>
-          <strong>Qualité :</strong>
+          <strong>Qualité&nbsp;: </strong>
           Président de l'Association Camphinoise de Tennis de Table
         </p>
 
         <p>
-          <strong>Contact :</strong>
+          <strong>Contact&nbsp;: </strong>
           <a href={`mailto:${site.contact.email}`}>
             {site.contact.email}
           </a>
@@ -119,7 +155,7 @@ import { site } from "../config/site";
         <h2>3. Hébergement</h2>
 
         <p>
-          Le site est hébergé par :
+          Le site est hébergé par&nbsp;:
         </p>
 
         <p>
@@ -130,13 +166,24 @@ import { site } from "../config/site";
         </p>
 
         <p>
-          <strong>Site internet :</strong>
+          <strong>Site internet&nbsp;: </strong>
           <a
             href="https://www.cloudflare.com"
             target="_blank"
             rel="noopener noreferrer"
           >
             www.cloudflare.com
+          </a>
+        </p>
+
+        <p>
+          <strong>Contact&nbsp;: </strong>
+          <a
+            href="https://www.cloudflare.com/transparency/"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Formulaire de contact Cloudflare
           </a>
         </p>
 
@@ -166,8 +213,7 @@ import { site } from "../config/site";
         </p>
 
         <p>
-          Les logos des partenaires (TUI, Département du Nord, Mairie de
-          Camphin-en-Carembault) sont la propriété de leurs détenteurs
+          Les logos des partenaires sont la propriété de leurs détenteurs
           respectifs et sont utilisés avec leur accord dans le cadre du
           partenariat.
         </p>
@@ -191,7 +237,7 @@ import { site } from "../config/site";
         </p>
 
         <p>
-          L'association décline toute responsabilité :
+          L'association décline toute responsabilité&nbsp;:
         </p>
 
         <ul>
@@ -267,8 +313,8 @@ import { site } from "../config/site";
         </p>
 
         <p>
-          <strong>Dernière mise à jour :</strong>
-          <em>[À COMPLÉTER — date de mise en ligne]</em>
+          <strong>Dernière mise à jour&nbsp;: </strong>
+          {LAST_UPDATE}
         </p>
 
       </article>

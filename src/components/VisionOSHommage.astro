@@ -1,0 +1,201 @@
+---
+/**
+ * =========================================================
+ * ACTT — HOMMAGE
+ * =========================================================
+ */
+
+interface Props {
+  name: string;
+  message: string;
+  photo: string;
+  photoAlt?: string;
+  signature?: string;
+}
+
+const {
+  name,
+  message,
+  photo,
+  photoAlt = name,
+  signature,
+} = Astro.props;
+---
+
+<article class="hommage">
+
+  <figure class="hommage-photo">
+    <img
+      src={photo}
+      alt={photoAlt}
+      loading="lazy"
+      decoding="async"
+    />
+  </figure>
+
+  <div class="hommage-content">
+
+    <span class="hommage-eyebrow">À la mémoire de</span>
+
+    <h3 class="hommage-name">{name}</h3>
+
+    <p class="hommage-message">{message}</p>
+
+    {signature && (
+      <p class="hommage-signature">— {signature}</p>
+    )}
+
+  </div>
+
+</article>
+
+<style>
+
+  .hommage {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    gap: 24px;
+
+    max-width: 620px;
+    margin: 56px auto 0;
+    padding: 40px 32px 36px;
+
+    background: #ffffff;
+
+    border: 1px solid rgba(6, 26, 58, 0.10);
+    border-radius: 16px;
+
+    box-shadow: 0 14px 34px rgba(6, 26, 58, 0.08);
+
+    text-align: center;
+  }
+
+  /* ---------------------------------------------------------
+     PHOTO
+     --------------------------------------------------------- */
+
+  .hommage-photo {
+    margin: 0;
+    padding: 0;
+
+    width: 140px;
+    height: 140px;
+
+    border-radius: 50%;
+
+    overflow: hidden;
+
+    box-shadow:
+      0 0 0 2px #ffffff,
+      0 0 0 4px rgba(6, 26, 58, 0.15);
+  }
+
+  .hommage-photo img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center 35%;
+  }
+
+  /* ---------------------------------------------------------
+     CONTENU
+     --------------------------------------------------------- */
+
+  .hommage-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    gap: 10px;
+
+    max-width: 460px;
+  }
+
+  .hommage-eyebrow {
+    color: #45617f;
+
+    font-size: 0.72rem;
+    font-weight: 800;
+
+    letter-spacing: 0.18em;
+
+    text-transform: uppercase;
+  }
+
+  .hommage-name {
+    margin: 0;
+
+    color: #061a3a;
+
+    font-size: 1.35rem;
+    font-weight: 900;
+
+    line-height: 1.2;
+
+    letter-spacing: 0.02em;
+  }
+
+  .hommage-message {
+    margin: 4px 0 0;
+
+    color: #17345c;
+
+    font-size: 1rem;
+    font-style: italic;
+    font-weight: 500;
+
+    line-height: 1.6;
+  }
+
+  .hommage-signature {
+    margin: 8px 0 0;
+
+    color: #45617f;
+
+    font-size: 0.85rem;
+    font-weight: 700;
+
+    letter-spacing: 0.06em;
+  }
+
+  /* ---------------------------------------------------------
+     MOBILE
+     --------------------------------------------------------- */
+
+  @media (max-width: 767px) {
+
+    .hommage {
+      gap: 20px;
+
+      margin-top: 40px;
+      padding: 32px 22px 30px;
+    }
+
+    .hommage-photo {
+      width: 118px;
+      height: 118px;
+    }
+
+    .hommage-name {
+      font-size: 1.2rem;
+    }
+
+    .hommage-message {
+      font-size: 0.95rem;
+    }
+  }
+
+  /* ---------------------------------------------------------
+     REDUCED MOTION
+     --------------------------------------------------------- */
+
+  @media (prefers-reduced-motion: reduce) {
+    .hommage {
+      transition: none;
+    }
+  }
+
+</style>

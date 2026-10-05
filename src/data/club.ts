@@ -22,6 +22,8 @@ export const club = {
     "Nous bénéficions de la très belle salle omnisports de Camphin en Carembault.",
   ],
 
+  storySignature: "Éric",
+
   bureau: [
     { role: "Président", name: "Éric" },
     { role: "Trésorier", name: "Hervé" },

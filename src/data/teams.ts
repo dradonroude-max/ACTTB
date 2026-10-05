@@ -4,7 +4,7 @@
 
 export interface Player {
   name: string;
-  role?: "Capitaine" | "Remplaçant";
+  role?: "Capitaine" | "Remplaçant" | "Coach";
   photo?: string;
 }
 
@@ -35,6 +35,7 @@ export const teams: Team[] = [
       },
       {
         name: "Bruno",
+        role: "Coach",
         photo: "/images/teams/joueurs/bruno.png",
       },
       {
@@ -47,7 +48,6 @@ export const teams: Team[] = [
       },
       {
         name: "Aymeric",
-        role: "Remplaçant",
         // Photo à venir
       },
     ],
