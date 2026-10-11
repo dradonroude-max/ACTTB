@@ -10,7 +10,7 @@ export const site = {
   name: "ACTT",
   description: "Club de tennis de table de Camphin-en-Carembault.",
 
-  url: "https://actt.club",
+  url: "https://camphin-en-carembault-actt.fr",
 
   // -------------------------------------------------------
   // CONTACT
@@ -42,9 +42,9 @@ export const site = {
   // -------------------------------------------------------
 
   seo: {
-    title: "ACTT — Camphin-en-Carembault Tennis de Table",
+    title: "Tennis de table à Camphin-en-Carembault — Club ACTT",
     description:
-      "Club de tennis de table de Camphin-en-Carembault. Loisir, compétition et pratique du tennis de table pour tous.",
+      "Club de tennis de table à Camphin-en-Carembault (Nord). Jeunes, adultes, loisir ou compétition. Première séance gratuite, mardi et jeudi, salle omnisports.",
     image: "/og-image.jpg",
     twitterCard: "summary_large_image" as const,
   },

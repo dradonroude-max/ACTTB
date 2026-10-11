@@ -9,4 +9,4 @@ Allow: /
 # SITEMAP
 # ---------------------------------------------------------
 
-Sitemap: https://actt.club/sitemap-index.xml
+Sitemap: https://camphin-en-carembault-actt.fr/sitemap-index.xml
