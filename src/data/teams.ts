@@ -68,7 +68,7 @@ export const teams: Team[] = [
       },
       {
         name: "Stéphane",
-        // Photo à venir
+        photo: "/images/teams/joueurs/stephane.jpg",
       },
       {
         name: "Richard",
