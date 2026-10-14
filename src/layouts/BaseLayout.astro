@@ -23,15 +23,8 @@ const {
   noIndex = false,
 } = Astro.props;
 
-const canonicalURL = new URL(
-  Astro.url.pathname,
-  site.url
-);
-
-const socialImage = new URL(
-  image,
-  site.url
-);
+const canonicalURL = new URL(Astro.url.pathname, site.url);
+const socialImage = new URL(image, site.url);
 
 const themeName = theme.active;
 
@@ -40,25 +33,58 @@ const fullTitle =
     ? title
     : `${title} — ${site.name}`;
 
+// Nom complet du club pour OG site_name
+const fullSiteName =
+  "ACTT — Camphin-en-Carembault Tennis de Table";
+
+// ---------------------------------------------------------
+// SCHEMA.ORG — SPORTS CLUB (enrichi)
+// ---------------------------------------------------------
+
 const structuredData = {
   "@context": "https://schema.org",
   "@type": "SportsClub",
+  "@id": `${site.url}/#club`,
   name: "ACTT — Association Camphinoise de Tennis de Table",
   alternateName: "ACTT",
   description: site.seo.description,
   url: site.url,
   logo: new URL(site.assets.logo, site.url).href,
+  image: socialImage.href,
   email: site.contact.email,
-  telephone: "+33" + site.contact.phone.replace(/\s/g, "").replace(/^0/, ""),
+  telephone:
+    "+33" +
+    site.contact.phone.replace(/\s/g, "").replace(/^0/, ""),
   sport: "Tennis de table",
   foundingDate: "2020-06-10",
+
   address: {
     "@type": "PostalAddress",
     streetAddress: site.contact.address,
     postalCode: site.contact.postalCode,
     addressLocality: site.contact.city,
+    addressRegion: "Hauts-de-France",
     addressCountry: "FR",
   },
+
+  areaServed: {
+    "@type": "City",
+    name: "Camphin-en-Carembault",
+  },
+
+  memberOf: {
+    "@type": "Organization",
+    name: "Fédération Française de Tennis de Table",
+  },
+
+  openingHoursSpecification: [
+    {
+      "@type": "OpeningHoursSpecification",
+      dayOfWeek: ["Tuesday", "Thursday"],
+      opens: "18:00",
+      closes: "21:00",
+    },
+  ],
 };
 ---
 
@@ -66,6 +92,10 @@ const structuredData = {
 <html lang="fr" data-theme={themeName}>
 
   <head>
+
+    <!-- =================================================
+         BASE
+         ================================================= -->
 
     <meta charset="UTF-8" />
 
@@ -76,12 +106,14 @@ const structuredData = {
 
     <meta
       name="theme-color"
-      content={
-        themeName === "dark"
-          ? "#0b0b0f"
-          : "#f5f5f7"
-      }
+      content="#061a3a"
     />
+
+    <!-- =================================================
+         PERFORMANCE — PRECONNECT
+         ================================================= -->
+
+    <link rel="preconnect" href="https://www.google.com" />
 
     <!-- =================================================
          GOOGLE SEARCH CONSOLE — VÉRIFICATION
@@ -89,8 +121,12 @@ const structuredData = {
 
     <meta
       name="google-site-verification"
-      content="CuW76r-LdWYhMnngOUKVQf6rHPplZYzA9knwSrfXnBg"
+      content="-7_qeJAAxpTzzjEkcBLpWnTHrax5WxJUNxlLRbIJ7T0"
     />
+
+    <!-- =================================================
+         SEO PRIMAIRE
+         ================================================= -->
 
     <title>{fullTitle}</title>
 
@@ -103,6 +139,27 @@ const structuredData = {
       rel="canonical"
       href={canonicalURL}
     />
+
+    <link
+      rel="alternate"
+      hreflang="fr"
+      href={canonicalURL}
+    />
+
+    <!-- =================================================
+         ROBOTS
+         ================================================= -->
+
+    {
+      noIndex ? (
+        <meta name="robots" content="noindex, nofollow" />
+      ) : (
+        <meta
+          name="robots"
+          content="index, follow, max-image-preview:large, max-snippet:-1"
+        />
+      )
+    }
 
     <!-- =================================================
          FAVICON — PACK MULTI-FORMATS
@@ -141,20 +198,14 @@ const structuredData = {
          OPEN GRAPH
          ================================================= -->
 
-    <meta
-      property="og:type"
-      content="website"
-    />
+    <meta property="og:type" content="website" />
 
     <meta
       property="og:site_name"
-      content={site.name}
+      content={fullSiteName}
     />
 
-    <meta
-      property="og:locale"
-      content="fr_FR"
-    />
+    <meta property="og:locale" content="fr_FR" />
 
     <meta
       property="og:title"
@@ -186,6 +237,16 @@ const structuredData = {
       content="630"
     />
 
+    <meta
+      property="og:image:type"
+      content="image/jpeg"
+    />
+
+    <meta
+      property="og:image:alt"
+      content={fullSiteName}
+    />
+
     <!-- =================================================
          TWITTER / X
          ================================================= -->
@@ -210,6 +271,11 @@ const structuredData = {
       content={socialImage}
     />
 
+    <meta
+      name="twitter:image:alt"
+      content={fullSiteName}
+    />
+
     <!-- =================================================
          SCHEMA.ORG — SPORTS CLUB
          ================================================= -->
@@ -218,19 +284,6 @@ const structuredData = {
       type="application/ld+json"
       set:html={JSON.stringify(structuredData)}
     />
-
-    <!-- =================================================
-         ROBOTS
-         ================================================= -->
-
-    {
-      noIndex && (
-        <meta
-          name="robots"
-          content="noindex, nofollow"
-        />
-      )
-    }
 
     <!-- =================================================
          PAGE-SPECIFIC HEAD
