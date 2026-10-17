@@ -38,6 +38,8 @@ const visiblePhotos = photos
         <img
           src={photo.src}
           alt={photo.alt}
+          width="800"
+          height="600"
           loading="lazy"
           decoding="async"
         />
@@ -93,6 +95,8 @@ const visiblePhotos = photos
       class="gallery-lb-image"
       src=""
       alt=""
+      width="1200"
+      height="800"
       decoding="async"
       title="Cliquer pour agrandir"
     />
@@ -206,6 +210,8 @@ const visiblePhotos = photos
         const img = document.createElement("img");
         img.src = photo.src;
         img.alt = "";
+        img.width = 100;
+        img.height = 75;
         img.loading = "lazy";
         img.decoding = "async";
 

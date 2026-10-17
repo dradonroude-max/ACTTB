@@ -129,6 +129,8 @@ const processResult = (result: any) => {
           <img
             src="/images/club/salle-omnisports.jpg"
             alt="La salle omnisports de Camphin-en-Carembault, où s'entraîne l'ACTT"
+            width="1200"
+            height="800"
             loading="lazy"
             decoding="async"
           />
@@ -354,7 +356,7 @@ const processResult = (result: any) => {
                 aria-label={partner.name}
               >
                 <span class="vision-partner-logo">
-                  <img src={partner.logo} alt={partner.name} loading="lazy" decoding="async" />
+                  <img src={partner.logo} alt={partner.name} width="200" height="80" loading="lazy" decoding="async" />
                 </span>
               </a>
             ) : (
@@ -367,7 +369,7 @@ const processResult = (result: any) => {
                 ]}
               >
                 <span class="vision-partner-logo">
-                  <img src={partner.logo} alt={partner.name} loading="lazy" decoding="async" />
+                  <img src={partner.logo} alt={partner.name} width="200" height="80" loading="lazy" decoding="async" />
                 </span>
               </div>
             )}
@@ -505,31 +507,31 @@ const processResult = (result: any) => {
 
     </div>
 
+    <!-- CORRECTION : Utilisation de <section> au lieu de <div> pour la sémantique -->
+    <section class="essayer-followup" aria-labelledby="essayer-followup-title">
 
-    <div class="essayer-followup">
-
-      <h3 class="essayer-followup-title">
+      <h3 class="essayer-followup-title" id="essayer-followup-title">
         Et après la première séance ?
       </h3>
 
       <div class="inscription-steps">
 
-        <div class="inscription-step">
+        <article class="inscription-step">
           <span class="inscription-step-number">1</span>
           <h4 class="inscription-step-title">Remplissez la fiche</h4>
           <p class="inscription-step-text">
             À télécharger ci-dessous, ou à demander
             directement sur place.
           </p>
-        </div>
+        </article>
 
-        <div class="inscription-step">
+        <article class="inscription-step">
           <span class="inscription-step-number">2</span>
           <h4 class="inscription-step-title">Remettez-la à la salle</h4>
           <p class="inscription-step-text">
             Avec votre règlement, lors d’un entraînement.
           </p>
-        </div>
+        </article>
 
       </div>
 
@@ -582,7 +584,7 @@ const processResult = (result: any) => {
 
       </div>
 
-    </div>
+    </section>
 
   </VisionOSSection>
 
