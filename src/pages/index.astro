@@ -24,7 +24,7 @@ import { teams } from "../data/teams";
 import { partners } from "../data/partners";
 import { pricing } from "../data/pricing";
 import { calendar, recentResults } from "../data/calendar";
-import { getCollection } from 'astro:content';
+import { news } from "../data/news";
 import { site } from "../config/site";
 
 // Génère un label de date : "Dim. 20 sept."
@@ -42,8 +42,7 @@ const sortedCalendar = [...calendar].sort((a, b) => {
 });
 
 // Actualités triées par date décroissante (plus récentes en premier)
-const newsCollection = await getCollection('news');
-const sortedNews = newsCollection.sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+const sortedNews = [...news].sort((a, b) => b.date.localeCompare(a.date));
 
 // Traite un résultat : quand le match était à l'extérieur,
 // on affiche l'adversaire en premier (convention sportive
@@ -204,18 +203,7 @@ const processResult = (result: any) => {
   >
     {sortedNews.length > 0 ? (
       <div class="news-grid">
-        {sortedNews.map((post) => (
-  <VisionOSNewsCard 
-    item={{
-      title: post.data.title,
-      date: post.data.date.toISOString(),
-      dateLabel: post.data.date.toLocaleDateString('fr-FR', { day: 'numeric', month: 'short', year: 'numeric' }),
-      category: post.data.category,
-      body: post.body.split('\n').filter(p => p.trim() !== ''),
-      author: post.data.author
-    }} 
-  />
-))}
+        {sortedNews.map((item) => (<VisionOSNewsCard item={item} />))}
       </div>
     ) : (
       <div class="vision-grid-3">

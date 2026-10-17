@@ -3,11 +3,11 @@
 // =========================================================
 
 export interface NewsItem {
-  date: string;         // ISO "2026-10-04"
-  dateLabel: string;    // "4 oct. 2026"
-  category?: string;    // "Vie du club" | "Événement" | ...
+  date: string;
+  dateLabel: string;
+  category?: string;
   title: string;
-  body: string[];       // 1 entrée = 1 paragraphe
+  body: string[];
   author?: string;
 }
 
