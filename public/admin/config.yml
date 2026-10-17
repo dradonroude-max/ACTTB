@@ -1,0 +1,22 @@
+backend:
+  name: github
+  repo: dradonroude-max/ACTT3B # Attention : vérifiez le nom exact de votre repo (ACTT3B ou ACTTB)
+  branch: main
+  base_url: https://sveltia-cms-auth.dradonroude.workers.dev
+
+# Dossier où seront stockées les images uploadées depuis le CMS
+media_folder: "public/images/uploads"
+public_folder: "/images/uploads"
+
+collections:
+  - name: "news"
+    label: "Actualités"
+    folder: "src/content/news"
+    create: true
+    slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
+    fields:
+      - { label: "Titre", name: "title", widget: "string" }
+      - { label: "Date", name: "date", widget: "datetime" }
+      - { label: "Catégorie", name: "category", widget: "string", required: false }
+      - { label: "Texte", name: "body", widget: "markdown" }
+      - { label: "Auteur", name: "author", widget: "string", required: false }
