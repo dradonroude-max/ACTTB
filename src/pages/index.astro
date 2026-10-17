@@ -104,7 +104,7 @@ const processResult = (result: any) => {
 
       <VisionOSPanel depth="raised" padding="lg" class="club-panel club-panel-primary">
         <VisionOSBadge label="Notre histoire" variant="primary" />
-        <h3>{club.tagline}</h3>
+        <p class="club-tagline">{club.tagline}</p>
         <div class="club-story">
           {club.story.map((paragraph) => <p>{paragraph}</p>)}
           <p class="club-story-signature">{club.storySignature}</p>
@@ -129,8 +129,8 @@ const processResult = (result: any) => {
           <img
             src="/images/club/salle-omnisports.jpg"
             alt="La salle omnisports de Camphin-en-Carembault, où s'entraîne l'ACTT"
-            width="1200"
-            height="800"
+            width="720"
+            height="960"
             loading="lazy"
             decoding="async"
           />
@@ -507,7 +507,6 @@ const processResult = (result: any) => {
 
     </div>
 
-    <!-- CORRECTION : Utilisation de <section> au lieu de <div> pour la sémantique -->
     <section class="essayer-followup" aria-labelledby="essayer-followup-title">
 
       <h3 class="essayer-followup-title" id="essayer-followup-title">
@@ -683,6 +682,14 @@ const processResult = (result: any) => {
 
   .club-panel-primary {
     border-top: 1px solid var(--vision-border) !important;
+  }
+
+  .club-tagline {
+    margin: 0 0 var(--vision-space-4) 0;
+    color: #061a3a;
+    font-size: var(--vision-text-xl);
+    font-weight: var(--vision-weight-semibold);
+    line-height: var(--vision-line-tight);
   }
 
   .club-story {
