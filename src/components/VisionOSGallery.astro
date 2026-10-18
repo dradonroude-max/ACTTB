@@ -16,7 +16,17 @@
  *   - Échap → quitte le zoom, puis ferme la lightbox
  */
 
-import { photos } from "../data/photos";
+// 1. On scanne automatiquement le dossier public/images/gallery/
+const imageFiles = import.meta.glob('/public/images/gallery/*.{jpg,jpeg,png,webp}', { eager: true });
+
+// 2. On transforme les fichiers en tableau de données
+const photos = Object.keys(imageFiles).map((path) => {
+  const src = path.replace('/public', '');
+  return {
+    src: src,
+    alt: "Photo de l'ACTT",
+  };
+}).sort((a, b) => a.src.localeCompare(b.src)); // Tri par nom de fichier
 
 const VISIBLE_COUNT = 6;
 

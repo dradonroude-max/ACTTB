@@ -266,7 +266,7 @@ const processResult = (result: any) => {
                 <span class="calendar-item-opponent">{match.opponent}</span>
               </div>
 
-              <span class="calendar-item-division">{match.division}</span>
+              <span class="calendar-item-division">{match.division} · {match.journee}</span>
             </li>
           ))}
         </ul>
@@ -286,7 +286,7 @@ const processResult = (result: any) => {
           </header>
 
           <ul class="calendar-list">
-            {recentResults.slice(0, 3).map((rawResult) => {
+            {recentResults.slice(0, 4).map((rawResult) => {
               const result = processResult(rawResult);
               return (
                 <li class="calendar-item calendar-item-result">
@@ -316,7 +316,7 @@ const processResult = (result: any) => {
                     <span class="calendar-item-opponent">{result.rightTeam}</span>
                   </div>
 
-                  <span class="calendar-item-division">{result.division}</span>
+                  <span class="calendar-item-division">{result.division} · {result.journee}</span>
                 </li>
               );
             })}
