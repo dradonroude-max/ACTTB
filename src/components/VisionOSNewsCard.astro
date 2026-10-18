@@ -3,12 +3,9 @@
  * =========================================================
  * ACTT — NEWS CARD
  * =========================================================
- *
- * Carte d'actualité : date, badge, titre, paragraphes, signature.
  */
 
 import VisionOSBadge from "./VisionOSBadge.astro";
-
 import type { NewsItem } from "../data/news";
 
 interface Props {
@@ -20,6 +17,19 @@ const { item } = Astro.props;
 
 <article class="news-card">
   <span class="news-card-accent" aria-hidden="true"></span>
+
+  {item.image && (
+    <div class="news-card-image">
+      <img
+        src={item.image}
+        alt={item.title}
+        width="800"
+        height="450"
+        loading="lazy"
+        decoding="async"
+      />
+    </div>
+  )}
 
   <div class="news-card-content">
 
@@ -51,22 +61,15 @@ const { item } = Astro.props;
 </article>
 
 <style>
-
   .news-card {
     position: relative;
-
     display: flex;
     flex-direction: column;
-
     overflow: hidden;
-
     background: #ffffff;
-
     border: 1px solid rgba(6, 26, 58, 0.10);
     border-radius: 16px;
-
     box-shadow: 0 14px 34px rgba(6, 26, 58, 0.10);
-
     transition:
       transform var(--vision-duration-normal) var(--vision-ease-smooth),
       box-shadow var(--vision-duration-normal) var(--vision-ease-smooth);
@@ -84,15 +87,28 @@ const { item } = Astro.props;
     width: 100%;
     height: 4px;
     flex: 0 0 4px;
-
     background: linear-gradient(90deg, #00aeef 0%, #35a853 100%);
+  }
+
+  /* Nouveau bloc Image */
+  .news-card-image {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    background: #e8eef4;
+  }
+
+  .news-card-image img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
   }
 
   .news-card-content {
     display: flex;
     flex-direction: column;
     gap: 16px;
-
     padding: 28px 32px 30px;
   }
 
@@ -100,7 +116,6 @@ const { item } = Astro.props;
     display: flex;
     align-items: center;
     flex-wrap: wrap;
-
     gap: 12px;
   }
 
@@ -114,12 +129,9 @@ const { item } = Astro.props;
 
   .news-card-title {
     margin: 0;
-
     color: #061a3a;
-
     font-size: clamp(1.3rem, 2.4vw, 1.65rem);
     font-weight: 900;
-
     line-height: 1.2;
     letter-spacing: -0.02em;
   }
@@ -132,18 +144,14 @@ const { item } = Astro.props;
 
   .news-card-body p {
     margin: 0;
-
     color: #17345c;
-
     font-size: 1rem;
     line-height: 1.65;
   }
 
   .news-card-author {
     margin: 4px 0 0;
-
     color: #45617f;
-
     font-size: 0.9rem;
     font-style: italic;
     font-weight: 600;
@@ -154,11 +162,9 @@ const { item } = Astro.props;
     .news-card-content {
       padding: 22px 22px 24px;
     }
-
     .news-card-title {
       font-size: 1.2rem;
     }
-
     .news-card-body p {
       font-size: 0.95rem;
     }
@@ -172,5 +178,4 @@ const { item } = Astro.props;
       transform: none;
     }
   }
-
 </style>

@@ -9,9 +9,23 @@ export interface NewsItem {
   title: string;
   body: string[];
   author?: string;
+  image?: string;
 }
 
 export const news: NewsItem[] = [
+  {
+    date: "2026-10-18",
+    dateLabel: "18 oct. 2026",
+    category: "Événement",
+    title: "Remise du chèque Octobre Rose",
+    body: [
+      "Dans le cadre de la campagne Octobre rose, le club a remis ce matin la somme collectée lors de nos entraînements.",
+      "Un grand merci à tous pour votre générosité et votre engagement.",
+      "Merci aux adhérents qui ont participé à la marche organisée par la mairie en soutien à la lutte contre le cancer du sein.",
+    ],
+    author: "Éric",
+    image: "/images/news/OR26.jpg",
+  },
   {
     date: "2026-10-04",
     dateLabel: "4 oct. 2026",
