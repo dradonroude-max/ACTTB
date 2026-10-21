@@ -13,15 +13,21 @@ interface Props {
 }
 
 const { item } = Astro.props;
+
+const imageList: string[] = item.images && item.images.length > 0 
+  ? item.images 
+  : (item.image ? [item.image] : []);
+
+const isHalloween = item.theme === "halloween";
 ---
 
-<article class="news-card">
+<article class:list={["news-card", { "news-card--halloween": isHalloween }]}>
   <span class="news-card-accent" aria-hidden="true"></span>
 
-  {item.image && (
+  {imageList.length === 1 && (
     <div class="news-card-image">
       <img
-        src={item.image}
+        src={imageList[0]}
         alt={item.title}
         width="800"
         height="450"
@@ -31,16 +37,45 @@ const { item } = Astro.props;
     </div>
   )}
 
-  <div class="news-card-content">
+  {imageList.length > 1 && (
+    <div class="news-card-gallery" data-count={imageList.length}>
+      {isHalloween && (
+        <>
+          <span class="bat-fly bat-fly--1" aria-hidden="true">🦇</span>
+          <span class="bat-fly bat-fly--2" aria-hidden="true">🦇</span>
+          <span class="bat-fly bat-fly--3" aria-hidden="true">🦇</span>
+        </>
+      )}
+      {imageList.map((imgSrc, index) => (
+        <div class="news-card-gallery-item">
+          <img
+            src={imgSrc}
+            alt={`${item.title} - photo ${index + 1}`}
+            loading="lazy"
+            decoding="async"
+          />
+        </div>
+      ))}
+    </div>
+  )}
 
+  <div class="news-card-content">
     <header class="news-card-header">
       <time datetime={item.date} class="news-card-date">
         {item.dateLabel}
       </time>
 
-      {item.category && (
-        <VisionOSBadge label={item.category} variant="primary" />
-      )}
+      <div class="badge-wrapper">
+        {item.category && (
+          <VisionOSBadge label={item.category} variant={isHalloween ? "warning" : "primary"} />
+        )}
+        {isHalloween && (
+          <span class="halloween-decor" aria-hidden="true">
+            <span class="ghost">👻</span>
+            <span class="bat">🦇</span>
+          </span>
+        )}
+      </div>
     </header>
 
     <h3 class="news-card-title">
@@ -56,7 +91,6 @@ const { item } = Astro.props;
         — {item.author}
       </p>
     )}
-
   </div>
 </article>
 
@@ -70,15 +104,146 @@ const { item } = Astro.props;
     border: 1px solid rgba(6, 26, 58, 0.10);
     border-radius: 16px;
     box-shadow: 0 14px 34px rgba(6, 26, 58, 0.10);
+    content-visibility: auto;
+    contain-intrinsic-size: 500px;
     transition:
-      transform var(--vision-duration-normal) var(--vision-ease-smooth),
-      box-shadow var(--vision-duration-normal) var(--vision-ease-smooth);
+      transform var(--vision-duration-normal, 0.3s) var(--vision-ease-smooth, ease),
+      box-shadow var(--vision-duration-normal, 0.3s) var(--vision-ease-smooth, ease),
+      border-color var(--vision-duration-normal, 0.3s) var(--vision-ease-smooth, ease);
+  }
+
+  /* =====================================================
+     ANIMATIONS HALLOWEEN
+     ===================================================== */
+
+  @keyframes halloween-glow {
+    0%, 100% {
+      box-shadow: 0 14px 34px rgba(249, 115, 22, 0.15), 0 0 10px rgba(249, 115, 22, 0.1);
+      border-color: rgba(249, 115, 22, 0.35);
+    }
+    50% {
+      box-shadow: 0 18px 40px rgba(234, 88, 12, 0.3), 0 0 25px rgba(245, 158, 11, 0.25);
+      border-color: rgba(249, 115, 22, 0.7);
+    }
+  }
+
+  @keyframes float-ghost {
+    0%, 100% { transform: translateY(0) rotate(0deg); }
+    50% { transform: translateY(-5px) rotate(6deg); }
+  }
+
+  @keyframes flutter-bat {
+    0%, 100% { transform: translateY(0) scale(1); }
+    50% { transform: translateY(-3px) scale(1.15) rotate(-8deg); }
+  }
+
+  @keyframes spider-descend {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(8px); }
+  }
+
+  @keyframes bat-cross {
+    0% {
+      left: -15%;
+      opacity: 0;
+      transform: translateY(0) rotate(0);
+    }
+    10% { opacity: 1; }
+    50% {
+      transform: translateY(-8px) rotate(8deg);
+    }
+    90% { opacity: 1; }
+    100% {
+      left: 115%;
+      opacity: 0;
+      transform: translateY(0) rotate(0);
+    }
+  }
+
+  .news-card--halloween {
+    animation: halloween-glow 3.5s ease-in-out infinite;
+  }
+
+  /* Toile d'araignée dans le coin */
+  .news-card--halloween::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 130px;
+    height: 130px;
+    background-image:
+      linear-gradient(0deg, transparent 49%, rgba(249, 115, 22, 0.35) 49.5%, rgba(249, 115, 22, 0.35) 50.5%, transparent 51%),
+      linear-gradient(22.5deg, transparent 49%, rgba(249, 115, 22, 0.35) 49.5%, rgba(249, 115, 22, 0.35) 50.5%, transparent 51%),
+      linear-gradient(45deg, transparent 49%, rgba(249, 115, 22, 0.35) 49.5%, rgba(249, 115, 22, 0.35) 50.5%, transparent 51%),
+      linear-gradient(67.5deg, transparent 49%, rgba(249, 115, 22, 0.35) 49.5%, rgba(249, 115, 22, 0.35) 50.5%, transparent 51%),
+      linear-gradient(90deg, transparent 49%, rgba(249, 115, 22, 0.35) 49.5%, rgba(249, 115, 22, 0.35) 50.5%, transparent 51%),
+      radial-gradient(circle at top right, transparent 25%, rgba(249, 115, 22, 0.35) 25.3%, transparent 25.8%),
+      radial-gradient(circle at top right, transparent 50%, rgba(249, 115, 22, 0.35) 50.3%, transparent 50.8%),
+      radial-gradient(circle at top right, transparent 75%, rgba(249, 115, 22, 0.35) 75.3%, transparent 75.8%);
+    background-size: 100% 100%;
+    background-position: top right;
+    background-repeat: no-repeat;
+    pointer-events: none;
+    opacity: 0.85;
+    z-index: 5;
+    transform-origin: top right;
+  }
+
+  .news-card--halloween .news-card-accent {
+    background: linear-gradient(90deg, #ea580c 0%, #f59e0b 50%, #7c3aed 100%);
+  }
+
+  .badge-wrapper {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .halloween-decor {
+    position: relative;
+    display: inline-flex;
+    gap: 6px;
+    font-size: 1.15rem;
+    line-height: 1;
+    user-select: none;
+  }
+
+  .ghost {
+    display: inline-block;
+    animation: float-ghost 2.5s ease-in-out infinite;
+  }
+
+  .bat {
+    display: inline-block;
+    animation: flutter-bat 1.8s ease-in-out infinite;
+  }
+
+  /* Araignée au-dessus du décor (agrandie) */
+  .news-card--halloween .halloween-decor::before {
+    content: "🕷️";
+    position: absolute;
+    top: -26px;
+    left: 50%;
+    translate: -50% 0;
+    font-size: 1.6rem;
+    animation: spider-descend 2s ease-in-out infinite;
+    filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.4));
+    pointer-events: none;
+    z-index: 10;
   }
 
   @media (hover: hover) and (pointer: fine) {
     .news-card:hover {
       transform: translateY(-3px);
       box-shadow: 0 20px 40px rgba(6, 26, 58, 0.14);
+    }
+
+    /* On garde l'effet visuel, mais sans stopper les animations */
+    .news-card--halloween:hover {
+      transform: translateY(-6px) scale(1.005);
+      box-shadow: 0 24px 48px rgba(234, 88, 12, 0.35), 0 0 35px rgba(245, 158, 11, 0.35);
+      border-color: rgba(249, 115, 22, 0.9);
     }
   }
 
@@ -90,7 +255,6 @@ const { item } = Astro.props;
     background: linear-gradient(90deg, #00aeef 0%, #35a853 100%);
   }
 
-  /* Nouveau bloc Image */
   .news-card-image {
     width: 100%;
     aspect-ratio: 16 / 9;
@@ -103,6 +267,82 @@ const { item } = Astro.props;
     width: 100%;
     height: 100%;
     object-fit: cover;
+  }
+
+  /* =====================================================
+     GALERIE MULTI-IMAGES + 3 CHAUVE-SOURIS
+     ===================================================== */
+
+  .news-card-gallery {
+    position: relative;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    padding: 12px 12px 0 12px;
+    background: #0b1329;
+    overflow: hidden;
+  }
+
+  .bat-fly {
+    position: absolute;
+    pointer-events: none;
+    z-index: 5;
+    opacity: 0;
+    filter: drop-shadow(0 3px 8px rgba(0, 0, 0, 0.6)) drop-shadow(0 0 4px rgba(245, 158, 11, 0.4));
+    line-height: 1;
+  }
+
+  /* Chauve-souris 1 : grande, traverse en 6s, en haut de la galerie */
+  .bat-fly--1 {
+    top: 10%;
+    font-size: 2.8rem;
+    animation: bat-cross 6s linear infinite;
+    animation-delay: 0s;
+  }
+
+  /* Chauve-souris 2 : moyenne, traverse en 8s, au milieu */
+  .bat-fly--2 {
+    top: 45%;
+    font-size: 2.2rem;
+    animation: bat-cross 8s linear infinite;
+    animation-delay: 2.5s;
+  }
+
+  /* Chauve-souris 3 : très grande, traverse en 7s, en bas */
+  .bat-fly--3 {
+    top: 70%;
+    font-size: 3.2rem;
+    animation: bat-cross 7s linear infinite;
+    animation-delay: 5s;
+  }
+
+  .news-card-gallery-item {
+    position: relative;
+    z-index: 2;
+    aspect-ratio: 4 / 5;
+    overflow: hidden;
+    border-radius: 10px;
+    background: #1e293b;
+  }
+
+  /* Gestion du cas impair : le dernier élément prend les 2 colonnes */
+  .news-card-gallery-item:last-of-type:nth-of-type(odd) {
+    grid-column: span 2;
+    aspect-ratio: 16 / 9;
+  }
+
+  .news-card-gallery-item img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.45s ease;
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .news-card-gallery-item:hover img {
+      transform: scale(1.05);
+    }
   }
 
   .news-card-content {
@@ -159,23 +399,56 @@ const { item } = Astro.props;
   }
 
   @media (max-width: 767px) {
+    .news-card-gallery {
+      grid-template-columns: 1fr;
+      padding: 8px 8px 0 8px;
+    }
+
+    .news-card-gallery-item,
+    .news-card-gallery-item:last-of-type:nth-of-type(odd) {
+      grid-column: span 1;
+      aspect-ratio: 16 / 10;
+    }
+
+    /* Chauves-souris plus discrètes sur mobile */
+    .bat-fly--1 { font-size: 2rem; }
+    .bat-fly--2 { font-size: 1.6rem; }
+    .bat-fly--3 { font-size: 2.2rem; }
+
     .news-card-content {
       padding: 22px 22px 24px;
     }
+
     .news-card-title {
       font-size: 1.2rem;
     }
+
     .news-card-body p {
       font-size: 0.95rem;
     }
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .news-card {
+    .news-card,
+    .news-card--halloween,
+    .ghost,
+    .bat {
+      animation: none;
       transition: none;
     }
-    .news-card:hover {
+
+    .news-card--halloween .halloween-decor::before,
+    .bat-fly {
+      display: none;
+    }
+
+    .news-card:hover,
+    .news-card--halloween:hover {
       transform: none;
+    }
+
+    .news-card-gallery-item img {
+      transition: none;
     }
   }
 </style>

@@ -10,9 +10,28 @@ export interface NewsItem {
   body: string[];
   author?: string;
   image?: string;
+  images?: string[];
+  theme?: "halloween" | "default";
 }
 
 export const news: NewsItem[] = [
+  {
+    date: "2026-10-21",
+    dateLabel: "21 oct. 2026",
+    category: "Événement",
+    theme: "halloween",
+    title: "🎃 Soirée Halloween pour les jeunes pongistes !",
+    body: [
+      "Le club de ping de Camphin-en-Carembault invite ses jeunes pongistes adhérents à venir fêter Halloween.",
+      "Rendez-vous le jeudi 29 octobre à partir de 18h !",
+      "Nous vous attendons avec votre masque ou votre chapeau afin de partager bonbons, rires, sorts et potion magique... sans oublier votre raquette !",
+    ],
+    author: "Éric",
+    images: [
+      "/images/news/halloween-invitation.jpg",
+      "/images/news/halloween-masques.jpg",
+    ],
+  },
   {
     date: "2026-10-18",
     dateLabel: "18 oct. 2026",
