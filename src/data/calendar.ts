@@ -27,33 +27,9 @@ export interface Result {
 }
 
 // ---------------------------------------------------------
-// CALENDRIER (Matchs à venir : Journées 4 à 7)
+// CALENDRIER (Matchs à venir : Journées 5 à 7)
 // ---------------------------------------------------------
 export const calendar: Match[] = [
-  // --- Journée 4 : 08/11/2026 ---
-  {
-    date: "2026-11-08",
-    dateLabel: "Dim. 8 nov.",
-    time: "14h00",
-    team: "Équipe 1",
-    division: "D1",
-    journee: "J4",
-    opponent: "ST ANDRE USTT",
-    location: "extérieur",
-    opponentCity: "ST ANDRE",
-  },
-  {
-    date: "2026-11-08",
-    dateLabel: "Dim. 8 nov.",
-    time: "14h00",
-    team: "Équipe 2",
-    division: "D3",
-    journee: "J4",
-    opponent: "BAISIEUX TT 15",
-    location: "extérieur",
-    opponentCity: "BAISIEUX",
-  },
-
   // --- Journée 5 : 22/11/2026 ---
   {
     date: "2026-11-22",
@@ -124,9 +100,33 @@ export const calendar: Match[] = [
 ];
 
 // ---------------------------------------------------------
-// RÉSULTATS (Journées 1 à 3)
+// RÉSULTATS (Journées 1 à 4)
 // ---------------------------------------------------------
 export const recentResults: Result[] = [
+  // --- Journée 4 : 08/11/2026 (Aujourd'hui) ---
+  {
+    date: "2026-11-08",
+    dateLabel: "8 nov. 2026",
+    team: "Équipe 1",
+    division: "D1",
+    journee: "J4",
+    opponent: "ST ANDRE USTT",
+    score: "9-5", 
+    outcome: "defaite",
+    location: "extérieur", 
+  },
+  {
+    date: "2026-11-08",
+    dateLabel: "8 nov. 2026",
+    team: "Équipe 2",
+    division: "D3",
+    journee: "J4",
+    opponent: "BAISIEUX TT 15",
+    score: "6-8", 
+    outcome: "victoire",
+    location: "extérieur",
+  },
+
   // --- Journée 3 : 18/10/2026 ---
   {
     date: "2026-10-18",
