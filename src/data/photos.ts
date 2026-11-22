@@ -1,13 +1,6 @@
 // =========================================================
 // ACTT — GALLERY PHOTOS
 // =========================================================
-//
-// Ordre d'affichage :
-//   Photo 1 → grande photo (carré 1:1)
-//   Photos 2, 3, 4, 5 → petites photos (carrés 1:1)
-//   Photo 6 → panoramique (ratio ~4:1)
-//
-// Toutes les photos sont accessibles dans la lightbox.
 
 export interface Photo {
   src: string;
@@ -62,4 +55,14 @@ export const photos: Photo[] = [
   { src: "/images/gallery/photo-44.jpg", alt: "Photo de l'ACTT" },
   { src: "/images/gallery/photo-45.jpg", alt: "Photo de l'ACTT" },
   { src: "/images/gallery/photo-46.jpg", alt: "Photo de l'ACTT" },
+  { src: "/images/gallery/photo-47.jpg", alt: "Photo de l'ACTT" },
+  { src: "/images/gallery/photo-48.jpg", alt: "Photo de l'ACTT" },
+  { src: "/images/gallery/photo-49.jpg", alt: "Photo de l'ACTT" },
+  { src: "/images/gallery/photo-50.jpg", alt: "Photo de l'ACTT" },
+  { src: "/images/gallery/photo-51.jpg", alt: "Photo de l'ACTT" },
+  { src: "/images/gallery/photo-52.jpg", alt: "Photo de l'ACTT" },
+  { src: "/images/gallery/photo-53.jpg", alt: "Photo de l'ACTT" },
+  { src: "/images/gallery/photo-54.jpg", alt: "Photo de l'ACTT" },
+  { src: "/images/gallery/photo-55.jpg", alt: "Photo de l'ACTT" },
+  { src: "/images/gallery/photo-56.jpg", alt: "Photo de l'ACTT" },
 ];

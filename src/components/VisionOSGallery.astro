@@ -3,41 +3,9 @@
  * =========================================================
  * ACTT — GALLERY
  * =========================================================
- *
- * Grille Bento (6 photos) + lightbox avec zoom.
- *
- * RÈGLE AUTOMATIQUE :
- *   - La photo n°1 (photo-1.jpg) reste toujours la première.
- *   - Les autres photos sont triées de la plus récente à la plus ancienne 
- *     (en se basant sur le numéro de fichier le plus élevé).
- *   - Les 6 PREMIÈRES photos du tableau final → affichées dans la grille
- *   - Toutes les SUIVANTES → uniquement dans la lightbox
  */
 
-// 1. On scanne automatiquement le dossier public/images/gallery/
-const imageFiles = import.meta.glob('/public/images/gallery/*.{jpg,jpeg,png,webp}', { eager: true });
-
-// 2. On prépare le tableau de base
-let allPhotosData = Object.keys(imageFiles).map((path) => {
-  const src = path.replace('/public', '');
-  return {
-    src: src,
-    alt: "Photo de l'ACTT",
-  };
-});
-
-// 3. On isole la photo n°1 (celle qui doit rester en premier)
-const photo1 = allPhotosData.find(p => p.src.includes('/photo-1.'));
-const otherPhotos = allPhotosData.filter(p => !p.src.includes('/photo-1.'));
-
-// 4. On trie les autres photos par ordre décroissant (de la plus grande à la plus petite)
-// L'option { numeric: true } permet de comprendre que "40" est plus grand que "2".
-otherPhotos.sort((a, b) => b.src.localeCompare(a.src, undefined, { numeric: true, sensitivity: 'base' }));
-
-// 5. On reconstruit le tableau final : la photo 1, puis les autres
-const photos = [];
-if (photo1) photos.push(photo1); // Si photo-1 existe, on la met en premier
-photos.push(...otherPhotos);     // Puis on ajoute le reste
+import { photos } from "../data/photos";
 
 const VISIBLE_COUNT = 6;
 

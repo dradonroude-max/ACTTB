@@ -27,32 +27,9 @@ export interface Result {
 }
 
 // ---------------------------------------------------------
-// CALENDRIER (Matchs à venir : Journées 5 à 7)
+// CALENDRIER (Matchs à venir : Journées 6 à 7)
 // ---------------------------------------------------------
 export const calendar: Match[] = [
-  // --- Journée 5 : 22/11/2026 ---
-  {
-    date: "2026-11-22",
-    dateLabel: "Dim. 22 nov.",
-    time: "14h00",
-    team: "Équipe 1",
-    division: "D1",
-    journee: "J5",
-    opponent: "SANTES CTT",
-    location: "domicile",
-  },
-  {
-    date: "2026-11-22",
-    dateLabel: "Dim. 22 nov.",
-    time: "14h00",
-    team: "Équipe 2",
-    division: "D3",
-    journee: "J5",
-    opponent: "VILLEN/ASCQ FOS 19",
-    location: "extérieur",
-    opponentCity: "VILLEN/ASCQ",
-  },
-
   // --- Journée 6 : 06/12/2026 ---
   {
     date: "2026-12-06",
@@ -100,10 +77,34 @@ export const calendar: Match[] = [
 ];
 
 // ---------------------------------------------------------
-// RÉSULTATS (Journées 1 à 4)
+// RÉSULTATS (Journées 1 à 5)
 // ---------------------------------------------------------
 export const recentResults: Result[] = [
-  // --- Journée 4 : 08/11/2026 (Aujourd'hui) ---
+  // --- Journée 5 : 22/11/2026 (Aujourd'hui) ---
+  {
+    date: "2026-11-22",
+    dateLabel: "22 nov. 2026",
+    team: "Équipe 1",
+    division: "D1",
+    journee: "J5",
+    opponent: "SANTES CTT",
+    score: "5-9", 
+    outcome: "defaite",
+    location: "domicile", 
+  },
+  {
+    date: "2026-11-22",
+    dateLabel: "22 nov. 2026",
+    team: "Équipe 2",
+    division: "D3",
+    journee: "J5",
+    opponent: "ATTICHES",
+    score: "13-1", 
+    outcome: "victoire",
+    location: "domicile",
+  },
+
+  // --- Journée 4 : 08/11/2026 ---
   {
     date: "2026-11-08",
     dateLabel: "8 nov. 2026",
