@@ -25,6 +25,7 @@ import { partners } from "../data/partners";
 import { pricing } from "../data/pricing";
 import { calendar, recentResults } from "../data/calendar";
 import { news } from "../data/news";
+import { standings } from "../data/standings";
 import { site } from "../config/site";
 
 // Génère un label de date : "Dim. 20 sept."
@@ -324,6 +325,48 @@ const processResult = (result: any) => {
         </article>
       )}
 
+    </div>
+  </VisionOSSection>
+
+
+  <!-- CLASSEMENTS -->
+  <VisionOSSection
+    id="classements"
+    eyebrow="CLASSEMENTS"
+    title="Les classements des équipes"
+    description="Suivez la progression de nos équipes dans leurs championnats respectifs."
+    spacing="sm"
+  >
+    <div class="standings-grid">
+      {standings.map((team) => (
+        <article class="standings-card">
+          <header class="standings-header">
+            <h3 class="standings-title">{team.teamName} <span>({team.division} - Poule {team.poule})</span></h3>
+          </header>
+          <div class="standings-table-wrapper">
+            <table class="standings-table">
+              <thead>
+                <tr>
+                  <th class="col-pos">Pos</th>
+                  <th class="col-team">Équipe</th>
+                  <th class="col-played">Joués</th>
+                  <th class="col-points">Pts</th>
+                </tr>
+              </thead>
+              <tbody>
+                {team.data.map((row) => (
+                  <tr class:list={{ "is-actt": row.team.includes("CAMPHIN") }}>
+                    <td class="col-pos">{row.pos}</td>
+                    <td class="col-team">{row.team}</td>
+                    <td class="col-played">{row.played}</td>
+                    <td class="col-points"><strong>{row.points}</strong></td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </article>
+      ))}
     </div>
   </VisionOSSection>
 
@@ -1008,6 +1051,92 @@ const processResult = (result: any) => {
 
 
   /* =======================================================
+     CLASSEMENTS
+     ======================================================= */
+
+  .standings-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    align-items: start;
+  }
+
+  .standings-card {
+    background: #ffffff;
+    border: 1px solid rgba(6, 26, 58, 0.10);
+    border-radius: 16px;
+    box-shadow: 0 14px 34px rgba(6, 26, 58, 0.10);
+    overflow: hidden;
+  }
+
+  .standings-header {
+    padding: 20px 24px;
+    background: #061a3a;
+    border-bottom: 4px solid #35a853;
+  }
+
+  .standings-title {
+    margin: 0;
+    color: #ffffff;
+    font-size: 1.2rem;
+    font-weight: 800;
+  }
+
+  .standings-title span {
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: rgba(248, 250, 252, 0.7);
+    margin-left: 8px;
+  }
+
+  .standings-table-wrapper {
+    overflow-x: auto;
+  }
+
+  .standings-table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+  }
+
+  .standings-table th {
+    padding: 12px 16px;
+    font-size: 0.75rem;
+    font-weight: 800;
+    color: #45617f;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    border-bottom: 1px solid rgba(6, 26, 58, 0.08);
+  }
+
+  .standings-table td {
+    padding: 12px 16px;
+    font-size: 0.9rem;
+    color: #17345c;
+    border-bottom: 1px solid rgba(6, 26, 58, 0.05);
+    white-space: nowrap;
+  }
+
+  .standings-table tr:last-child td {
+    border-bottom: none;
+  }
+
+  .standings-table tr.is-actt {
+    background-color: rgba(0, 174, 239, 0.08);
+    font-weight: 700;
+    color: #061a3a;
+  }
+
+  .standings-table tr.is-actt td {
+    color: #061a3a;
+  }
+
+  .col-pos { width: 40px; text-align: center; font-weight: bold; }
+  .col-played { text-align: center; width: 60px; }
+  .col-points { text-align: center; width: 60px; font-weight: 800; color: #35a853; }
+
+
+  /* =======================================================
      PREMIÈRE SÉANCE
      ======================================================= */
 
@@ -1562,6 +1691,16 @@ const processResult = (result: any) => {
     border-radius: 16px;
     box-shadow: 0 8px 22px rgba(6, 26, 58, 0.06);
     text-align: center;
+    /* CORRECTION ICI : AJOUT DE LA TRANSITION */
+    transition: transform var(--vision-duration-normal) var(--vision-ease-smooth), box-shadow var(--vision-duration-normal) var(--vision-ease-smooth);
+  }
+
+  /* CORRECTION ICI : AJOUT DU HOVER */
+  @media (hover: hover) and (pointer: fine) {
+    .vision-pricing-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 14px 30px rgba(6, 26, 58, 0.10);
+    }
   }
 
   .vision-pricing-label {
@@ -1626,6 +1765,10 @@ const processResult = (result: any) => {
     .calendrier-grid {
       grid-template-columns: 1fr;
       gap: 22px;
+    }
+
+    .standings-grid {
+      grid-template-columns: 1fr;
     }
 
     .essayer-grid {
