@@ -28,6 +28,14 @@ import { news } from "../data/news";
 import { standings } from "../data/standings";
 import { site } from "../config/site";
 
+// Configuration du bandeau anniversaire (passer active à false pour le masquer)
+const birthdayBanner = {
+  active: true,
+  eyebrow: "AUJOURD'HUI, ON CÉLÈBRE !",
+  name: "Hervé",
+  message: "Toute l'équipe ACTT te souhaite une superbe journée.",
+};
+
 // Génère un label de date : "Dim. 20 sept."
 const formatDateLabel = (iso: string) => {
   const d = new Date(iso + "T12:00:00");
@@ -73,6 +81,72 @@ const processResult = (result: any) => {
   title="ACTT — Camphin-en-Carembault Tennis de Table"
   description="Camphin-en-Carembault Tennis de Table — un club de tennis de table ouvert à tous, du loisir à la compétition."
 >
+
+  <!-- BANDEAU ANNIVERSAIRE -->
+  {birthdayBanner.active && (
+    <aside
+      class="birthday-banner-wrapper"
+      aria-label={`Anniversaire de ${birthdayBanner.name}`}
+    >
+      <div class="birthday-banner">
+        <!-- Faisceaux lumineux décoratifs -->
+        <div class="birthday-beams" aria-hidden="true">
+          <span class="birthday-beam birthday-beam-cyan"></span>
+          <span class="birthday-beam birthday-beam-green"></span>
+        </div>
+
+        <!-- Confettis animés -->
+        <div class="birthday-confetti-layer" aria-hidden="true">
+          <span class="confetti confetti-1"></span>
+          <span class="confetti confetti-2"></span>
+          <span class="confetti confetti-3"></span>
+          <span class="confetti confetti-4"></span>
+          <span class="confetti confetti-5"></span>
+          <span class="confetti confetti-6"></span>
+        </div>
+
+        <div class="birthday-content">
+          <!-- Illustration Gâteau SVG animée -->
+          <div class="birthday-cake-box" aria-hidden="true">
+            <svg class="birthday-cake-svg" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <!-- Ombre / halo au sol -->
+              <ellipse cx="40" cy="70" rx="28" ry="5" fill="#00aeef" fill-opacity="0.35" />
+              <!-- Assiette -->
+              <ellipse cx="40" cy="67" rx="26" ry="5" fill="#e2e8f0" />
+              <ellipse cx="40" cy="66" rx="24" ry="4" fill="#ffffff" />
+              <!-- Base du gâteau -->
+              <path d="M18 46C18 43 62 43 62 46V63C62 66.5 52 69 40 69C28 69 18 66.5 18 63V46Z" fill="#bae6fd" />
+              <!-- Glaçage supérieur -->
+              <path d="M18 46C18 41.5 28 39 40 39C52 39 62 41.5 62 46C62 49 58 51 55 49.5C52 48 51 53 47 52C43 51 43 47 40 47C37 47 36 52 32 51.5C28 51 28 48 25 49.5C22 51 18 49 18 46Z" fill="#ffffff" />
+              <!-- Bougies -->
+              <rect x="26" y="29" width="4" height="14" rx="1.5" fill="#f8fafc" stroke="#38bdf8" stroke-width="1" />
+              <rect x="33" y="27" width="4" height="15" rx="1.5" fill="#f8fafc" stroke="#38bdf8" stroke-width="1" />
+              <rect x="40" y="25" width="4" height="16" rx="1.5" fill="#f8fafc" stroke="#38bdf8" stroke-width="1" />
+              <rect x="47" y="27" width="4" height="15" rx="1.5" fill="#f8fafc" stroke="#38bdf8" stroke-width="1" />
+              <rect x="54" y="29" width="4" height="14" rx="1.5" fill="#f8fafc" stroke="#38bdf8" stroke-width="1" />
+              <!-- Flammes animées -->
+              <path class="candle-flame flame-1" d="M28 28C28 28 25.5 24.5 28 20.5C30.5 24.5 28 28 28 28Z" fill="#facc15" />
+              <path class="candle-flame flame-2" d="M35 26C35 26 32.5 22.5 35 18.5C37.5 22.5 35 26 35 26Z" fill="#fb923c" />
+              <path class="candle-flame flame-3" d="M42 24C42 24 39.5 20.5 42 16.5C44.5 20.5 42 24 42 24Z" fill="#facc15" />
+              <path class="candle-flame flame-4" d="M49 26C49 26 46.5 22.5 49 18.5C51.5 22.5 49 26 49 26Z" fill="#fb923c" />
+              <path class="candle-flame flame-5" d="M56 28C56 28 53.5 24.5 56 20.5C58.5 24.5 56 28 56 28Z" fill="#facc15" />
+            </svg>
+          </div>
+
+          <span class="birthday-divider" aria-hidden="true"></span>
+
+          <div class="birthday-text">
+            <span class="birthday-eyebrow">{birthdayBanner.eyebrow}</span>
+            <p class="birthday-title">
+              Joyeux anniversaire <strong class="birthday-name">{birthdayBanner.name} !</strong>
+              <span class="birthday-emoji" aria-hidden="true">🎂</span>
+            </p>
+            <p class="birthday-subtitle">{birthdayBanner.message}</p>
+          </div>
+        </div>
+      </div>
+    </aside>
+  )}
 
   <!-- HERO -->
   <VisionOSHero
@@ -650,6 +724,45 @@ const processResult = (result: any) => {
 
 
 <script>
+  // Scroll précis vers les ancres (#id ou /#id) avec compensation exacte de la navbar
+  // (sans marge résiduelle) et double recalage pour absorber les images lazy.
+  const scrollToTarget = (target: HTMLElement, smooth = true) => {
+    const header = document.querySelector<HTMLElement>("header, nav");
+    let offset = 0;
+
+    if (header) {
+      const pos = getComputedStyle(header).position;
+      if (pos === "fixed" || pos === "sticky") {
+        offset = Math.floor(header.getBoundingClientRect().height);
+      }
+    }
+
+    const top = Math.max(0, Math.round(target.getBoundingClientRect().top + window.scrollY - offset));
+    window.scrollTo({ top, behavior: smooth ? "smooth" : "auto" });
+  };
+
+  document.querySelectorAll<HTMLAnchorElement>('a[href^="#"], a[href^="/#"]').forEach((link) => {
+    link.addEventListener("click", (e) => {
+      const href = link.getAttribute("href") ?? "";
+      const hashIndex = href.indexOf("#");
+      if (hashIndex === -1) return;
+
+      const id = href.slice(hashIndex + 1);
+      if (!id) return;
+
+      const target = document.getElementById(id);
+      if (!target) return;
+
+      e.preventDefault();
+      history.pushState(null, "", `#${id}`);
+      scrollToTarget(target, true);
+
+      // Recalages successifs si des images lazy chargent pendant le défilement
+      window.setTimeout(() => scrollToTarget(target, true), 350);
+      window.setTimeout(() => scrollToTarget(target, true), 750);
+    });
+  });
+
   // Filtre le calendrier : n'affiche que les 4 prochains matchs.
   const list = document.querySelector<HTMLElement>("[data-calendar-list]");
 
@@ -700,6 +813,243 @@ const processResult = (result: any) => {
 
 
 <style>
+
+  /* =======================================================
+     ANCRES / SCROLL
+     ======================================================= */
+
+  :global(section[id]),
+  :global(.vision-section[id]),
+  :global([id="tarifs"]) {
+    scroll-margin-top: 72px;
+  }
+
+  /* =======================================================
+     BANDEAU ANNIVERSAIRE
+     ======================================================= */
+
+  .birthday-banner-wrapper {
+    width: 100%;
+    margin: 0 0 -1px;
+    padding: 12px 16px 4px;
+    background: #061a3a;
+    position: relative;
+    z-index: 20;
+  }
+
+  .birthday-banner {
+    position: relative;
+    max-width: 1248px;
+    margin-inline: auto;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 20px;
+    padding: 16px 24px;
+    border-radius: 16px;
+    overflow: hidden;
+    background: linear-gradient(100deg, #04132d 0%, #07224d 52%, #051c42 100%);
+    border: 1.5px solid rgba(56, 189, 248, 0.75);
+    box-shadow:
+      0 0 22px rgba(0, 174, 239, 0.28),
+      inset 0 0 24px rgba(0, 174, 239, 0.12);
+    animation:
+      birthdayEnter 550ms cubic-bezier(0.22, 1, 0.36, 1) both,
+      birthdayGlowPulse 4s ease-in-out infinite;
+  }
+
+  /* Faisceaux lumineux en arrière-plan à droite */
+  .birthday-beams {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    overflow: hidden;
+  }
+
+  .birthday-beam {
+    position: absolute;
+    width: 460px;
+    height: 18px;
+    border-radius: 999px;
+    filter: blur(8px);
+    opacity: 0.7;
+    transform-origin: center;
+  }
+
+  .birthday-beam-cyan {
+    right: -60px;
+    bottom: 10px;
+    background: linear-gradient(90deg, transparent 0%, #00aeef 50%, #7dd3fc 100%);
+    transform: rotate(-16deg);
+    animation: beamSlide 6s ease-in-out infinite alternate;
+  }
+
+  .birthday-beam-green {
+    right: -80px;
+    bottom: -4px;
+    background: linear-gradient(90deg, transparent 0%, #35a853 45%, #8bcf32 100%);
+    transform: rotate(-12deg);
+    animation: beamSlide 7.5s ease-in-out infinite alternate-reverse;
+  }
+
+  /* Confettis animés */
+  .birthday-confetti-layer {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    overflow: hidden;
+  }
+
+  .confetti {
+    position: absolute;
+    width: 8px;
+    height: 14px;
+    border-radius: 2px;
+    opacity: 0.85;
+    animation: confettiFloat 5s ease-in-out infinite;
+  }
+
+  .confetti-1 { left: 2.5%; top: 38%; background: #8bcf32; transform: rotate(-28deg); animation-delay: 0s; }
+  .confetti-2 { left: 16%; top: 18%; width: 7px; height: 7px; border-radius: 50%; background: #facc15; animation-delay: 0.8s; }
+  .confetti-3 { left: 65%; top: 62%; background: #35a853; transform: rotate(-35deg); animation-delay: 1.4s; }
+  .confetti-4 { left: 76%; top: 16%; background: #facc15; transform: rotate(24deg); animation-delay: 0.4s; }
+  .confetti-5 { left: 81%; top: 28%; width: 9px; height: 9px; background: #00aeef; transform: rotate(45deg); animation-delay: 1.9s; }
+  .confetti-6 { right: 6.5%; bottom: 18%; background: #8bcf32; transform: rotate(-32deg); animation-delay: 1.1s; }
+
+  .birthday-content {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    min-width: 0;
+  }
+
+  .birthday-cake-box {
+    flex: 0 0 auto;
+    width: 72px;
+    height: 72px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    animation: cakeBob 3.2s ease-in-out infinite;
+  }
+
+  .birthday-cake-svg {
+    width: 100%;
+    height: 100%;
+    filter: drop-shadow(0 6px 14px rgba(0, 174, 239, 0.35));
+  }
+
+  .candle-flame {
+    transform-origin: center bottom;
+    animation: flameFlicker 1.1s ease-in-out infinite alternate;
+  }
+
+  .flame-2 { animation-delay: 0.18s; }
+  .flame-3 { animation-delay: 0.35s; }
+  .flame-4 { animation-delay: 0.12s; }
+  .flame-5 { animation-delay: 0.28s; }
+
+  .birthday-divider {
+    flex: 0 0 1px;
+    width: 1px;
+    height: 68px;
+    background: linear-gradient(180deg, transparent 0%, rgba(125, 211, 252, 0.55) 50%, transparent 100%);
+  }
+
+  .birthday-text {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    min-width: 0;
+  }
+
+  .birthday-eyebrow {
+    color: #a3e635;
+    font-size: 0.82rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .birthday-title {
+    margin: 0;
+    color: #ffffff;
+    font-size: clamp(1.35rem, 2.4vw, 1.9rem);
+    font-weight: 800;
+    line-height: 1.15;
+    letter-spacing: -0.01em;
+  }
+
+  .birthday-name {
+    color: #8bcf32;
+    font-weight: 900;
+  }
+
+  .birthday-emoji {
+    display: inline-block;
+    margin-left: 6px;
+    animation: emojiBounce 2.2s ease-in-out infinite;
+  }
+
+  .birthday-subtitle {
+    margin: 2px 0 0;
+    color: rgba(248, 250, 252, 0.9);
+    font-size: 0.98rem;
+    font-style: italic;
+    line-height: 1.35;
+  }
+
+  @keyframes birthdayEnter {
+    from {
+      opacity: 0;
+      transform: translateY(-16px) scale(0.98);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+  }
+
+  @keyframes birthdayGlowPulse {
+    0%, 100% {
+      box-shadow:
+        0 0 20px rgba(0, 174, 239, 0.26),
+        inset 0 0 22px rgba(0, 174, 239, 0.10);
+    }
+    50% {
+      box-shadow:
+        0 0 32px rgba(0, 174, 239, 0.44),
+        inset 0 0 28px rgba(139, 207, 50, 0.14);
+    }
+  }
+
+  @keyframes cakeBob {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-4px); }
+  }
+
+  @keyframes flameFlicker {
+    0% { transform: scale(0.92) rotate(-3deg); opacity: 0.85; }
+    100% { transform: scale(1.12) rotate(3deg); opacity: 1; }
+  }
+
+  @keyframes confettiFloat {
+    0%, 100% { transform: translateY(0) rotate(0deg); opacity: 0.85; }
+    50% { transform: translateY(-8px) rotate(18deg); opacity: 1; }
+  }
+
+  @keyframes beamSlide {
+    0% { transform: translateX(0) rotate(-14deg); opacity: 0.55; }
+    100% { transform: translateX(-24px) rotate(-14deg); opacity: 0.85; }
+  }
+
+  @keyframes emojiBounce {
+    0%, 100% { transform: translateY(0) scale(1); }
+    45% { transform: translateY(-3px) scale(1.08); }
+  }
+
 
   :global(.vision-section-align-center) :global(.vision-section-title) {
     margin-inline: auto;
@@ -1691,11 +2041,9 @@ const processResult = (result: any) => {
     border-radius: 16px;
     box-shadow: 0 8px 22px rgba(6, 26, 58, 0.06);
     text-align: center;
-    /* CORRECTION ICI : AJOUT DE LA TRANSITION */
     transition: transform var(--vision-duration-normal) var(--vision-ease-smooth), box-shadow var(--vision-duration-normal) var(--vision-ease-smooth);
   }
 
-  /* CORRECTION ICI : AJOUT DU HOVER */
   @media (hover: hover) and (pointer: fine) {
     .vision-pricing-card:hover {
       transform: translateY(-3px);
@@ -1787,6 +2135,32 @@ const processResult = (result: any) => {
      ======================================================= */
 
   @media (max-width: 767px) {
+    .birthday-banner {
+      padding: 14px 16px;
+      align-items: flex-start;
+    }
+
+    .birthday-content {
+      gap: 14px;
+    }
+
+    .birthday-cake-box {
+      width: 52px;
+      height: 52px;
+    }
+
+    .birthday-divider {
+      display: none;
+    }
+
+    .birthday-eyebrow {
+      font-size: 0.72rem;
+    }
+
+    .birthday-subtitle {
+      font-size: 0.88rem;
+    }
+
     .calendrier-card-header { padding: 18px 20px 14px; }
     .calendrier-card-title { font-size: 1.15rem; }
 
@@ -1850,6 +2224,16 @@ const processResult = (result: any) => {
      ======================================================= */
 
   @media (prefers-reduced-motion: reduce) {
+    .birthday-banner-wrapper,
+    .birthday-banner,
+    .birthday-cake-box,
+    .candle-flame,
+    .confetti,
+    .birthday-beam,
+    .birthday-emoji {
+      animation: none !important;
+    }
+
     .vision-partner-card { transition: none; }
     .vision-partner-card-link:hover { transform: none; }
 
